@@ -328,45 +328,31 @@ function SidebarLink({
   compact: boolean;
   onNavigate?: () => void;
 }) {
-  return (
   const soon = item.tier === "coming_soon";
-  const className = cn(
-    "flex min-h-11 items-center gap-2 rounded-full px-2.5 py-1.5 text-[15px] transition-colors duration-150 md:min-h-0",
-    soon
-      ? "cursor-default text-[var(--text-muted)] opacity-55"
-      : active
-        ? "bg-[var(--accent-select)] font-semibold text-[var(--ink)]"
-        : "font-medium text-[var(--ink)]/75 hover:bg-[var(--surface-alt)] hover:text-[var(--ink)]",
-    compact && "justify-center px-0",
-  );
-
   return (
     <li>
-      {soon ? (
-        <span title={`${item.name} · Soon`} className={className}>
-          <NavIcon name={item.icon} />
-          {!compact ? (
-            <>
-              <span className="min-w-0 flex-1 truncate">{item.name}</span>
-              <LockBadge tier={item.tier} />
-            </>
-          ) : null}
-        </span>
-      ) : (
-        <Link
-          href={item.href}
-          title={item.name}
-          onClick={onNavigate}
-          className={className}
-        >
-          <NavIcon name={item.icon} />
-          {!compact ? (
-            <>
-              <span className="min-w-0 flex-1 truncate">{item.name}</span>
-              <LockBadge tier={item.tier} />
-            </>
-          ) : null}
-        </Link>
-      )}
+      <Link
+        href={item.href}
+        title={item.name}
+        onClick={onNavigate}
+        className={cn(
+          "flex min-h-11 items-center gap-2 rounded-full px-2.5 py-1.5 text-[15px] transition-colors duration-150 md:min-h-0",
+          soon
+            ? "text-[var(--text-muted)] opacity-55 hover:bg-[var(--surface-alt)] hover:opacity-70"
+            : active
+              ? "bg-[var(--accent-select)] font-semibold text-[var(--ink)]"
+              : "font-medium text-[var(--ink)]/75 hover:bg-[var(--surface-alt)] hover:text-[var(--ink)]",
+          compact && "justify-center px-0",
+        )}
+      >
+        <NavIcon name={item.icon} />
+        {!compact ? (
+          <>
+            <span className="min-w-0 flex-1 truncate">{item.name}</span>
+            <LockBadge tier={item.tier} />
+          </>
+        ) : null}
+      </Link>
+    </li>
   );
 }
