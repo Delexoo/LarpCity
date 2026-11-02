@@ -24,23 +24,14 @@ export type NavItem = {
   description?: string;
 };
 
-const freePlatforms = new Set([
-  "coinbase",
-  "cash-app",
-  "stripe",
-  "venmo",
-  "phantom",
-  "metamask",
-]);
-
+/** All active platforms are Free (with watermark). Pro removes the watermark. */
 function platform(
   name: string,
   slug: string,
   section: NavSection,
   extras?: Partial<NavItem>,
 ): NavItem {
-  const tier: PlatformTier =
-    extras?.tier ?? (freePlatforms.has(slug) ? "free" : "pro");
+  const tier: PlatformTier = extras?.tier ?? "free";
   return {
     id: extras?.id ?? slug,
     name,
@@ -308,9 +299,9 @@ export function getActivePlatforms(): NavItem[] {
 
 export function isPlatformLocked(
   item: NavItem,
-  userIsPro: boolean,
+  _userIsPro: boolean,
 ): boolean {
-  if (item.tier === "coming_soon") return true;
-  if (item.tier === "pro" && !userIsPro) return true;
-  return false;
+  // Free unlocks every active platform; only roadmap items stay locked.
+  void _userIsPro;
+  return item.tier === "coming_soon";
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useLocalPlan } from "@/hooks/useLocalPlan";
 import { cn } from "@/lib/utils";
 import { AppSidebar } from "./AppSidebar";
 import { TopBar } from "./TopBar";
@@ -9,13 +10,14 @@ import { TopBar } from "./TopBar";
 export function DashboardShell({
   children,
   email,
-  plan = "free",
 }: {
   children: React.ReactNode;
   email?: string | null;
+  /** @deprecated Plan comes from local storage (Free watermark / Pro clean). */
   plan?: string;
 }) {
   const pathname = usePathname();
+  const { plan } = useLocalPlan();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 

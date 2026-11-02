@@ -76,8 +76,8 @@ npm run lint     # ESLint
 
 ## Plans
 
-- **Free:** Coinbase, Cash App, Stripe, Venmo, Phantom, MetaMask — **1 LARP / month**
-- **Pro:** Full platform catalog + higher limits
+- **Free:** All active platforms · LarpCity watermark on viewers
+- **Pro:** Everything in Free · watermark removed forever (lifetime $99, or $29/mo later)
 
 ## Release notes
 

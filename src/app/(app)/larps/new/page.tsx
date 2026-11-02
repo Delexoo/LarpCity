@@ -32,10 +32,8 @@ export default function NewLarpPage() {
                 </div>
                 {comingSoon ? (
                   <Badge tone="muted">Soon</Badge>
-                ) : platform.tier === "free" ? (
-                  <Badge tone="accent">Free</Badge>
                 ) : (
-                  <Badge tone="pro">Pro</Badge>
+                  <Badge tone="accent">Included</Badge>
                 )}
               </div>
               <div className="mt-4">

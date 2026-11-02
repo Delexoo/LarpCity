@@ -6,7 +6,7 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   return (
-    <DashboardShell email="guest@larpcity.local" plan="pro">
+    <DashboardShell email="guest@larpcity.local">
       {children}
     </DashboardShell>
   );

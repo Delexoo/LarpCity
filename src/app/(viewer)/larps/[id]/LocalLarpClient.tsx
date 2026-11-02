@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { InstallLarpPrompt } from "@/components/larps/InstallLarpPrompt";
+import { LarpWatermark } from "@/components/larps/LarpWatermark";
 import { Button } from "@/components/ui/Button";
+import { useLocalPlan } from "@/hooks/useLocalPlan";
 import {
   resolveLocalLarp,
   type LocalLarp,
@@ -190,6 +192,7 @@ async function loadGenericHtml(larp: LocalLarp): Promise<string> {
 }
 
 export function LocalLarpClient({ id }: { id: string }) {
+  const { isPro, ready: planReady } = useLocalPlan();
   const [larp, setLarp] = useState<LocalLarp | null | undefined>(undefined);
   const [html, setHtml] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -358,6 +361,7 @@ export function LocalLarpClient({ id }: { id: string }) {
           <StripeProtectMark className="w-[118px] -translate-y-3" />
         </button>
       ) : null}
+      {planReady && !isPro ? <LarpWatermark /> : null}
       <InstallLarpPrompt larpId={larp.id} />
     </>
   );

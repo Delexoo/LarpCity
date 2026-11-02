@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/Badge";
+import { PlanSettings } from "./PlanSettings";
 
 export const metadata = { title: "Settings" };
 
@@ -8,7 +8,7 @@ export default function SettingsPage() {
       <div>
         <h1 className="page-title">Settings</h1>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">
-          Profile, plan, and billing. Auth and billing services are paused.
+          Profile, plan, and billing. Stripe payments turn on when billing is live.
         </p>
       </div>
 
@@ -28,15 +28,7 @@ export default function SettingsPage() {
         </dl>
       </section>
 
-      <section className="ll-panel p-6">
-        <div className="flex items-center justify-between gap-4">
-          <h2 className="text-sm font-semibold text-[var(--ink)]">Plan</h2>
-          <Badge tone="pro">Pro</Badge>
-        </div>
-        <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          Preview mode · full UI access while services are offline.
-        </p>
-      </section>
+      <PlanSettings />
     </div>
   );
 }

@@ -38,8 +38,8 @@ export default function HomePage() {
           Mock dashboards that look like the real thing
         </h1>
         <p className="mt-4 max-w-md text-pretty text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
-          Build screenshot-ready financial and social LARPs in minutes — Stripe,
-          Coinbase, wallets, creator studios, and more.
+          Free access to every platform with a watermark. Pro removes it forever
+          for clean, screenshot-ready LARPs.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <Link href="/dashboard">

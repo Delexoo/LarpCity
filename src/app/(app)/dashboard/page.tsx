@@ -48,12 +48,10 @@ export default function DashboardPage() {
                   {platform.section}
                 </p>
               </div>
-              {platform.tier === "free" ? (
-                <Badge tone="accent">Free</Badge>
-              ) : platform.tier === "coming_soon" ? (
+              {platform.tier === "coming_soon" ? (
                 <Badge tone="muted">Soon</Badge>
               ) : (
-                <Badge tone="pro">Pro</Badge>
+                <Badge tone="accent">Open</Badge>
               )}
             </Link>
           ))}

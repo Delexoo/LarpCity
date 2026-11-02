@@ -1,5 +1,16 @@
 # LarpCity Release Notes
 
+## v0.3.1 — Free all platforms + watermark; Pro removes it
+
+**Production:** https://larpcity-delexo.vercel.app
+
+### Highlights
+- **Free:** every active platform unlocked, with a LarpCity watermark on viewers
+- **Pro:** everything in Free plus watermark removed forever (lifetime-first pricing)
+- Pricing page and Settings plan controls updated for the new model
+
+---
+
 ## v0.3.0 — Ink + Paper UI, Venmo, manage LARPs
 
 **Production:** https://larpcity-delexo.vercel.app

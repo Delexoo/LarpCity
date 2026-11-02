@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 import {
   canCreateLarp,
   currentMonthKey,
-  isPro,
 } from "@/lib/subscription";
 import {
   getActivePlatforms,
@@ -73,13 +72,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: profileError.message }, { status: 500 });
   }
 
-  if (platform.tier === "pro" && !isPro(profile)) {
-    return NextResponse.json(
-      { error: "Pro plan required for this platform" },
-      { status: 403 },
-    );
-  }
-
   const monthKey = currentMonthKey();
   let createdThisMonth = profile?.larps_created_this_month ?? 0;
   if (profile?.larps_month_key !== monthKey) {
@@ -90,7 +82,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error:
-          "Free plan allows 1 LARP per month. Upgrade to Pro for unlimited.",
+          "LARP creation limit reached. Upgrade to Pro for watermark-free LARPs and higher limits.",
       },
       { status: 403 },
     );
