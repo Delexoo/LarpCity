@@ -8,8 +8,8 @@ export const metadata = {
 
 function Feature({ children }: { children: React.ReactNode }) {
   return (
-    <li className="flex items-start gap-2.5 text-sm text-[var(--paper)]/75">
-      <Check className="mt-0.5 size-4 shrink-0 text-[var(--acid)]" strokeWidth={2} />
+    <li className="flex items-start gap-2.5 text-sm text-[var(--ink)]">
+      <Check className="mt-0.5 size-4 shrink-0 text-[var(--ink)]" strokeWidth={2} />
       <span>{children}</span>
     </li>
   );
@@ -17,16 +17,23 @@ function Feature({ children }: { children: React.ReactNode }) {
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-[var(--ink)]">
+    <div className="min-h-screen bg-[var(--bg)]">
       <header className="flex items-center justify-between px-5 py-5 md:px-10">
-        <Link href="/" className="wordmark text-lg">
+        <Link href="/" className="wordmark text-xl">
           LarpCity
         </Link>
-        <Link href="/dashboard">
-          <Button size="sm" variant="outline">
-            Open app
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/login">
+            <Button variant="ghost" size="sm">
+              Sign in
+            </Button>
+          </Link>
+          <Link href="/dashboard">
+            <Button size="sm" variant="outline">
+              Open app
+            </Button>
+          </Link>
+        </div>
       </header>
 
       <main className="mx-auto max-w-5xl px-5 pb-20 pt-10">
@@ -38,11 +45,11 @@ export default function PricingPage() {
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          <div className="ll-panel p-8">
-            <p className="text-sm font-medium text-[var(--text-secondary)]">
+          <div className="rounded-[1.5rem] border border-[var(--hairline)] bg-[var(--surface)] p-8 shadow-[var(--shadow-card)]">
+            <p className="text-sm font-semibold text-[var(--text-secondary)]">
               Free
             </p>
-            <p className="mt-3 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight text-[var(--paper)]">
+            <p className="mt-3 text-4xl font-bold tracking-tight text-[var(--ink)]">
               $0
             </p>
             <ul className="mt-6 space-y-2">
@@ -57,9 +64,9 @@ export default function PricingPage() {
             </Link>
           </div>
 
-          <div className="rounded-2xl border border-[var(--acid)]/40 bg-[var(--ink-raised)] p-8 shadow-[0_0_0_1px_rgba(204,255,0,0.08)]">
-            <p className="text-sm font-medium text-[var(--acid)]">Pro</p>
-            <p className="mt-3 font-[family-name:var(--font-display)] text-4xl font-bold tracking-tight text-[var(--paper)]">
+          <div className="rounded-[1.5rem] border-[1.5px] border-[var(--ink)] bg-[var(--surface)] p-8 shadow-[var(--shadow-card)]">
+            <p className="text-sm font-semibold text-[var(--ink)]">Pro</p>
+            <p className="mt-3 text-4xl font-bold tracking-tight text-[var(--ink)]">
               $29
               <span className="text-base font-medium text-[var(--text-secondary)]">
                 /mo

@@ -13,24 +13,24 @@ export default function SettingsPage() {
       </div>
 
       <section className="ll-panel overflow-hidden">
-        <div className="border-b border-white/10 px-5 py-4">
-          <h2 className="text-sm font-medium text-[var(--paper)]">Profile</h2>
+        <div className="border-b border-[var(--hairline)] px-5 py-4">
+          <h2 className="text-sm font-semibold text-[var(--ink)]">Profile</h2>
         </div>
         <dl>
-          <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-white/10 px-5">
+          <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-[var(--hairline)] px-5">
             <dt className="text-sm text-[var(--text-secondary)]">Email</dt>
-            <dd className="text-sm text-[var(--paper)]">guest@larpcity.local</dd>
+            <dd className="text-sm text-[var(--ink)]">guest@larpcity.local</dd>
           </div>
           <div className="flex min-h-[52px] items-center justify-between gap-4 px-5">
             <dt className="text-sm text-[var(--text-secondary)]">Name</dt>
-            <dd className="text-sm text-[var(--paper)]">Guest</dd>
+            <dd className="text-sm text-[var(--ink)]">Guest</dd>
           </div>
         </dl>
       </section>
 
       <section className="ll-panel p-6">
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-sm font-medium text-[var(--paper)]">Plan</h2>
+          <h2 className="text-sm font-semibold text-[var(--ink)]">Plan</h2>
           <Badge tone="pro">Pro</Badge>
         </div>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">

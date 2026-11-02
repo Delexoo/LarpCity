@@ -33,10 +33,10 @@ export function DashboardShell({
   }, [mobileOpen]);
 
   return (
-    <div className="flex min-h-screen bg-[var(--ink)] text-[var(--paper)]">
+    <div className="flex min-h-screen bg-[var(--bg)] text-[var(--ink)]">
       <div
         className={cn(
-          "z-50 bg-[var(--ink-raised)]",
+          "z-50 bg-[var(--surface)]",
           mobileOpen
             ? "fixed inset-0 flex flex-col md:static md:inset-auto md:block"
             : "hidden md:block",

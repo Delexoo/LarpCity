@@ -1,6 +1,6 @@
 import { LocalLarpClient } from "./LocalLarpClient";
 
-export const metadata = { title: "LARP" };
+export const metadata = { title: "Stripe" };
 
 export default async function LarpViewerPage({
   params,

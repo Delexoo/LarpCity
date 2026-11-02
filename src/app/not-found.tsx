@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/Button";
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--ink)] px-5 text-center">
-      <Link href="/" className="wordmark text-lg">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--bg)] px-5 text-center">
+      <Link href="/" className="wordmark text-xl">
         LarpCity
       </Link>
       <h1 className="page-title mt-10 text-4xl">Page not found</h1>

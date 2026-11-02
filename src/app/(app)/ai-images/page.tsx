@@ -16,7 +16,7 @@ export default function AiImagesPage() {
         {Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i}
-            className="flex aspect-square items-center justify-center rounded-2xl border border-dashed border-white/15 text-[var(--text-muted)]"
+            className="flex aspect-square items-center justify-center rounded-[1rem] border-2 border-dashed border-[var(--dashed)] bg-[var(--surface)] text-[var(--text-muted)]"
           >
             <Plus className="size-5" strokeWidth={2} />
           </div>

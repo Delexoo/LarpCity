@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import {
   createLocalLarp,
   getLocalLarp,
+  syncLarpSnapshot,
   updateLocalLarp,
 } from "@/lib/larps/local-store";
 import { randomStripeAmounts } from "@/lib/larps/realistic";
@@ -42,7 +43,7 @@ function FieldLabel({
 }) {
   return (
     <div className="mb-2">
-      <p className="text-sm font-medium text-[var(--paper)]">{children}</p>
+      <p className="text-sm font-medium text-[var(--ink)]">{children}</p>
       {hint ? (
         <p className="mt-0.5 text-xs text-[var(--text-secondary)]">{hint}</p>
       ) : null}
@@ -64,7 +65,7 @@ function TextInput({
       value={value}
       placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-[var(--paper)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--acid)]/40 focus:outline-2 focus:outline-[color-mix(in_oklab,var(--acid)_45%,transparent)] focus:outline-offset-2"
+      className="w-full rounded-lg border border-[var(--hairline)] bg-[var(--surface-alt)] px-3.5 py-2.5 text-sm text-[var(--ink)] outline-none placeholder:text-[var(--text-muted)] focus:border-[var(--ink)]/40 focus:outline-2 focus:outline-[var(--accent-ring)] focus:outline-offset-2"
     />
   );
 }
@@ -86,14 +87,14 @@ function Accordion({
 }) {
   const open = openId === id;
   return (
-    <div className="border-b border-white/10 last:border-0">
+    <div className="border-b border-[var(--hairline)] last:border-0">
       <button
         type="button"
         onClick={() => setOpenId(open ? null : id)}
         className="flex w-full items-center justify-between gap-3 py-4 text-left"
       >
         <div className="min-w-0">
-          <p className="text-sm font-semibold tracking-tight text-[var(--paper)]">
+          <p className="text-sm font-semibold tracking-tight text-[var(--ink)]">
             {title}
           </p>
           <p className="mt-0.5 truncate text-xs text-[var(--text-secondary)]">
@@ -299,7 +300,7 @@ export function StripeNewLarpForm({
                 key={p}
                 type="button"
                 onClick={() => applyBalancePreset(p)}
-                className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-[var(--paper)]/80 transition hover:border-[var(--acid)]/40 hover:text-[var(--acid)]"
+                className="rounded-full border border-[var(--hairline)] bg-[var(--surface-alt)] px-3 py-1.5 text-xs font-medium text-[var(--ink)]/80 transition hover:border-[var(--ink)]/40 hover:text-[var(--ink)]"
               >
                 {p}
               </button>
@@ -319,7 +320,7 @@ export function StripeNewLarpForm({
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 sm:px-5">
+        <section className="rounded-2xl border border-[var(--hairline)] bg-[var(--surface)] px-4 sm:px-5">
           <Accordion
             id="quick"
             openId={openId}
@@ -339,11 +340,11 @@ export function StripeNewLarpForm({
                   className={cn(
                     "rounded-xl border p-3 text-left transition",
                     preset === item.id
-                      ? "border-[var(--acid)]/50 bg-[var(--accent-select)]"
-                      : "border-white/10 bg-transparent hover:border-white/25",
+                      ? "border-[var(--ink)]/40 bg-[var(--accent-select)]"
+                      : "border-[var(--hairline)] bg-transparent hover:border-[var(--ink)]/25",
                   )}
                 >
-                  <p className="text-sm font-medium text-[var(--paper)]">
+                  <p className="text-sm font-medium text-[var(--ink)]">
                     {item.label}
                   </p>
                   <p className="mt-1 text-xs text-[var(--text-secondary)]">
@@ -373,8 +374,8 @@ export function StripeNewLarpForm({
                       className={cn(
                         "rounded-full border px-3 py-1.5 text-xs font-medium",
                         currency === c
-                          ? "border-[var(--acid)]/50 bg-[var(--accent-select)] text-[var(--acid)]"
-                          : "border-white/10 text-[var(--paper)]/80",
+                          ? "border-[var(--ink)]/40 bg-[var(--accent-select)] text-[var(--ink)]"
+                          : "border-[var(--hairline)] text-[var(--ink)]/80",
                       )}
                     >
                       {c}
@@ -441,8 +442,8 @@ export function StripeNewLarpForm({
                       className={cn(
                         "rounded-full border px-3 py-1.5 text-xs font-medium",
                         vibe === v
-                          ? "border-[var(--acid)]/50 bg-[var(--accent-select)] text-[var(--acid)]"
-                          : "border-white/10 text-[var(--paper)]/80",
+                          ? "border-[var(--ink)]/40 bg-[var(--accent-select)] text-[var(--ink)]"
+                          : "border-[var(--hairline)] text-[var(--ink)]/80",
                       )}
                     >
                       {v}
@@ -461,8 +462,8 @@ export function StripeNewLarpForm({
                       className={cn(
                         "rounded-full border px-3 py-1.5 text-xs font-medium",
                         theme === t
-                          ? "border-[var(--acid)]/50 bg-[var(--accent-select)] text-[var(--acid)]"
-                          : "border-white/10 text-[var(--paper)]/80",
+                          ? "border-[var(--ink)]/40 bg-[var(--accent-select)] text-[var(--ink)]"
+                          : "border-[var(--hairline)] text-[var(--ink)]/80",
                       )}
                     >
                       {t}
@@ -488,22 +489,22 @@ export function StripeNewLarpForm({
               ].map((p) => (
                 <div
                   key={p.name}
-                  className="flex items-center justify-between rounded-xl border border-white/10 px-3 py-2.5"
+                  className="flex items-center justify-between rounded-xl border border-[var(--hairline)] px-3 py-2.5"
                 >
                   <div>
-                    <p className="text-sm text-[var(--paper)]">{p.name}</p>
+                    <p className="text-sm text-[var(--ink)]">{p.name}</p>
                     <p className="text-xs text-[var(--text-secondary)]">
                       {p.type}
                     </p>
                   </div>
-                  <p className="text-sm text-[var(--paper)]">{p.price}</p>
+                  <p className="text-sm text-[var(--ink)]">{p.price}</p>
                 </div>
               ))}
               <Button type="button" variant="outline" size="sm">
                 Add product
               </Button>
               <p className="text-xs text-[var(--text-secondary)]">
-                Allocation total: <span className="text-[var(--paper)]">100</span>{" "}
+                Allocation total: <span className="text-[var(--ink)]">100</span>{" "}
                 (auto-normalized at render)
               </p>
             </div>
@@ -561,12 +562,12 @@ export function StripeNewLarpForm({
         </section>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-white/10 bg-[var(--ink)]/90 backdrop-blur-md">
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--hairline)] bg-[var(--surface)]/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p
             className={cn(
               "inline-flex items-center gap-2 text-sm",
-              believable ? "text-emerald-400" : "text-amber-300",
+              believable ? "text-[var(--ink)]" : "text-[var(--text-secondary)]",
             )}
           >
             <Check className="size-4" strokeWidth={2} />
@@ -586,6 +587,7 @@ export function StripeNewLarpForm({
                 const data = collectData();
                 if (editId) {
                   const updated = updateLocalLarp(editId, { title, data });
+                  if (updated) void syncLarpSnapshot(updated);
                   router.push(
                     updated
                       ? `/larps/${encodeURIComponent(updated.id)}`
@@ -598,7 +600,9 @@ export function StripeNewLarpForm({
                   platform_slug: "stripe",
                   data,
                 });
-                router.push(`/larps?created=${encodeURIComponent(larp.id)}`);
+                void syncLarpSnapshot(larp);
+                // Open the viewer so Install uses the correct start_url + cookie handoff.
+                router.push(`/larps/${encodeURIComponent(larp.id)}`);
               }}
               className="min-w-[140px]"
             >

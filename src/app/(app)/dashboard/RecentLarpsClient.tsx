@@ -16,15 +16,15 @@ export function RecentLarpsClient() {
   }, []);
 
   if (!ready) {
-    return <div className="h-28 animate-pulse rounded-2xl bg-white/[0.04]" />;
+    return (
+      <div className="h-28 animate-pulse rounded-[1.5rem] bg-[var(--skeleton)]/40" />
+    );
   }
 
   if (larps.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.02] px-6 py-12 text-center">
-        <p className="font-[family-name:var(--font-display)] text-lg text-[var(--paper)]">
-          No LARPs yet
-        </p>
+      <div className="rounded-[1.5rem] border border-dashed border-[var(--dashed)] bg-[var(--surface)] px-6 py-12 text-center shadow-[var(--shadow-card)]">
+        <p className="page-title text-2xl">No LARPs yet</p>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">
           Create one from a platform and it will show up here.
         </p>

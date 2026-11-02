@@ -1,5 +1,28 @@
 # LarpCity Release Notes
 
+## v0.3.0 — Ink + Paper UI, Venmo, manage LARPs
+
+**Production:** https://app-kohl-three-47.vercel.app
+
+### Highlights
+- **Ink + Paper redesign** — primarily white black-and-white shell; no lime/acid accents in chrome
+- **One typeface** — Figtree everywhere (titles, wordmark, body) for a simple professional look
+- **My LARPs manage actions** — edit, open, share, and delete from the library
+- **Venmo LARP** — desktop + mobile viewers, brand assets, create form, notifications helpers
+- **Stripe polish** — official wordmark, deeper mobile viewer, Settings snippet updates
+- **PWA / install** — service worker, install prompt, snapshot + manifest API routes
+- **Sentence-case UI copy** — clearer page titles and empty states
+
+### Fixes
+- Stripe logo path/viewBox corruption in protect overlay and mobile viewer
+- Invalid button-inside-link markup on LARP cards (links wrap actions cleanly)
+
+### Not in this release
+- Live cloud LARP sync / multi-device accounts (local `localStorage` store)
+- Full Google OAuth gate on every route (entry still open for local-first use)
+
+---
+
 ## v0.2.0 — Stripe deep dashboard & Settings
 
 ### Highlights
@@ -11,10 +34,6 @@
 - Create → My LARPs flow with highlight; open LARP for immersive viewer
 - Removed manual Desktop/Mobile device toggle
 - Cleaned legacy `web/`, reference dumps, and temp scripts
-
-### Not in this release
-- Live Stripe billing / OAuth / cloud sync (local LARP store only)
-- GitHub remote push (requires GitHub auth on this machine)
 
 ### Deploy
 - Production: https://app-kohl-three-47.vercel.app

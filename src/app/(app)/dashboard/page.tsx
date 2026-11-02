@@ -11,7 +11,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-10">
-      <div className="flex flex-col gap-4 border-b border-white/[0.07] pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 border-b border-[var(--hairline)] pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <h1 className="page-title">Dashboard</h1>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">
@@ -25,10 +25,10 @@ export default function DashboardPage() {
 
       <section>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-sm font-medium text-[var(--paper)]">Platforms</h2>
+          <h2 className="text-sm font-semibold text-[var(--ink)]">Platforms</h2>
           <Link
             href="/larps/new"
-            className="text-xs text-[var(--text-secondary)] hover:text-[var(--paper)]"
+            className="text-xs text-[var(--text-secondary)] hover:text-[var(--ink)]"
           >
             Browse all
           </Link>
@@ -38,10 +38,12 @@ export default function DashboardPage() {
             <Link
               key={platform.id}
               href={platform.href}
-              className="ll-stat-card flex items-center justify-between px-4 py-3 transition hover:border-[var(--acid)]/35"
+              className="ll-stat-card flex items-center justify-between px-4 py-3 transition hover:border-[var(--ink)]/30"
             >
               <div>
-                <p className="text-sm text-[var(--paper)]">{platform.name}</p>
+                <p className="text-sm font-medium text-[var(--ink)]">
+                  {platform.name}
+                </p>
                 <p className="mt-0.5 text-[11px] text-[var(--text-secondary)]">
                   {platform.section}
                 </p>
@@ -60,12 +62,12 @@ export default function DashboardPage() {
 
       <section>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-sm font-medium text-[var(--paper)]">
+          <h2 className="text-sm font-semibold text-[var(--ink)]">
             Recent LARPs
           </h2>
           <Link
             href="/larps"
-            className="text-xs text-[var(--text-secondary)] hover:text-[var(--paper)]"
+            className="text-xs text-[var(--text-secondary)] hover:text-[var(--ink)]"
           >
             View all
           </Link>

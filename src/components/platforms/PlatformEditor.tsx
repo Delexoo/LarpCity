@@ -176,7 +176,7 @@ export function PlatformEditor({
           Back to edit
         </Button>
       </div>
-      <div className="overflow-hidden rounded-2xl border border-white/10">
+      <div className="overflow-hidden rounded-2xl border border-[var(--hairline)]">
         {renderPreview()}
       </div>
     </div>
@@ -184,14 +184,14 @@ export function PlatformEditor({
 
   return (
     <div className="space-y-4">
-      <div className="flex max-w-full gap-1 overflow-x-auto rounded-[0.8rem] border border-white/10 p-1 lg:hidden">
+      <div className="flex max-w-full gap-1 overflow-x-auto rounded-[0.8rem] border border-[var(--hairline)] p-1 lg:hidden">
         <button
           type="button"
           onClick={() => setMobilePane("edit")}
           className={cn(
             "min-h-10 flex-1 rounded-lg text-sm font-medium transition",
             mobilePane === "edit"
-              ? "bg-[var(--accent-select)] text-[var(--acid)] shadow-[inset_0_0_0_1px_rgba(204,255,0,0.16)]"
+              ? "bg-[var(--accent-select)] text-[var(--ink)] shadow-[var(--shadow-segment)]"
               : "text-[var(--text-muted)]",
           )}
         >
@@ -203,7 +203,7 @@ export function PlatformEditor({
           className={cn(
             "min-h-10 flex-1 rounded-lg text-sm font-medium transition",
             mobilePane === "preview"
-              ? "bg-[var(--accent-select)] text-[var(--acid)] shadow-[inset_0_0_0_1px_rgba(204,255,0,0.16)]"
+              ? "bg-[var(--accent-select)] text-[var(--ink)] shadow-[var(--shadow-segment)]"
               : "text-[var(--text-muted)]",
           )}
         >

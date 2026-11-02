@@ -17,14 +17,14 @@ export function LarpCard({ larp }: { larp: LarpCardData }) {
   return (
     <Link
       href={`/larps/${larp.id}`}
-      className="group block rounded-2xl border border-white/10 bg-white/[0.02] p-4 transition hover:border-[var(--acid)]/35 hover:bg-white/[0.04]"
+      className="group block rounded-[1rem] border border-[var(--hairline)] bg-[var(--surface)] p-4 shadow-[var(--shadow-card)] transition hover:border-[var(--ink)]/25"
     >
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-[11px] uppercase tracking-wider text-[var(--text-secondary)]">
             {larp.platform_slug.replace(/-/g, " ")}
           </p>
-          <h3 className="mt-1 text-sm font-medium text-[var(--paper)] group-hover:text-[var(--acid)]">
+          <h3 className="mt-1 text-sm font-semibold text-[var(--ink)] group-hover:underline">
             {larp.title}
           </h3>
         </div>

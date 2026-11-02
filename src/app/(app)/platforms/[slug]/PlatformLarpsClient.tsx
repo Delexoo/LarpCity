@@ -25,14 +25,14 @@ export function PlatformLarpsClient({
   }, [slug]);
 
   if (!ready) {
-    return <div className="h-32 animate-pulse rounded-2xl bg-white/[0.04]" />;
+    return <div className="h-32 animate-pulse rounded-[1.5rem] bg-[var(--skeleton)]/40" />;
   }
 
   if (larps.length === 0) {
     return (
       <EmptyState
         title={`No ${platformName} LARPs yet`}
-        description="Create a new LARP to configure balances, device, and dashboard details."
+        description="Create a new LARP to configure balances and dashboard details."
         action={
           <CreateLarpActions
             platformSlug={slug}

@@ -87,3 +87,125 @@ export function updateLocalLarp(
   saveLocalLarps(list);
   return next;
 }
+
+export function deleteLocalLarp(id: string): boolean {
+  const all = listLocalLarps();
+  const next = all.filter((larp) => larp.id !== id);
+  if (next.length === all.length) return false;
+  saveLocalLarps(next);
+  return true;
+}
+
+/** Upsert a LARP into the local list (used when hydrating from cookie/API). */
+export function upsertLocalLarp(larp: LocalLarp): LocalLarp {
+  const next = [larp, ...listLocalLarps().filter((item) => item.id !== larp.id)];
+  saveLocalLarps(next);
+  return larp;
+}
+
+function cookieName(id: string) {
+  return `lc_larp_${id.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 48)}`;
+}
+
+function encodeLarpCookie(larp: LocalLarp): string | null {
+  try {
+    const json = JSON.stringify(larp);
+    const b64 = btoa(unescape(encodeURIComponent(json)))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/g, "");
+    // Stay under typical 4KB cookie limits.
+    if (b64.length > 3500) return null;
+    return b64;
+  } catch {
+    return null;
+  }
+}
+
+function decodeLarpCookie(raw: string): LocalLarp | null {
+  try {
+    const pad = raw.length % 4 === 0 ? "" : "=".repeat(4 - (raw.length % 4));
+    const b64 = raw.replace(/-/g, "+").replace(/_/g, "/") + pad;
+    const json = decodeURIComponent(escape(atob(b64)));
+    const parsed = JSON.parse(json) as LocalLarp;
+    if (!parsed?.id || !parsed.platform_slug) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+/** iOS copies cookies (not localStorage) into Home Screen web apps at install. */
+export function writeInstallCookie(larp: LocalLarp) {
+  if (typeof document === "undefined") return;
+  const value = encodeLarpCookie(larp);
+  if (!value) return;
+  const secure = typeof location !== "undefined" && location.protocol === "https:";
+  document.cookie = `${cookieName(larp.id)}=${value}; Path=/; Max-Age=31536000; SameSite=Lax${secure ? "; Secure" : ""}`;
+}
+
+export function readInstallCookie(id: string): LocalLarp | null {
+  if (typeof document === "undefined") return null;
+  const key = `${cookieName(id)}=`;
+  const hit = document.cookie.split("; ").find((row) => row.startsWith(key));
+  if (!hit) return null;
+  return decodeLarpCookie(hit.slice(key.length));
+}
+
+/** Push LARP to cloud snapshot so installed PWAs can hydrate without localStorage. */
+export async function syncLarpSnapshot(larp: LocalLarp): Promise<boolean> {
+  writeInstallCookie(larp);
+  try {
+    const res = await fetch(`/api/larp-snapshots/${encodeURIComponent(larp.id)}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ larp }),
+      keepalive: true,
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function fetchLarpSnapshot(id: string): Promise<LocalLarp | null> {
+  try {
+    const res = await fetch(`/api/larp-snapshots/${encodeURIComponent(id)}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const body = (await res.json()) as { larp?: LocalLarp };
+    if (!body.larp?.id) return null;
+    return body.larp;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Resolve a LARP for the viewer / installed PWA.
+ * localStorage → install cookie (iOS handoff) → cloud snapshot.
+ */
+export async function resolveLocalLarp(id: string): Promise<LocalLarp | null> {
+  const local = getLocalLarp(id);
+  if (local) {
+    void syncLarpSnapshot(local);
+    return local;
+  }
+
+  const fromCookie = readInstallCookie(id);
+  if (fromCookie) {
+    upsertLocalLarp(fromCookie);
+    void syncLarpSnapshot(fromCookie);
+    return fromCookie;
+  }
+
+  const remote = await fetchLarpSnapshot(id);
+  if (remote) {
+    upsertLocalLarp(remote);
+    writeInstallCookie(remote);
+    return remote;
+  }
+
+  return null;
+}

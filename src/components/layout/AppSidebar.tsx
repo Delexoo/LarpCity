@@ -185,37 +185,38 @@ export function AppSidebar({
   return (
     <aside
       className={cn(
-        "flex h-full flex-col bg-[var(--ink-raised)]",
+        "flex h-full flex-col bg-[var(--surface)]",
         mobile
           ? "w-full"
           : cn(
-              "sticky top-0 h-screen border-r border-white/10 transition-[width] duration-200",
-              compact ? "w-[68px]" : "w-[252px]",
+              "sticky top-0 h-screen border-r border-[var(--hairline)] transition-[width] duration-200",
+              compact ? "w-[68px]" : "w-[260px]",
             ),
       )}
     >
       <div
         className={cn(
-          "flex items-center gap-2.5 border-b border-white/10 px-3 py-4",
+          "flex items-center gap-2.5 border-b border-[var(--hairline)] px-3 py-4",
           compact && "justify-center",
         )}
       >
-        <div className="flex size-8 items-center justify-center rounded-md bg-[var(--acid)] font-[family-name:var(--font-display)] text-xs font-bold text-[var(--ink)]">
-          L
-        </div>
         {!compact ? (
           <div className="min-w-0 flex-1">
-            <p className="wordmark truncate text-sm">LarpCity</p>
-            <Badge tone={isPro ? "pro" : "muted"} className="mt-1">
+            <p className="wordmark truncate text-[1.35rem] leading-none">
+              LarpCity
+            </p>
+            <Badge tone={isPro ? "pro" : "muted"} className="mt-2">
               {isPro ? "Pro" : "Free"}
             </Badge>
           </div>
-        ) : null}
+        ) : (
+          <p className="wordmark text-lg leading-none">L</p>
+        )}
         {mobile ? (
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex size-9 shrink-0 items-center justify-center rounded-full text-[var(--paper)]/80 hover:bg-white/5"
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-full text-[var(--ink)] hover:bg-[var(--surface-alt)]"
             aria-label="Close menu"
           >
             <X className="size-5" strokeWidth={2} />
@@ -226,12 +227,12 @@ export function AppSidebar({
       {!compact ? (
         <button
           type="button"
-          className="mx-3 mt-3 flex h-9 items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 text-left text-xs text-[var(--text-secondary)]"
+          className="mx-3 mt-3 flex h-9 items-center gap-2 rounded-full border border-[var(--hairline)] bg-[var(--bg)] px-3 text-left text-xs text-[var(--text-secondary)]"
         >
           <Search className="size-3.5" strokeWidth={2} />
           <span className="flex-1">Search</span>
           {!mobile ? (
-            <kbd className="rounded border border-white/10 px-1.5 py-0.5 text-[10px]">
+            <kbd className="rounded border border-[var(--hairline)] px-1.5 py-0.5 text-[10px]">
               Ctrl K
             </kbd>
           ) : null}
@@ -239,7 +240,7 @@ export function AppSidebar({
       ) : (
         <button
           type="button"
-          className="mx-auto mt-3 flex size-8 items-center justify-center rounded-full border border-white/10 text-[var(--text-secondary)]"
+          className="mx-auto mt-3 flex size-8 items-center justify-center rounded-full border border-[var(--hairline)] text-[var(--text-secondary)]"
           aria-label="Search"
         >
           <Search className="size-3.5" strokeWidth={2} />
@@ -253,7 +254,7 @@ export function AppSidebar({
           return (
             <div key={section} className="mb-4">
               {!compact ? (
-                <p className="mb-1.5 px-2 text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                <p className="mb-1.5 px-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-[var(--text-secondary)]">
                   {section}
                 </p>
               ) : null}
@@ -276,13 +277,13 @@ export function AppSidebar({
         })}
       </nav>
 
-      <div className="border-t border-white/10 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+      <div className="border-t border-[var(--hairline)] p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         <a
           href="https://discord.gg/"
           target="_blank"
           rel="noreferrer"
           className={cn(
-            "mb-1 flex items-center gap-2 rounded-md px-2 py-2 text-xs text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--paper)]",
+            "mb-1 flex items-center gap-2 rounded-full px-2 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-alt)] hover:text-[var(--ink)]",
             compact && "justify-center px-0",
           )}
         >
@@ -294,7 +295,7 @@ export function AppSidebar({
             type="button"
             onClick={onToggle}
             className={cn(
-              "flex w-full items-center gap-2 rounded-md px-2 py-2 text-xs text-[var(--text-secondary)] hover:bg-white/5 hover:text-[var(--paper)]",
+              "flex w-full items-center gap-2 rounded-full px-2 py-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-alt)] hover:text-[var(--ink)]",
               compact && "justify-center px-0",
             )}
           >
@@ -331,10 +332,10 @@ function SidebarLink({
         title={item.name}
         onClick={onNavigate}
         className={cn(
-          "flex min-h-11 items-center gap-2 rounded-md px-2 py-1.5 text-[13px] transition-colors duration-150 md:min-h-0",
+          "flex min-h-11 items-center gap-2 rounded-full px-2.5 py-1.5 text-[15px] transition-colors duration-150 md:min-h-0",
           active
-            ? "bg-white/8 font-medium text-[var(--paper)]"
-            : "text-[var(--paper)]/65 hover:bg-white/5 hover:text-[var(--paper)]",
+            ? "bg-[var(--accent-select)] font-semibold text-[var(--ink)]"
+            : "font-medium text-[var(--ink)]/75 hover:bg-[var(--surface-alt)] hover:text-[var(--ink)]",
           compact && "justify-center px-0",
         )}
       >

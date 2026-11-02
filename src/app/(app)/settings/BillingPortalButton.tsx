@@ -31,7 +31,9 @@ export function BillingPortalButton() {
       >
         {loading ? "Opening…" : "Billing portal"}
       </Button>
-      {error ? <p className="mt-2 text-xs text-red-400">{error}</p> : null}
+      {error ? (
+        <p className="mt-2 text-xs text-[var(--alert-dot)]">{error}</p>
+      ) : null}
     </div>
   );
 }

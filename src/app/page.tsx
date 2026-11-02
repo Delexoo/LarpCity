@@ -3,18 +3,21 @@ import { Button } from "@/components/ui/Button";
 
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[var(--ink)]">
+    <div className="relative min-h-screen overflow-hidden bg-[var(--bg)]">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 opacity-70"
         style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% -10%, rgba(204,255,0,0.12), transparent 55%), radial-gradient(ellipse 50% 40% at 80% 20%, rgba(255,255,255,0.04), transparent 50%)",
+          backgroundImage:
+            "linear-gradient(to right, rgba(26,26,26,0.045) 1px, transparent 1px), linear-gradient(to bottom, rgba(26,26,26,0.045) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+          maskImage:
+            "radial-gradient(ellipse 70% 55% at 50% 20%, black, transparent 75%)",
         }}
       />
 
       <header className="relative z-10 flex items-center justify-between px-5 py-5 md:px-10">
-        <p className="wordmark text-lg">LarpCity</p>
+        <p className="wordmark text-xl">LarpCity</p>
         <div className="flex items-center gap-2">
           <Link href="/pricing">
             <Button variant="ghost" size="sm">
@@ -28,11 +31,11 @@ export default function HomePage() {
       </header>
 
       <main className="relative z-10 flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-5 pb-24 text-center">
-        <p className="wordmark text-[2.75rem] leading-none sm:text-5xl md:text-7xl">
+        <p className="wordmark text-[3rem] leading-none sm:text-6xl md:text-7xl">
           LarpCity
         </p>
-        <h1 className="mt-6 max-w-xl text-balance text-xl font-medium text-[var(--paper)]/90 md:text-2xl">
-          Mock dashboards that look like the real thing.
+        <h1 className="page-title mt-6 max-w-xl text-balance text-2xl md:text-3xl">
+          Mock dashboards that look like the real thing
         </h1>
         <p className="mt-4 max-w-md text-pretty text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
           Build screenshot-ready financial and social LARPs in minutes — Stripe,

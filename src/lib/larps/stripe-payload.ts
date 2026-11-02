@@ -240,8 +240,8 @@ export function injectStripeViewerHtml(
 
   const settingsBridge = `<script>(function(){var KEY="larpcity.stripe.settings.${payload.x.id.replace(/"/g, "")}";function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}}function save(patch){var next=Object.assign(load(),patch||{},{_updatedAt:Date.now()});try{localStorage.setItem(KEY,JSON.stringify(next))}catch(e){}return next}window.__LC_LOAD_SETTINGS=load;window.__LC_SAVE_SETTINGS=save;})();</script>`;
 
-  const exit = `<style>#lc-exit{position:fixed;bottom:56px;right:12px;z-index:99999;font:12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 24px)}#lc-exit a{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#1a2c44;color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.18);opacity:.9}#lc-exit a.secondary{background:#635bff}#lc-exit a:hover{opacity:1}</style><div id="lc-exit"><a class="secondary" href="/platforms/stripe/new?edit=${encodeURIComponent(payload.x.id)}" target="_parent" rel="noopener">Edit amounts</a><a href="/larps" target="_parent" rel="noopener">← My LARPs</a></div>`;
-  html = html.replace("</body>", `${responsive}${settingsBridge}${exit}</body>`);
+  // Immersive official Stripe look — no LarpCity chrome overlays.
+  html = html.replace("</body>", `${responsive}${settingsBridge}</body>`);
 
   return html;
 }

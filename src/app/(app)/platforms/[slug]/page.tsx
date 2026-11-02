@@ -48,10 +48,8 @@ export default async function PlatformHubPage({
       </div>
 
       {comingSoon ? (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.02] px-6 py-12 text-center">
-          <p className="font-[family-name:var(--font-display)] text-lg text-[var(--paper)]">
-            Coming soon
-          </p>
+        <div className="rounded-[1.5rem] border border-[var(--hairline)] bg-[var(--surface)] px-6 py-12 text-center shadow-[var(--shadow-card)]">
+          <p className="page-title text-2xl">Coming soon</p>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">
             {platform.name} is on the roadmap. Check back soon.
           </p>

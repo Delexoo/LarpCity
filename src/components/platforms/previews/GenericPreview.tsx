@@ -36,7 +36,7 @@ export function GenericPreview({
       </div>
       <div className="px-5 py-6">
         <p className="text-xs text-[var(--muted)]">Available balance</p>
-        <p className="mt-1 font-[family-name:var(--font-display)] text-3xl tracking-tight text-white">
+        <p className="mt-1 text-3xl font-bold tracking-tight text-white">
           {data.balance || "$0.00"}
         </p>
       </div>

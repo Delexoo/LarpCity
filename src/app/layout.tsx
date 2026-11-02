@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Figtree } from "next/font/google";
 import "./globals.css";
 
-const space = Space_Grotesk({
+const figtree = Figtree({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const spaceDisplay = Space_Grotesk({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -29,11 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${space.variable} ${spaceDisplay.variable} h-full antialiased`}
-    >
-      <body className="min-h-full bg-[var(--bg)] text-[var(--paper)]">
+    <html lang="en" className={`${figtree.variable} h-full antialiased`}>
+      <body className="min-h-full bg-[var(--bg)] font-[family-name:var(--font-body)] text-[var(--ink)]">
         {children}
       </body>
     </html>
