@@ -53,12 +53,12 @@ const newCase = `case "settingsitem": return openSettingsItem(b.getAttribute("da
       case "settingsback": return settings();
       case "settingssave": {
         var patch = collectSettingsFields(view);
-        if (window.__LC_SAVE_SETTINGS) window.__LC_SAVE_SETTINGS(patch);
+        if (window.__LK_SAVE_SETTINGS) window.__LK_SAVE_SETTINGS(patch);
         var saved = $("#sf_saved"); if (saved) { saved.hidden = false; setTimeout(function(){ saved.hidden = true; }, 1600); }
         return;
       }
       case "settingsdismissbanner": {
-        if (window.__LC_SAVE_SETTINGS) window.__LC_SAVE_SETTINGS({ _banner: false });
+        if (window.__LK_SAVE_SETTINGS) window.__LK_SAVE_SETTINGS({ _banner: false });
         return settings();
       }`;
 

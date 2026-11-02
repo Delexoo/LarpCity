@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BRAND_NAME } from "@/lib/brand";
 
 /** Small Free-plan mark (Pro removes it). Matches Install pill size. */
 export function LarpWatermark() {
@@ -18,7 +19,7 @@ export function LarpWatermark() {
           height={16}
           className="size-4 shrink-0 rounded-[4px] object-cover"
         />
-        Made with LarpCity
+        Made with {BRAND_NAME}
       </Link>
     </div>
   );

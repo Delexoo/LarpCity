@@ -238,9 +238,9 @@ export function injectStripeViewerHtml(
   // Soften fixed desktop min-width so tablets don't clip as hard.
   const responsive = `<style>@media (max-width:959px){body{min-width:0!important}#nav{position:fixed;transform:translateX(-100%)}#nav.open{transform:none}#main,#view,.work{margin-left:0!important;padding-left:12px!important;padding-right:12px!important}.today{grid-template-columns:1fr!important}}</style>`;
 
-  const settingsBridge = `<script>(function(){var KEY="larpcity.stripe.settings.${payload.x.id.replace(/"/g, "")}";function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}}function save(patch){var next=Object.assign(load(),patch||{},{_updatedAt:Date.now()});try{localStorage.setItem(KEY,JSON.stringify(next))}catch(e){}return next}window.__LC_LOAD_SETTINGS=load;window.__LC_SAVE_SETTINGS=save;})();</script>`;
+  const settingsBridge = `<script>(function(){var id=${JSON.stringify(payload.x.id)};var KEY="larpingkit.stripe.settings."+id;var LEGACY="larpcity.stripe.settings."+id;function load(){try{var raw=localStorage.getItem(KEY);if(raw==null){raw=localStorage.getItem(LEGACY);if(raw!=null)try{localStorage.setItem(KEY,raw)}catch(e){}}return JSON.parse(raw||"{}")||{}}catch(e){return{}}}function save(patch){var next=Object.assign(load(),patch||{},{_updatedAt:Date.now()});try{localStorage.setItem(KEY,JSON.stringify(next))}catch(e){}return next}window.__LK_LOAD_SETTINGS=load;window.__LK_SAVE_SETTINGS=save;})();</script>`;
 
-  // Immersive official Stripe look — no LarpCity chrome overlays.
+  // Immersive official Stripe look — no LarpingKit chrome overlays.
   html = html.replace("</body>", `${responsive}${settingsBridge}</body>`);
 
   return html;

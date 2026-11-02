@@ -12,7 +12,21 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 function dismissKey(id: string) {
-  return `larpcity.pwa.dismissed.${id}`;
+  const next = `larpingkit.pwa.dismissed.${id}`;
+  try {
+    if (
+      typeof window !== "undefined" &&
+      window.localStorage.getItem(next) == null
+    ) {
+      const legacy = window.localStorage.getItem(
+        `larpcity.pwa.dismissed.${id}`,
+      );
+      if (legacy != null) window.localStorage.setItem(next, legacy);
+    }
+  } catch {
+    /* ignore */
+  }
+  return next;
 }
 
 function isStandalone() {

@@ -48,7 +48,7 @@ async function shareLarp(larp: LocalLarp) {
 
   if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
     try {
-      await navigator.share({ title, url, text: `Open ${title} on LarpCity` });
+      await navigator.share({ title, url, text: `Open ${title} on LarpingKit` });
       return "shared";
     } catch (err) {
       if ((err as Error)?.name === "AbortError") return "cancelled";

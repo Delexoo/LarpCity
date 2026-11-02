@@ -5,11 +5,11 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 const PAGES: Record<string, { title: string; body: string }> = {
   privacy: {
     title: "Privacy",
-    body: "LarpCity stores LARPs on your device by default. Account and billing data (when enabled) is processed by Supabase and Stripe. We do not sell personal information.",
+    body: "LarpingKit stores LARPs on your device by default. Account and billing data (when enabled) is processed by Supabase and Stripe. We do not sell personal information.",
   },
   terms: {
     title: "Terms",
-    body: "LarpCity provides mock dashboard tools for content and screenshots. You are responsible for how you use generated visuals. Not affiliated with Stripe, Coinbase, Shopify, YouTube, or any referenced brand.",
+    body: "LarpingKit provides mock dashboard tools for content and screenshots. You are responsible for how you use generated visuals. Not affiliated with Stripe, Coinbase, Shopify, YouTube, or any referenced brand.",
   },
   "refund-policy": {
     title: "Refund policy",
@@ -32,7 +32,7 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const page = PAGES[slug];
-  return { title: page ? `${page.title} · LarpCity` : "Legal" };
+  return { title: page ? `${page.title} · LarpingKit` : "Legal" };
 }
 
 export default async function LegalPage({

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { BRAND_NAME } from "@/lib/brand";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -10,11 +11,11 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: "LarpCity",
-    template: "%s · LarpCity",
+    default: BRAND_NAME,
+    template: `%s · ${BRAND_NAME}`,
   },
-  description:
-    "Create polished mock financial and social dashboards for screenshots — LarpCity.",
+  description: `Create polished mock financial and social dashboards for screenshots — ${BRAND_NAME}.`,
+  metadataBase: new URL("https://larpingkit.com"),
 };
 
 export default function RootLayout({

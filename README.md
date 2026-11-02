@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/larplabslogo.png" width="88" height="88" alt="LarpCity">
+  <img src="public/larplabslogo.png" width="88" height="88" alt="LarpingKit">
 </p>
 
-<h1 align="center">LarpCity</h1>
+<h1 align="center">LarpingKit</h1>
 
 <p align="center">
   <strong>Polished mock dashboards for screenshots</strong><br>
@@ -27,7 +27,7 @@
 
 ## What it is
 
-LarpCity lets you spin up realistic **LARPs** — local-first mock product UIs — so you can capture clean screenshots without touching live accounts.
+**LarpingKit** (larpingkit.com) lets you spin up realistic **LARPs** — local-first mock product UIs — so you can capture clean screenshots without touching live accounts.
 
 | Ready now | Coming soon |
 | --- | --- |
@@ -105,7 +105,7 @@ npm run lint     # ESLint
 
 ## Plans
 
-- **Free** — all ready platforms · LarpCity watermark on viewers  
+- **Free** — all ready platforms · LarpingKit watermark on viewers  
 - **Pro** — watermark removed (lifetime-first pricing)
 
 ## Release notes

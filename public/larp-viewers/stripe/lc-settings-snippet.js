@@ -2,7 +2,7 @@
    Keep in sync with settings() in home.html. */
 
 function settings() {
-  var S = window.__LC_LOAD_SETTINGS ? window.__LC_LOAD_SETTINGS() : {};
+  var S = window.__LK_LOAD_SETTINGS ? window.__LK_LOAD_SETTINGS() : {};
   var groups = [
     ["Personal settings", [
       ["Personal details", "user", "Contact info, password, auth methods, active sessions."],
@@ -49,7 +49,7 @@ function settings() {
 }
 
 function settingsVal(key, fallback) {
-  var S = window.__LC_LOAD_SETTINGS ? window.__LC_LOAD_SETTINGS() : {};
+  var S = window.__LK_LOAD_SETTINGS ? window.__LK_LOAD_SETTINGS() : {};
   if (S[key] != null && S[key] !== "") return String(S[key]);
   return fallback;
 }

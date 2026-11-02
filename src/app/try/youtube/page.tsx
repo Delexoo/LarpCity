@@ -1,36 +1,39 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { Button } from "@/components/ui/Button";
+import { YouTubeNewLarpForm } from "@/components/platforms/forms/YouTubeNewLarpForm";
 
 export const metadata = {
-  title: "Try YouTube Studio · LarpCity",
-  description: "Build a YouTube Studio LARP with your channel numbers.",
+  title: "Try YouTube Studio · LarpingKit",
+  description:
+    "Build a YouTube Studio LARP with your channel numbers — live form, no account required to start.",
 };
 
 export default function TryYouTubePage() {
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--ink)]">
       <SiteHeader />
-      <main className="mx-auto max-w-2xl px-5 pb-20 pt-[7.5rem] md:px-8">
+      <main className="mx-auto max-w-3xl px-5 pb-20 pt-[7.5rem] md:px-8">
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-[var(--text-secondary)]">
-          Free try
+          Live Studio build · no signup
         </p>
         <h1 className="page-title mt-3 text-[clamp(1.85rem,3vw,2.5rem)]">
           Your YouTube Studio, your numbers.
         </h1>
-        <p className="mt-4 text-sm leading-relaxed text-[var(--text-secondary)]">
-          Set channel name, subs, and views — open a Studio-style dashboard ready
-          for screenshots.
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)]">
+          Set channel name, subs, and views — then open a Studio-style dashboard
+          ready for screenshots. Same create flow as the app.
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/platforms/youtube-studio/new">
-            <Button size="lg">Build YouTube LARP</Button>
+        <p className="mt-3 text-sm text-[var(--text-muted)]">
+          Prefer commerce?{" "}
+          <Link
+            href="/try/shopify"
+            className="font-medium text-[var(--ink)] underline-offset-2 hover:underline"
+          >
+            Try Shopify
           </Link>
-          <Link href="/try/shopify">
-            <Button size="lg" variant="outline">
-              Try Shopify
-            </Button>
-          </Link>
+        </p>
+        <div className="mt-10">
+          <YouTubeNewLarpForm />
         </div>
       </main>
     </div>

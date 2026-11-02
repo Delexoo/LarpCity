@@ -9,7 +9,7 @@ export default function ReferPage() {
       <div>
         <h1 className="page-title">Refer a friend</h1>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">
-          Share LarpCity and earn rewards when friends upgrade.
+          Share LarpingKit and earn rewards when friends upgrade.
         </p>
       </div>
       <EmptyState

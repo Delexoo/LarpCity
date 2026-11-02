@@ -71,7 +71,7 @@ export default function PricingPage() {
               Clean
             </p>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
-              Same platforms · no LarpCity mark
+              Same platforms · no LarpingKit mark
             </p>
             <ul className="mt-8 space-y-3">
               <Feature>Everything in Free</Feature>

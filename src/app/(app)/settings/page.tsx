@@ -19,7 +19,7 @@ export default function SettingsPage() {
         <dl>
           <div className="flex min-h-[52px] items-center justify-between gap-4 border-b border-[var(--hairline)] px-5">
             <dt className="text-sm text-[var(--text-secondary)]">Email</dt>
-            <dd className="text-sm text-[var(--ink)]">guest@larpcity.local</dd>
+            <dd className="text-sm text-[var(--ink)]">guest@larpingkit.local</dd>
           </div>
           <div className="flex min-h-[52px] items-center justify-between gap-4 px-5">
             <dt className="text-sm text-[var(--text-secondary)]">Name</dt>

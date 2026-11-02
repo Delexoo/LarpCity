@@ -10,7 +10,7 @@ export default function SupportPage() {
       <div>
         <h1 className="page-title">Support</h1>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">
-          Reach the LarpCity team on Discord.
+          Reach the LarpingKit team on Discord.
         </p>
       </div>
       <EmptyState

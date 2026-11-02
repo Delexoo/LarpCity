@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   LOCAL_PLAN_EVENT,
+  LOCAL_PLAN_KEY,
   readLocalPlan,
   writeLocalPlan,
   type LocalPlan,
@@ -17,7 +18,7 @@ export function useLocalPlan() {
     setReady(true);
 
     const onStorage = (e: StorageEvent) => {
-      if (e.key && e.key !== "larpcity.plan.v1") return;
+      if (e.key && e.key !== LOCAL_PLAN_KEY) return;
       setPlan(readLocalPlan());
     };
     const onCustom = () => setPlan(readLocalPlan());

@@ -1,4 +1,4 @@
-## LarpCity v0.4.0 — Home, Instagram, Shopify & Studio polish
+## LarpingKit v0.4.0 — Home, Instagram, Shopify & Studio polish
 
 **Live demo:** https://larpcity-delexo.vercel.app
 

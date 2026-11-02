@@ -349,7 +349,7 @@ export function injectVenmoViewerHtml(
     "usedPhoto = {}; PHOTO = {}; PEOPLE.sort(function(){ return Math.random() - 0.5; }); PEOPLE.forEach(function (p) { photoFor(p.name, p.handle); });",
   );
 
-  // Strip embedded Install Venmo pill (LarpCity already shows InstallLarpPrompt).
+  // Strip embedded Install Venmo pill (LarpingKit already shows InstallLarpPrompt).
   html = html.replace(
     /<script id="ll-install-data"[\s\S]*$/i,
     "",

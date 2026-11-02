@@ -329,7 +329,7 @@ export function YouTubeNewLarpForm({
             Channel identity
           </h2>
           <div>
-            <FieldLabel hint="Only in your LarpCity list.">Profile name</FieldLabel>
+            <FieldLabel hint="Only in your LarpingKit list.">Profile name</FieldLabel>
             <TextInput
               value={internalName}
               onChange={setInternalName}

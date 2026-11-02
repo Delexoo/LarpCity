@@ -1,7 +1,7 @@
 import type { LocalLarp } from "@/lib/larps/local-store";
 import { getPlatformBySlug } from "@/lib/platforms/catalog";
 
-const KEY = (id: string) => `larpcity.larp.notifications.${id}`;
+const KEY = (id: string) => `larpingkit.larp.notifications.${id}`;
 
 export type LarpNotificationPrefs = {
   enabled: boolean;
@@ -11,7 +11,14 @@ export type LarpNotificationPrefs = {
 export function getLarpNotificationPrefs(id: string): LarpNotificationPrefs {
   if (typeof window === "undefined") return { enabled: false, updatedAt: 0 };
   try {
-    const raw = localStorage.getItem(KEY(id));
+    const key = KEY(id);
+    if (localStorage.getItem(key) == null) {
+      const legacy = localStorage.getItem(
+        `larpcity.larp.notifications.${id}`,
+      );
+      if (legacy != null) localStorage.setItem(key, legacy);
+    }
+    const raw = localStorage.getItem(key);
     if (!raw) return { enabled: false, updatedAt: 0 };
     const parsed = JSON.parse(raw) as LarpNotificationPrefs;
     return {

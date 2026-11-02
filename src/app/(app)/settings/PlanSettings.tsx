@@ -17,7 +17,7 @@ export function PlanSettings() {
       <p className="mt-3 text-sm text-[var(--text-secondary)]">
         {isPro
           ? "Watermark removed on this device. Screenshot-ready LARPs across every platform."
-          : "All platforms unlocked. Free LARPs show a LarpCity watermark until you upgrade."}
+          : "All platforms unlocked. Free LARPs show a LarpingKit watermark until you upgrade."}
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
         {isPro ? (

@@ -8,15 +8,27 @@ export type LocalLarp = {
   data: Record<string, unknown>;
 };
 
-const STORAGE_KEY = "larpcity.larps.v1";
+const STORAGE_KEY = "larpingkit.larps.v1";
 
 function canUseStorage() {
   return typeof window !== "undefined" && !!window.localStorage;
 }
 
+function ensureMigrated() {
+  if (!canUseStorage()) return;
+  try {
+    if (window.localStorage.getItem(STORAGE_KEY) != null) return;
+    const legacy = window.localStorage.getItem("larpcity.larps.v1");
+    if (legacy != null) window.localStorage.setItem(STORAGE_KEY, legacy);
+  } catch {
+    /* ignore */
+  }
+}
+
 export function listLocalLarps(): LocalLarp[] {
   if (!canUseStorage()) return [];
   try {
+    ensureMigrated();
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as LocalLarp[];

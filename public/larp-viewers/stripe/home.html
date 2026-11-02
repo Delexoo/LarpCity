@@ -1541,7 +1541,7 @@ body.as-open .today{grid-template-columns:minmax(0,1fr)}
   /* ── Settings, Connect, Tax ──────────────────────────────── */
   
 function settings() {
-  var S = window.__LC_LOAD_SETTINGS ? window.__LC_LOAD_SETTINGS() : {};
+  var S = window.__LK_LOAD_SETTINGS ? window.__LK_LOAD_SETTINGS() : {};
   var groups = [
     ["Personal settings", [
       ["Personal details", "user", "Contact info, password, auth methods, active sessions."],
@@ -1588,7 +1588,7 @@ function settings() {
 }
 
 function settingsVal(key, fallback) {
-  var S = window.__LC_LOAD_SETTINGS ? window.__LC_LOAD_SETTINGS() : {};
+  var S = window.__LK_LOAD_SETTINGS ? window.__LK_LOAD_SETTINGS() : {};
   if (S[key] != null && S[key] !== "") return String(S[key]);
   return fallback;
 }
@@ -1644,7 +1644,7 @@ function collectSettingsFields(root) {
 
 function settingsPersonal() {
   var name = settingsVal("personName", (typeof biz !== "undefined" ? biz : "DELEXO"));
-  var email = settingsVal("email", "guest@larpcity.local");
+  var email = settingsVal("email", "guest@larpingkit.local");
   var phone = settingsVal("phone", "+1 (700) 678-8878");
   var backup = settingsVal("backupEmail", "");
   view.innerHTML = '<div class="pg set-sub">' + settingsBackBar("Personal details") +
@@ -1686,7 +1686,7 @@ function settingsComms() {
     ["upd_migrate", "Data migrations between accounts", false, false, false]
   ];
   function chk(key, on, disabled) {
-    var saved = window.__LC_LOAD_SETTINGS ? window.__LC_LOAD_SETTINGS()[key] : null;
+    var saved = window.__LK_LOAD_SETTINGS ? window.__LK_LOAD_SETTINGS()[key] : null;
     var checked = saved == null ? on : !!saved;
     return '<label class="chk' + (disabled ? " dis" : "") + '"><input type="checkbox" data-check="' + key + '"' + (checked ? " checked" : "") + (disabled ? " disabled" : "") + "></label>";
   }
@@ -2436,12 +2436,12 @@ function settingsGeneric(title) {
       case "settingsback": return settings();
       case "settingssave": {
         var patch = collectSettingsFields(view);
-        if (window.__LC_SAVE_SETTINGS) window.__LC_SAVE_SETTINGS(patch);
+        if (window.__LK_SAVE_SETTINGS) window.__LK_SAVE_SETTINGS(patch);
         var saved = $("#sf_saved"); if (saved) { saved.hidden = false; setTimeout(function(){ saved.hidden = true; }, 1600); }
         return;
       }
       case "settingsdismissbanner": {
-        if (window.__LC_SAVE_SETTINGS) window.__LC_SAVE_SETTINGS({ _banner: false });
+        if (window.__LK_SAVE_SETTINGS) window.__LK_SAVE_SETTINGS({ _banner: false });
         return settings();
       }
       case "noop": return fail();

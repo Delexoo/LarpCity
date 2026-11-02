@@ -252,7 +252,7 @@ export function ShopifyNewLarpForm({
         <section className="ll-panel space-y-5 p-5">
           <h2 className="text-sm font-semibold text-[var(--ink)]">Store identity</h2>
           <div>
-            <FieldLabel hint="Only in your LarpCity list.">Internal name</FieldLabel>
+            <FieldLabel hint="Only in your LarpingKit list.">Internal name</FieldLabel>
             <TextInput
               value={internalName}
               onChange={setInternalName}

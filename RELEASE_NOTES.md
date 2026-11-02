@@ -1,4 +1,4 @@
-# LarpCity Release Notes
+# LarpingKit Release Notes
 
 ## v0.4.1 — LarpLabs parity pass (web-safe)
 
@@ -74,7 +74,7 @@
 **Production:** https://larpcity-delexo.vercel.app
 
 ### Highlights
-- **Free:** every active platform unlocked, with a LarpCity watermark on viewers
+- **Free:** every active platform unlocked, with a LarpingKit watermark on viewers
 - **Pro:** everything in Free plus watermark removed forever (lifetime-first pricing)
 - Pricing page and Settings plan controls updated for the new model
 

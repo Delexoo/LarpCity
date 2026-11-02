@@ -1,11 +1,14 @@
+import { migrateStorageKey } from "@/lib/storage-migrate";
+
 export type LocalPlan = "free" | "pro";
 
-export const LOCAL_PLAN_KEY = "larpcity.plan.v1";
-export const LOCAL_PLAN_EVENT = "larpcity:plan";
+export const LOCAL_PLAN_KEY = "larpingkit.plan.v1";
+export const LOCAL_PLAN_EVENT = "larpingkit:plan";
 
 export function readLocalPlan(): LocalPlan {
   if (typeof window === "undefined") return "free";
   try {
+    migrateStorageKey(LOCAL_PLAN_KEY);
     const raw = window.localStorage.getItem(LOCAL_PLAN_KEY);
     return raw === "pro" ? "pro" : "free";
   } catch {

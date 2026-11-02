@@ -1,4 +1,4 @@
-## LarpCity v0.4.1 — LarpLabs parity pass (web-safe)
+## LarpingKit v0.4.1 — LarpLabs parity pass (web-safe)
 
 **Live demo:** https://larpcity-delexo.vercel.app
 

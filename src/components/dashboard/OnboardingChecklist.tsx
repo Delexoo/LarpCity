@@ -6,7 +6,7 @@ import { Check } from "lucide-react";
 import { listLocalLarps } from "@/lib/larps/local-store";
 import { cn } from "@/lib/utils";
 
-const STORAGE_KEY = "larpcity.onboarding.v1";
+const STORAGE_KEY = "larpingkit.onboarding.v1";
 
 type Progress = {
   shared?: boolean;
@@ -25,6 +25,10 @@ export function OnboardingChecklist() {
     setLarpCount(larps.length);
     setBrandCount(new Set(larps.map((l) => l.platform_slug)).size);
     try {
+      if (localStorage.getItem(STORAGE_KEY) == null) {
+        const legacy = localStorage.getItem("larpcity.onboarding.v1");
+        if (legacy != null) localStorage.setItem(STORAGE_KEY, legacy);
+      }
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const p = JSON.parse(raw) as Progress;
