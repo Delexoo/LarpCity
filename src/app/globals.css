@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+:root {
+  /* LarpLabs / larplabs.io dashboard tokens */
+  --ink: #0a0a0b;
+  --ink-raised: #101013;
+  --paper: #f5f5f7;
+  --acid: #ccff00;
+  --coral: #ff3d00;
+
+  --bg: var(--ink);
+  --surface: var(--ink-raised);
+  --surface-alt: #16161a;
+  --surface-prompt: #1a1a1f;
+  --foreground: var(--paper);
+  --text-secondary: color-mix(in oklab, var(--paper) 60%, transparent);
+  --text-muted: color-mix(in oklab, var(--paper) 40%, transparent);
+  --hairline: color-mix(in oklab, white 10%, transparent);
+  --dashed: color-mix(in oklab, white 18%, transparent);
+  --accent: var(--acid);
+  --accent-select: color-mix(in oklab, var(--acid) 12%, transparent);
+  --accent-ring: color-mix(in oklab, var(--acid) 55%, transparent);
+  --banner-bg: color-mix(in oklab, white 4%, transparent);
+  --skeleton: #2a2a30;
+  --alert-dot: var(--coral);
+  --free-chip: color-mix(in oklab, white 8%, transparent);
+
+  /* Legacy aliases */
+  --panel: var(--surface);
+  --panel-elevated: var(--surface-alt);
+  --border: var(--hairline);
+  --muted: var(--text-secondary);
+  --background: var(--bg);
+
+  --r-pill: 999px;
+  --r-card: 1rem;
+  --r-list: 0.85rem;
+  --shadow-card: 0 18px 50px rgba(0, 0, 0, 0.3);
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--paper);
+  --color-panel: var(--surface);
+  --color-accent: var(--acid);
+  --color-muted: var(--text-secondary);
+  --color-border: var(--hairline);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+* {
+  border-color: var(--hairline);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: var(--font-body), system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--acid) 35%, transparent);
+  color: var(--ink);
+}
+
+a {
+  text-decoration: none;
+}
+
+input,
+textarea,
+button,
+select {
+  font: inherit;
+}
+
+.page-title {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: var(--paper);
+  overflow-wrap: anywhere;
+}
+
+.wordmark {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--paper);
+}
+
+.playful-title {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--paper);
+}
+
+.input-line {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 1px solid var(--hairline);
+  border-radius: 0.65rem;
+  background: color-mix(in oklab, white 3%, transparent);
+  padding: 0.65rem 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--paper);
+  outline: none;
+}
+
+.input-line:focus {
+  outline: 2px solid color-mix(in oklab, var(--acid) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.textarea-ink {
+  width: 100%;
+  border: 1px solid var(--hairline);
+  border-radius: 0.65rem;
+  background: color-mix(in oklab, white 3%, transparent);
+  padding: 0.85rem;
+  font-size: 0.875rem;
+  color: var(--paper);
+  outline: none;
+}
+
+.textarea-ink:focus {
+  outline: 2px solid color-mix(in oklab, var(--acid) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.ll-panel {
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  border-radius: 1rem;
+}
+
+.ll-stat-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.043), rgba(255, 255, 255, 0.016));
+  border: 1px solid var(--hairline);
+  border-radius: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

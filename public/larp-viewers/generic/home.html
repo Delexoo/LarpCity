@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LARP Dashboard</title>
+  <style>
+    :root {
+      --bg: #0b0c0f;
+      --panel: #12141a;
+      --line: #232733;
+      --text: #e8eaef;
+      --muted: #8b93a7;
+      --accent: #ccff00;
+      --ok: #3dd68c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(1200px 600px at 10% -10%, #1a2030, var(--bg));
+      color: var(--text);
+      font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+    aside {
+      border-right: 1px solid var(--line);
+      background: rgba(10, 11, 14, 0.9);
+      padding: 18px 14px;
+    }
+    .brand {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-size: 15px;
+      margin-bottom: 22px;
+      padding: 0 8px;
+    }
+    .nav button {
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 9px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+    }
+    .nav button.active, .nav button:hover {
+      background: #1a1f2b;
+      color: var(--text);
+    }
+    main { padding: 28px 32px 80px; }
+    h1 { margin: 0 0 6px; font-size: 28px; letter-spacing: -0.03em; }
+    .sub { color: var(--muted); margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .label { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+    .value { font-size: 26px; font-weight: 650; letter-spacing: -0.03em; }
+    .delta { color: var(--ok); font-size: 12px; margin-top: 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 18px; }
+    th, td { text-align: left; padding: 12px 8px; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-weight: 500; font-size: 12px; }
+    #lc-exit { position: fixed; bottom: 16px; right: 16px; z-index: 50; }
+    #lc-exit a {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 12px; border-radius: 999px;
+      background: var(--accent); color: #0a0a0b; text-decoration: none;
+      font-weight: 650; font-size: 12px;
+    }
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .grid { grid-template-columns: 1fr; }
+      main { padding: 20px 16px 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand" id="biz">Business</div>
+      <nav class="nav">
+        <button class="active" type="button">Home</button>
+        <button type="button">Balances</button>
+        <button type="button">Activity</button>
+        <button type="button">Customers</button>
+        <button type="button">Settings</button>
+      </nav>
+    </aside>
+    <main>
+      <h1>Today</h1>
+      <p class="sub" id="platform">Dashboard</p>
+      <div class="grid">
+        <div class="card">
+          <div class="label">Available balance</div>
+          <div class="value" id="balance">$0.00</div>
+          <div class="delta">Ready to pay out</div>
+        </div>
+        <div class="card">
+          <div class="label">Gross volume</div>
+          <div class="value" id="gross">$0.00</div>
+          <div class="delta">Last 4 weeks</div>
+        </div>
+        <div class="card">
+          <div class="label">Net volume</div>
+          <div class="value" id="net">$0.00</div>
+          <div class="delta">After fees</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="label">Recent activity</div>
+        <table>
+          <thead>
+            <tr><th>Description</th><th>Status</th><th>Amount</th></tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <div id="lc-exit"><a href="/larps" target="_parent" rel="noopener">← My LARPs</a></div>
+  <script id="payload" type="application/json">{"biz":"Business","platform":"Generic","balance":"$0.00","gross":"$0.00","net":"$0.00"}</script>
+  <script>
+    (function () {
+      var P = {};
+      try { P = JSON.parse(document.getElementById("payload").textContent || "{}"); } catch (e) {}
+      document.title = (P.biz || "LARP") + " – " + (P.platform || "Dashboard");
+      document.getElementById("biz").textContent = P.biz || "Business";
+      document.getElementById("platform").textContent = (P.platform || "Dashboard") + " overview";
+      document.getElementById("balance").textContent = P.balance || "$0.00";
+      document.getElementById("gross").textContent = P.gross || "$0.00";
+      document.getElementById("net").textContent = P.net || "$0.00";
+      var rows = document.getElementById("rows");
+      var items = P.activity || [
+        { label: "Inbound transfer", status: "Succeeded", amount: P.gross || "$120.00" },
+        { label: "Payout", status: "In transit", amount: P.balance || "$80.00" },
+        { label: "Fee", status: "Posted", amount: "-$2.40" }
+      ];
+      rows.innerHTML = items.map(function (r) {
+        return "<tr><td>" + r.label + "</td><td>" + r.status + "</td><td>" + r.amount + "</td></tr>";
+      }).join("");
+    })();
+  </script>
+</body>
+</html>
