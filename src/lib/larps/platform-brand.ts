@@ -8,43 +8,71 @@ export type PlatformBrand = {
 };
 
 /**
- * In-app tiles — prefer full-bleed square SVGs (CSS clips the corners).
- * Avoid pre-rounded PNGs with black/transparent corner padding.
+ * In-app tiles — prefer full-bleed square marks (CSS clips the corners).
+ * Bump ?v= when swapping assets so caches refresh.
  */
 const LOGO_SRC: Record<string, string> = {
-  coinbase: "/brand-logos/coinbase.svg",
-  chase: "/brand-logos/chase.png",
-  amex: "/brand-logos/amex.svg",
-  venmo: "/brand-logos/venmo.svg",
-  "cash-app": "/brand-logos/cashapp.svg",
-  cashapp: "/brand-logos/cashapp.svg",
-  stripe: "/brand-logos/stripe.svg",
-  "youtube-studio": "/brand-logos/youtube.svg",
-  youtube: "/brand-logos/youtube.svg",
-  shopify: "/brand-logos/shopify.svg",
-  "meta-ads": "/brand-logos/meta.svg",
-  metaads: "/brand-logos/meta.svg",
-  phantom: "/brand-logos/phantom.svg",
-  exodus: "/brand-logos/exodus.svg",
-  "exodus-app": "/brand-logos/exodus.svg",
-  "ledger-live": "/brand-logos/ledger.svg",
-  "ledger-portfolios": "/brand-logos/ledger.svg",
-  revolut: "/brand-logos/revolut.svg",
-  metamask: "/brand-logos/metamask.svg",
-  "trezor-suite": "/brand-logos/trezor-suite.png",
-  "cake-wallet": "/brand-logos/cakewallet.png",
-  "feather-wallet": "/brand-logos/feather-wallet.png",
-  onekey: "/brand-logos/onekey.png",
-  bmw: "/brand-logos/bmw.png",
-  tesla: "/brand-logos/tesla.png",
-  porsche: "/brand-logos/porsche.png",
-  lamborghini: "/brand-logos/lamborghini.png",
-  bybit: "/brand-logos/bybit.png",
-  metatrader: "/brand-logos/metatrader-logo.png",
-  infloww: "/brand-logos/infloww.png",
-  imessage: "/brand-logos/imessage.jpg",
-  instagram: "/brand-logos/instagram.svg",
+  // Platforms
+  coinbase: "/brand-logos/coinbase.svg?v=4",
+  amex: "/brand-logos/amex.svg?v=4",
+  venmo: "/brand-logos/venmo.svg?v=4",
+  "cash-app": "/brand-logos/cashapp.svg?v=4",
+  cashapp: "/brand-logos/cashapp.svg?v=4",
+  stripe: "/brand-logos/stripe.svg?v=4",
+  shopify: "/brand-logos/shopify.svg?v=4",
+  "meta-ads": "/brand-logos/meta.svg?v=4",
+  metaads: "/brand-logos/meta.svg?v=4",
+
+  // Wallets
+  phantom: "/brand-logos/phantom.svg?v=4",
+  exodus: "/brand-logos/exodus.svg?v=4",
+  "exodus-app": "/brand-logos/exodus.svg?v=4",
+  "ledger-live": "/brand-logos/ledger.svg?v=4",
+  "ledger-portfolios": "/brand-logos/ledger.svg?v=4",
+  revolut: "/brand-logos/revolut.svg?v=4",
+  chase: "/brand-logos/chase.png?v=4",
+  "trezor-suite": "/brand-logos/trezor-suite.png?v=4",
+  metamask: "/brand-logos/metamask.svg?v=4",
+  onekey: "/brand-logos/onekey.png?v=4",
+  "cake-wallet": "/brand-logos/cakewallet.png?v=4",
+  "feather-wallet": "/brand-logos/feather-wallet.png?v=4",
+
+  // Creator
+  instagram: "/brand-logos/instagram.svg?v=4",
+  "youtube-studio": "/brand-logos/youtube.svg?v=4",
+  youtube: "/brand-logos/youtube.svg?v=4",
+  infloww: "/brand-logos/infloww.png?v=4",
+
+  // Lifestyle
+  bmw: "/brand-logos/bmw.png?v=4",
+  tesla: "/brand-logos/tesla.png?v=4",
+  porsche: "/brand-logos/porsche.png?v=4",
+  lamborghini: "/brand-logos/lamborghini.png?v=4",
+
+  // Trading / casino
+  bybit: "/brand-logos/bybit.png?v=4",
+  metatrader: "/brand-logos/metatrader-logo.png?v=4",
+  "prop-firms": "/brand-logos/ftmo.png?v=4",
+  fanduel: "/brand-logos/fanduel.png?v=4",
+  "casino-larp": "/brand-logos/stake.webp?v=4",
+  stake: "/brand-logos/stake.webp?v=4",
+  shuffle: "/brand-logos/shuffle.png?v=4",
+  rainbet: "/brand-logos/rainbet.png?v=4",
+  roobet: "/brand-logos/roobet.jpg?v=4",
+
+  // Receipts / messaging
+  receipts: "/brand-logos/coinbase.svg?v=4",
+  imessage: "/brand-logos/imessage.jpg?v=4",
+  "larp-emails": "/brand-logos/gmail.jpg?v=4",
+
+  // Misc known marks
+  paypal: "/brand-logos/paypal.png?v=4",
 };
+
+/** Slugs that have a dedicated brand file (sidebar / tiles). */
+export function hasPlatformLogo(slug: string): boolean {
+  return Boolean(LOGO_SRC[slug]);
+}
 
 /** PWA / apple-touch icons must be raster when possible. */
 const BRANDS: Record<string, PlatformBrand> = {
@@ -91,7 +119,7 @@ const BRANDS: Record<string, PlatformBrand> = {
     backgroundColor: "#0F0F0F",
   },
   receipts: {
-    name: "Coinbase",
+    name: "Receipts",
     iconPath: "/brand-logos/coinbase.png",
     themeColor: "#0052FF",
     backgroundColor: "#0052FF",
@@ -125,6 +153,12 @@ const BRANDS: Record<string, PlatformBrand> = {
     iconPath: "/brand-logos/instagram.svg",
     themeColor: "#E1306C",
     backgroundColor: "#ffffff",
+  },
+  amex: {
+    name: "Amex",
+    iconPath: "/brand-logos/amex.png",
+    themeColor: "#006FCF",
+    backgroundColor: "#006FCF",
   },
 };
 

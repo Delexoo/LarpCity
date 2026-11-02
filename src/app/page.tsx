@@ -12,45 +12,8 @@ const FEATURED = [
   "youtube-studio",
   "shopify",
   "chase",
-  "imessage",
+  "instagram",
 ];
-
-const STEPS = [
-  {
-    n: "01",
-    title: "Pick the app",
-    body: "Stripe, Cash App, Coinbase, Shopify, YouTube Studio, Chase, and more.",
-  },
-  {
-    n: "02",
-    title: "Type your numbers",
-    body: "Balances, names, charts, and activity update every screen.",
-  },
-  {
-    n: "03",
-    title: "Open like an app",
-    body: "Screenshot in the browser or install to the home screen for a clean chrome-free view.",
-  },
-] as const;
-
-const FAQ = [
-  {
-    q: "How realistic are the mockups?",
-    a: "Ready platforms are rebuilt screen-for-screen for screenshots. Unfinished hubs show as Soon in the sidebar.",
-  },
-  {
-    q: "Do I need an account?",
-    a: "You can create LARPs locally on this device right away. Auth and Pro billing hook in when you enable them.",
-  },
-  {
-    q: "What is Pro?",
-    a: "Free includes ready platforms with a small watermark. Pro removes the watermark.",
-  },
-  {
-    q: "Are you affiliated with these brands?",
-    a: "No. LarpCity is independent. All trademarks belong to their owners.",
-  },
-] as const;
 
 export default function HomePage() {
   const bySlug = new Map(getActivePlatforms().map((p) => [p.slug, p]));
@@ -63,27 +26,26 @@ export default function HomePage() {
       <SiteHeader />
 
       <main>
-        <section className="relative overflow-hidden px-5 pb-20 pt-[7.5rem] md:px-8 md:pb-28 md:pt-[9rem]">
+        {/* Full first viewport — brand, one line, one CTA */}
+        <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden px-5 pb-16 pt-24 md:px-8">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-[32rem] bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(0,0,0,0.045),transparent)]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_50%_20%,rgba(0,0,0,0.05),transparent_70%)]"
           />
-          <div className="relative mx-auto max-w-[52rem] text-center">
-            <p className="reveal text-[0.78rem] font-medium uppercase tracking-[0.14em] text-[var(--text-secondary)]">
-              Look like you made it
+          <div className="relative mx-auto w-full max-w-[40rem] text-center">
+            <p className="wordmark text-[clamp(2.4rem,8vw,4.25rem)] leading-none tracking-[-0.04em] text-[var(--ink-pure)]">
+              LarpingKit
             </p>
-            <h1 className="display-title reveal reveal-delay-1 mt-4">
-              Your numbers.
-              <br />
-              Real-looking apps.
+            <h1 className="mt-5 text-[clamp(1.15rem,2.4vw,1.45rem)] font-medium tracking-tight text-[var(--ink)]">
+              Screenshot-ready mock dashboards.
             </h1>
-            <p className="lead reveal reveal-delay-2 mx-auto mt-6 max-w-xl">
-              Cash App, Coinbase, Stripe, Shopify, YouTube Studio, Chase, and
-              more — screenshot-ready LARPs on your phone or in the browser.
+            <p className="mx-auto mt-3 max-w-md text-[0.95rem] leading-relaxed text-[var(--text-secondary)]">
+              Stripe, Cash App, Coinbase, Shopify, and more — your numbers, in
+              under a minute.
             </p>
-            <div className="reveal reveal-delay-3 mt-10 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Link href="/dashboard">
-                <Button size="lg">Start free</Button>
+                <Button size="lg">Open app</Button>
               </Link>
               <Link href="/try/shopify">
                 <Button size="lg" variant="outline">
@@ -91,145 +53,155 @@ export default function HomePage() {
                 </Button>
               </Link>
             </div>
-            <p className="reveal reveal-delay-3 mt-4 text-xs text-[var(--text-muted)]">
-              No card needed · Try{" "}
-              <Link href="/try/youtube" className="underline-offset-2 hover:underline">
-                YouTube Studio
+            <p className="mt-4 text-xs text-[var(--text-muted)]">
+              Or{" "}
+              <Link
+                href="/try/youtube"
+                className="underline-offset-2 hover:underline"
+              >
+                try YouTube Studio
               </Link>{" "}
-              too
+              · no card needed
             </p>
+          </div>
+        </section>
+
+        <section className="border-t border-[var(--hairline)] bg-[var(--bg)] px-5 py-14 md:px-8">
+          <div className="mx-auto grid max-w-[56rem] gap-8 md:grid-cols-3">
+            {[
+              {
+                n: "01",
+                t: "Pick the app",
+                b: "Stripe, Cash App, Coinbase, Shopify, YouTube Studio, Chase, and more.",
+              },
+              {
+                n: "02",
+                t: "Type your numbers",
+                b: "Balances, names, charts, and activity update every screen.",
+              },
+              {
+                n: "03",
+                t: "Screenshot or install",
+                b: "Open in the browser or add to the home screen for a clean view.",
+              },
+            ].map((s) => (
+              <div key={s.n}>
+                <p className="text-xs font-semibold tracking-[0.12em] text-[var(--text-muted)]">
+                  {s.n}
+                </p>
+                <h2 className="mt-2 text-[1.05rem] font-semibold tracking-tight text-[var(--ink)]">
+                  {s.t}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+                  {s.b}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 
         <section
           id="platforms"
-          className="border-t border-[var(--hairline)] bg-[var(--surface)] px-5 py-20 md:px-8 md:py-28"
+          className="border-t border-[var(--hairline)] bg-[var(--surface)] px-5 py-16 md:px-8 md:py-20"
         >
-          <div className="mx-auto max-w-[68rem]">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="page-title text-[clamp(1.75rem,3vw,2.35rem)]">
-                Everything you need to LARP
-              </h2>
-              <p className="lead mt-3 text-[1.05rem]">
-                Ready platforms are live. The rest sit as clickable Soon in the
-                app.
-              </p>
-            </div>
-            <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mx-auto max-w-[56rem]">
+            <h2 className="page-title text-center text-[clamp(1.5rem,2.5vw,1.9rem)]">
+              Ready platforms
+            </h2>
+            <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
               {platforms.map((platform) => (
                 <Link
                   key={platform.id}
                   href={platform.href}
-                  className="group flex min-h-[8.5rem] flex-col items-center justify-center gap-3 rounded-[1.35rem] border border-[var(--hairline)] bg-[var(--bg)] px-3 py-6 transition duration-300 hover:-translate-y-0.5 hover:border-[var(--ink)]/25 hover:bg-white hover:shadow-[var(--shadow-card)]"
+                  className="flex min-h-[6.5rem] flex-col items-center justify-center gap-2.5 rounded-[1.25rem] border border-[var(--hairline)] bg-[var(--bg)] px-3 py-4 transition hover:border-[var(--ink)]/25 active:scale-[0.98]"
                 >
                   <PlatformLogo
                     slug={platform.slug}
                     name={platform.name}
-                    size={48}
-                    className="rounded-[1.1rem]"
+                    size={40}
+                    className="rounded-[0.9rem]"
                   />
-                  <span className="text-center text-[0.95rem] font-semibold tracking-tight text-[var(--ink)]">
+                  <span className="text-center text-[0.88rem] font-semibold tracking-tight text-[var(--ink)]">
                     {platform.name}
                   </span>
                 </Link>
               ))}
             </div>
-            <div className="mt-10 text-center">
+            <p className="mt-8 text-center">
               <Link
-                href="/larps/new"
+                href="/dashboard"
                 className="text-sm font-semibold text-[var(--ink)] underline-offset-4 hover:underline"
               >
-                Browse all platforms
+                Go to Home
               </Link>
-            </div>
-          </div>
-        </section>
-
-        <section
-          id="how"
-          className="border-t border-[var(--hairline)] px-5 py-20 md:px-8 md:py-28"
-        >
-          <div className="mx-auto max-w-[68rem]">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="page-title text-[clamp(1.75rem,3vw,2.35rem)]">
-                Not just a screenshot. The app.
-              </h2>
-              <p className="lead mt-3 text-[1.05rem]">
-                Three steps. Home-screen install when you want the full chrome-free
-                look.
-              </p>
-            </div>
-            <div className="mt-14 grid gap-8 md:grid-cols-3 md:gap-6">
-              {STEPS.map((step) => (
-                <div
-                  key={step.n}
-                  className="rounded-[1.5rem] border border-[var(--hairline)] bg-[var(--surface)] p-7"
-                >
-                  <p className="text-xs font-semibold tracking-[0.12em] text-[var(--text-muted)]">
-                    {step.n}
-                  </p>
-                  <h3 className="mt-4 text-xl font-semibold tracking-tight text-[var(--ink)]">
-                    {step.title}
-                  </h3>
-                  <p className="mt-2 text-[0.95rem] leading-relaxed text-[var(--text-secondary)]">
-                    {step.body}
-                  </p>
-                </div>
-              ))}
-            </div>
+            </p>
           </div>
         </section>
 
         <section
           id="faq"
-          className="border-t border-[var(--hairline)] bg-[var(--surface)] px-5 py-20 md:px-8 md:py-28"
+          className="border-t border-[var(--hairline)] bg-[var(--bg)] px-5 py-16 md:px-8"
         >
-          <div className="mx-auto max-w-3xl">
-            <h2 className="page-title text-center text-[clamp(1.75rem,3vw,2.35rem)]">
-              Questions, answered
+          <div className="mx-auto max-w-[40rem]">
+            <h2 className="page-title text-center text-[clamp(1.5rem,2.5vw,1.9rem)]">
+              Questions
             </h2>
-            <div className="mt-12 space-y-4">
-              {FAQ.map((item) => (
-                <details
-                  key={item.q}
-                  className="group rounded-[1.25rem] border border-[var(--hairline)] bg-[var(--bg)] px-5 py-4"
-                >
-                  <summary className="cursor-pointer list-none text-sm font-semibold text-[var(--ink)]">
+            <dl className="mt-8 space-y-5">
+              {[
+                {
+                  q: "How realistic are the mockups?",
+                  a: "Ready platforms are rebuilt screen-for-screen for screenshots. Unfinished hubs show as Soon in the sidebar.",
+                },
+                {
+                  q: "Do I need an account?",
+                  a: "You can create LARPs locally on this device right away — including the free Shopify and YouTube try builders.",
+                },
+                {
+                  q: "What is Pro?",
+                  a: "Free includes ready platforms with a small watermark. Pro removes the watermark.",
+                },
+                {
+                  q: "Are you affiliated with these brands?",
+                  a: "No. LarpingKit is independent. All trademarks belong to their owners.",
+                },
+              ].map((item) => (
+                <div key={item.q}>
+                  <dt className="text-sm font-semibold text-[var(--ink)]">
                     {item.q}
-                  </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+                  </dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-[var(--text-secondary)]">
                     {item.a}
-                  </p>
-                </details>
+                  </dd>
+                </div>
               ))}
-            </div>
+            </dl>
           </div>
         </section>
 
-        <section className="border-t border-[var(--hairline)] bg-[var(--ink)] px-5 py-20 text-white md:px-8 md:py-28">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-[clamp(1.85rem,3.5vw,2.6rem)] font-semibold tracking-[-0.04em]">
-              Ready when you are.
+        <section className="border-t border-[var(--hairline)] bg-[var(--ink)] px-5 py-16 text-white md:px-8">
+          <div className="mx-auto max-w-xl text-center">
+            <h2 className="text-[clamp(1.5rem,3vw,2rem)] font-semibold tracking-[-0.03em]">
+              Free to start.
             </h2>
-            <p className="mt-4 text-[1.05rem] leading-relaxed text-white/65">
-              Jump into the app and create your first LARP in under a minute.
+            <p className="mt-3 text-[0.95rem] text-white/65">
+              Watermark on Free. Pro removes it.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
               <Link href="/dashboard">
                 <Button
                   size="lg"
                   className="bg-white text-[var(--ink)] hover:bg-white/90"
                 >
-                  Open app
+                  Start free
                 </Button>
               </Link>
-              <Link href="/pricing">
+              <Link href="/try/shopify">
                 <Button
                   size="lg"
-                  variant="ghost"
-                  className="text-white hover:bg-white/10 hover:text-white"
+                  variant="outline"
+                  className="border-white/30 text-white hover:bg-white/10"
                 >
-                  Pricing
+                  Try Shopify
                 </Button>
               </Link>
             </div>
@@ -237,23 +209,17 @@ export default function HomePage() {
         </section>
       </main>
 
-      <footer className="border-t border-[var(--hairline)] bg-[var(--surface)] px-5 py-10 md:px-8">
-        <div className="mx-auto flex max-w-[68rem] flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <footer className="border-t border-[var(--hairline)] bg-[var(--surface)] px-5 py-8 md:px-8">
+        <div className="mx-auto flex max-w-[56rem] flex-wrap items-center justify-between gap-3">
           <p className="text-sm font-extrabold tracking-tight text-[var(--ink)]">
-            LarpCity
+            LarpingKit
           </p>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-[var(--text-secondary)]">
-            <Link href="/try/shopify" className="hover:text-[var(--ink)]">
-              Try Shopify
-            </Link>
             <Link href="/pricing" className="hover:text-[var(--ink)]">
               Pricing
             </Link>
             <Link href="/legal/terms" className="hover:text-[var(--ink)]">
               Terms
-            </Link>
-            <Link href="/legal/privacy" className="hover:text-[var(--ink)]">
-              Privacy
             </Link>
             <Link href="/dashboard" className="hover:text-[var(--ink)]">
               App

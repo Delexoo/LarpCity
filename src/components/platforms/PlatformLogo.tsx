@@ -23,11 +23,12 @@ const CONTAIN_SLUGS = new Set([
   "onekey",
   "bybit",
   "trezor-suite",
+  "paypal",
 ]);
 
 /**
- * Pre-rounded PNGs with black/empty corners — nudge scale so CSS radius
- * clips the letterbox instead of showing a dark ring.
+ * Pre-rounded PNGs with letterboxed corners — scale up so CSS radius
+ * clips the empty ring instead of showing a double-squircle.
  */
 const BLEED_SLUGS = new Set([
   "chase",
@@ -39,9 +40,12 @@ const BLEED_SLUGS = new Set([
   "meta-ads",
   "infloww",
   "ftmo",
+  "prop-firms",
+  "imessage",
+  "fanduel",
 ]);
 
-/** Real brand mark for platform tiles (dashboard, picker, hubs). */
+/** Real brand mark for platform tiles (dashboard, picker, hubs, sidebar). */
 export function PlatformLogo({
   slug,
   name,
@@ -53,6 +57,7 @@ export function PlatformLogo({
   const brand = getPlatformBrand(slug);
   const mode = fit ?? (CONTAIN_SLUGS.has(slug) ? "contain" : "cover");
   const bleed = mode === "cover" && BLEED_SLUGS.has(slug);
+  const pad = size <= 24 ? "p-[12%]" : "p-[16%]";
 
   return (
     <span
@@ -64,8 +69,7 @@ export function PlatformLogo({
       style={{
         width: size,
         height: size,
-        backgroundColor:
-          mode === "cover" ? brand.themeColor : undefined,
+        backgroundColor: mode === "cover" ? brand.themeColor : undefined,
       }}
       aria-hidden
     >
@@ -75,8 +79,8 @@ export function PlatformLogo({
         fill
         sizes={`${size}px`}
         className={cn(
-          mode === "cover" ? "object-cover" : "object-contain p-[18%]",
-          bleed && "scale-[1.14]",
+          mode === "cover" ? "object-cover object-center" : `object-contain ${pad}`,
+          bleed && (size <= 24 ? "scale-[1.2]" : "scale-[1.14]"),
         )}
         unoptimized
       />

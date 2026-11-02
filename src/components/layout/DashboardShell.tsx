@@ -77,7 +77,7 @@ export function DashboardShell({
           menuOpen={mobileOpen}
           onMenuClick={() => setMobileOpen((v) => !v)}
         />
-        <main className="relative mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 md:px-8 md:py-8">
+        <main className="relative mx-auto w-full max-w-4xl flex-1 px-3 py-4 sm:px-5 md:px-6 md:py-5">
           {children}
         </main>
       </div>

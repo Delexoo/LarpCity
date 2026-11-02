@@ -6,11 +6,7 @@ import { cn } from "@/lib/utils";
 
 const LINKS = [
   { href: "/#platforms", label: "Platforms" },
-  { href: "/#how", label: "How it works" },
-  { href: "/#faq", label: "FAQ" },
-  { href: "/try/shopify", label: "Try it" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/login", label: "Sign in" },
   { href: "/dashboard", label: "Open app" },
 ] as const;
 
@@ -62,14 +58,14 @@ export function SiteHeader({
           className="relative z-[2] text-[1.15rem] font-extrabold tracking-[-0.03em] text-[var(--ink-pure)]"
           onClick={() => setOpen(false)}
         >
-          LarpCity
+          LarpingKit
         </Link>
 
         <nav
           className="site-topnav hidden items-center gap-1 md:flex"
           aria-label="Primary"
         >
-          {LINKS.slice(0, 3).map((link) => (
+          {LINKS.slice(0, 2).map((link) => (
             <Link
               key={link.href}
               href={link.href}

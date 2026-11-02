@@ -16,7 +16,7 @@ const FEATURED = [
   "cash-app",
   "shopify",
   "chase",
-  "imessage",
+  "instagram",
 ];
 
 export default async function DashboardPage({
@@ -31,16 +31,16 @@ export default async function DashboardPage({
   );
 
   return (
-    <div className="mx-auto max-w-4xl space-y-12">
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mx-auto max-w-3xl space-y-8">
+      <div className="flex items-end justify-between gap-4">
         <div>
-          <h1 className="page-title text-[clamp(1.75rem,3vw,2.25rem)]">Home</h1>
-          <p className="mt-2 max-w-md text-sm leading-relaxed text-[var(--text-secondary)]">
-            Your platforms and LARPs in one place.
+          <h1 className="page-title text-[clamp(1.5rem,2.5vw,1.85rem)]">Home</h1>
+          <p className="mt-1 text-sm text-[var(--text-secondary)]">
+            Platforms and your LARPs.
           </p>
         </div>
-        <Link href="/larps/new" className="w-full sm:w-auto">
-          <Button size="lg" className="w-full min-w-[10.5rem] rounded-full sm:w-auto">
+        <Link href="/larps/new">
+          <Button size="md" className="rounded-full">
             New LARP
           </Button>
         </Link>
@@ -49,29 +49,29 @@ export default async function DashboardPage({
       <OnboardingChecklist />
 
       <section>
-        <div className="mb-4 flex items-baseline justify-between gap-3">
+        <div className="mb-3 flex items-baseline justify-between gap-3">
           <h2 className="text-sm font-semibold text-[var(--ink)]">Platforms</h2>
           <Link
             href="/larps/new"
-            className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--ink)]"
+            className="text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--ink)]"
           >
             See all
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {platforms.map((platform) => (
             <Link
               key={platform.id}
               href={platform.href}
-              className="group flex min-h-[7.5rem] flex-col items-center justify-center gap-3 rounded-[1.5rem] border border-[var(--hairline)] bg-[var(--surface)] px-3 py-5 transition hover:border-[var(--ink)]/30 active:scale-[0.98]"
+              className="flex min-h-[6.25rem] flex-col items-center justify-center gap-2 rounded-[1.2rem] border border-[var(--hairline)] bg-[var(--surface)] px-2 py-4 transition hover:border-[var(--ink)]/25 active:scale-[0.98]"
             >
               <PlatformLogo
                 slug={platform.slug}
                 name={platform.name}
-                size={52}
-                className="rounded-[1.25rem]"
+                size={40}
+                className="rounded-[0.85rem]"
               />
-              <span className="text-center text-[15px] font-semibold leading-tight text-[var(--ink)]">
+              <span className="text-center text-[13px] font-semibold leading-tight text-[var(--ink)]">
                 {platform.name}
               </span>
             </Link>
@@ -80,12 +80,10 @@ export default async function DashboardPage({
       </section>
 
       <section>
-        <div className="mb-4 flex items-baseline justify-between gap-3">
-          <h2 className="text-sm font-semibold text-[var(--ink)]">My LARPs</h2>
-        </div>
+        <h2 className="mb-3 text-sm font-semibold text-[var(--ink)]">My LARPs</h2>
         {params.created ? (
-          <div className="mb-4 rounded-[1.25rem] border border-[var(--hairline)] bg-[var(--banner-bg)] px-4 py-3 text-sm text-[var(--banner-ink)]">
-            LARP created — newest one is highlighted below.
+          <div className="mb-3 rounded-[1.1rem] border border-[var(--hairline)] bg-[var(--banner-bg)] px-3.5 py-2.5 text-sm text-[var(--banner-ink)]">
+            LARP created — highlighted below.
           </div>
         ) : null}
         <LarpsListClient highlightId={params.created} />
