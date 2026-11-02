@@ -2,7 +2,7 @@
 
 Create polished mock financial and social dashboards (LARPs) for screenshots — Stripe, Venmo, Coinbase, wallets, and more.
 
-**Live demo:** [app-kohl-three-47.vercel.app](https://app-kohl-three-47.vercel.app)
+**Live demo:** [larpcity-delexo.vercel.app](https://larpcity-delexo.vercel.app)
 
 ## Features
 

@@ -2,7 +2,7 @@
 
 ## v0.3.0 — Ink + Paper UI, Venmo, manage LARPs
 
-**Production:** https://app-kohl-three-47.vercel.app
+**Production:** https://larpcity-delexo.vercel.app
 
 ### Highlights
 - **Ink + Paper redesign** — primarily white black-and-white shell; no lime/acid accents in chrome
@@ -36,4 +36,4 @@
 - Cleaned legacy `web/`, reference dumps, and temp scripts
 
 ### Deploy
-- Production: https://app-kohl-three-47.vercel.app
+- Production: https://larpcity-delexo.vercel.app
