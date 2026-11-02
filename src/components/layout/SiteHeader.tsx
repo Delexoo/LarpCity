@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 const LINKS = [
   { href: "/#platforms", label: "Platforms" },
   { href: "/#how", label: "How it works" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/try/shopify", label: "Try it" },
   { href: "/pricing", label: "Pricing" },
   { href: "/login", label: "Sign in" },
   { href: "/dashboard", label: "Open app" },

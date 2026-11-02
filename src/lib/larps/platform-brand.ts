@@ -7,26 +7,29 @@ export type PlatformBrand = {
   backgroundColor: string;
 };
 
-/** In-app tiles — prefer real PNG marks when available. */
+/**
+ * In-app tiles — prefer full-bleed square SVGs (CSS clips the corners).
+ * Avoid pre-rounded PNGs with black/transparent corner padding.
+ */
 const LOGO_SRC: Record<string, string> = {
-  coinbase: "/brand-logos/coinbase.png",
+  coinbase: "/brand-logos/coinbase.svg",
   chase: "/brand-logos/chase.png",
-  amex: "/brand-logos/amex.png",
-  venmo: "/brand-logos/venmo.png",
-  "cash-app": "/brand-logos/cash-app.png",
-  cashapp: "/brand-logos/cash-app.png",
-  stripe: "/brand-logos/stripe.png",
-  "youtube-studio": "/brand-logos/youtube.png",
-  youtube: "/brand-logos/youtube.png",
-  shopify: "/brand-logos/shopify.png",
-  "meta-ads": "/brand-logos/metaads.png",
-  metaads: "/brand-logos/metaads.png",
-  phantom: "/brand-logos/phantom.png",
-  exodus: "/brand-logos/exodus.png",
-  "exodus-app": "/brand-logos/exodus.png",
-  "ledger-live": "/brand-logos/ledger.png",
-  "ledger-portfolios": "/brand-logos/ledger.png",
-  revolut: "/brand-logos/revolut.png",
+  amex: "/brand-logos/amex.svg",
+  venmo: "/brand-logos/venmo.svg",
+  "cash-app": "/brand-logos/cashapp.svg",
+  cashapp: "/brand-logos/cashapp.svg",
+  stripe: "/brand-logos/stripe.svg",
+  "youtube-studio": "/brand-logos/youtube.svg",
+  youtube: "/brand-logos/youtube.svg",
+  shopify: "/brand-logos/shopify.svg",
+  "meta-ads": "/brand-logos/meta.svg",
+  metaads: "/brand-logos/meta.svg",
+  phantom: "/brand-logos/phantom.svg",
+  exodus: "/brand-logos/exodus.svg",
+  "exodus-app": "/brand-logos/exodus.svg",
+  "ledger-live": "/brand-logos/ledger.svg",
+  "ledger-portfolios": "/brand-logos/ledger.svg",
+  revolut: "/brand-logos/revolut.svg",
   metamask: "/brand-logos/metamask.svg",
   "trezor-suite": "/brand-logos/trezor-suite.png",
   "cake-wallet": "/brand-logos/cakewallet.png",

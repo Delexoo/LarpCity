@@ -228,6 +228,7 @@ export function AppSidebar({
       {!compact ? (
         <button
           type="button"
+          onClick={() => window.dispatchEvent(new Event("larpcity:cmdk"))}
           className="mx-3 mt-3 flex h-9 items-center gap-2 rounded-full border border-[var(--hairline)] bg-[var(--bg)] px-3 text-left text-xs text-[var(--text-secondary)]"
         >
           <Search className="size-3.5" strokeWidth={2} />
@@ -241,6 +242,7 @@ export function AppSidebar({
       ) : (
         <button
           type="button"
+          onClick={() => window.dispatchEvent(new Event("larpcity:cmdk"))}
           className="mx-auto mt-3 flex size-8 items-center justify-center rounded-full border border-[var(--hairline)] text-[var(--text-secondary)]"
           aria-label="Search"
         >

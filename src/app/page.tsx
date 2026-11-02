@@ -18,18 +18,37 @@ const FEATURED = [
 const STEPS = [
   {
     n: "01",
-    title: "Pick a platform",
-    body: "Stripe, Coinbase, Venmo, Cash App, and more — choose the look you need.",
+    title: "Pick the app",
+    body: "Stripe, Cash App, Coinbase, Shopify, YouTube Studio, Chase, and more.",
   },
   {
     n: "02",
-    title: "Set your numbers",
-    body: "Balances, names, and details fill in the dashboard. Change anything anytime.",
+    title: "Type your numbers",
+    body: "Balances, names, charts, and activity update every screen.",
   },
   {
     n: "03",
-    title: "Open and screenshot",
-    body: "Desktop and phone views auto-fit. Install to the home screen when you want it.",
+    title: "Open like an app",
+    body: "Screenshot in the browser or install to the home screen for a clean chrome-free view.",
+  },
+] as const;
+
+const FAQ = [
+  {
+    q: "How realistic are the mockups?",
+    a: "Ready platforms are rebuilt screen-for-screen for screenshots. Unfinished hubs show as Soon in the sidebar.",
+  },
+  {
+    q: "Do I need an account?",
+    a: "You can create LARPs locally on this device right away. Auth and Pro billing hook in when you enable them.",
+  },
+  {
+    q: "What is Pro?",
+    a: "Free includes ready platforms with a small watermark. Pro removes the watermark.",
+  },
+  {
+    q: "Are you affiliated with these brands?",
+    a: "No. LarpCity is independent. All trademarks belong to their owners.",
   },
 ] as const;
 
@@ -51,27 +70,34 @@ export default function HomePage() {
           />
           <div className="relative mx-auto max-w-[52rem] text-center">
             <p className="reveal text-[0.78rem] font-medium uppercase tracking-[0.14em] text-[var(--text-secondary)]">
-              Mock dashboards
+              Look like you made it
             </p>
             <h1 className="display-title reveal reveal-delay-1 mt-4">
-              Screenshot-ready LARPs.
+              Your numbers.
               <br />
-              Clean. Simple. Fast.
+              Real-looking apps.
             </h1>
             <p className="lead reveal reveal-delay-2 mx-auto mt-6 max-w-xl">
-              Build mock financial and creator dashboards that look real. Free
-              with a watermark — Pro removes it forever.
+              Cash App, Coinbase, Stripe, Shopify, YouTube Studio, Chase, and
+              more — screenshot-ready LARPs on your phone or in the browser.
             </p>
             <div className="reveal reveal-delay-3 mt-10 flex flex-wrap items-center justify-center gap-3">
               <Link href="/dashboard">
-                <Button size="lg">Open app</Button>
+                <Button size="lg">Start free</Button>
               </Link>
-              <Link href="/pricing">
+              <Link href="/try/shopify">
                 <Button size="lg" variant="outline">
-                  View pricing
+                  Try Shopify
                 </Button>
               </Link>
             </div>
+            <p className="reveal reveal-delay-3 mt-4 text-xs text-[var(--text-muted)]">
+              No card needed · Try{" "}
+              <Link href="/try/youtube" className="underline-offset-2 hover:underline">
+                YouTube Studio
+              </Link>{" "}
+              too
+            </p>
           </div>
         </section>
 
@@ -82,11 +108,11 @@ export default function HomePage() {
           <div className="mx-auto max-w-[68rem]">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="page-title text-[clamp(1.75rem,3vw,2.35rem)]">
-                Platforms people actually need
+                Everything you need to LARP
               </h2>
               <p className="lead mt-3 text-[1.05rem]">
-                One place for wallets, payments, creator tools, and receipts.
-                Open a hub, create a LARP, done.
+                Ready platforms are live. The rest sit as clickable Soon in the
+                app.
               </p>
             </div>
             <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -126,10 +152,11 @@ export default function HomePage() {
           <div className="mx-auto max-w-[68rem]">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="page-title text-[clamp(1.75rem,3vw,2.35rem)]">
-                How it works
+                Not just a screenshot. The app.
               </h2>
               <p className="lead mt-3 text-[1.05rem]">
-                Three steps. No clutter. Built for quick screenshots.
+                Three steps. Home-screen install when you want the full chrome-free
+                look.
               </p>
             </div>
             <div className="mt-14 grid gap-8 md:grid-cols-3 md:gap-6">
@@ -148,6 +175,32 @@ export default function HomePage() {
                     {step.body}
                   </p>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="faq"
+          className="border-t border-[var(--hairline)] bg-[var(--surface)] px-5 py-20 md:px-8 md:py-28"
+        >
+          <div className="mx-auto max-w-3xl">
+            <h2 className="page-title text-center text-[clamp(1.75rem,3vw,2.35rem)]">
+              Questions, answered
+            </h2>
+            <div className="mt-12 space-y-4">
+              {FAQ.map((item) => (
+                <details
+                  key={item.q}
+                  className="group rounded-[1.25rem] border border-[var(--hairline)] bg-[var(--bg)] px-5 py-4"
+                >
+                  <summary className="cursor-pointer list-none text-sm font-semibold text-[var(--ink)]">
+                    {item.q}
+                  </summary>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+                    {item.a}
+                  </p>
+                </details>
               ))}
             </div>
           </div>
@@ -190,11 +243,17 @@ export default function HomePage() {
             LarpCity
           </p>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-[var(--text-secondary)]">
+            <Link href="/try/shopify" className="hover:text-[var(--ink)]">
+              Try Shopify
+            </Link>
             <Link href="/pricing" className="hover:text-[var(--ink)]">
               Pricing
             </Link>
-            <Link href="/login" className="hover:text-[var(--ink)]">
-              Sign in
+            <Link href="/legal/terms" className="hover:text-[var(--ink)]">
+              Terms
+            </Link>
+            <Link href="/legal/privacy" className="hover:text-[var(--ink)]">
+              Privacy
             </Link>
             <Link href="/dashboard" className="hover:text-[var(--ink)]">
               App

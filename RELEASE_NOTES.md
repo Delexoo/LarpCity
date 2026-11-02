@@ -1,5 +1,26 @@
 # LarpCity Release Notes
 
+## v0.4.1 — LarpLabs parity pass (web-safe)
+
+**Production:** https://larpcity-delexo.vercel.app  
+**GitHub:** https://github.com/Delexoo/LarpCity
+
+### Research
+- Deep capture of [larplabs.io](https://larplabs.io) marketing + authenticated Pro dashboard (2026-11-02)
+- Sources under `../larplabs.io/capture-2026-11-02/` (reference only; not shipped)
+
+### Shipped
+- **Cmd+K command palette** — jump to any platform / page
+- **Get started checklist** on Home
+- **Public try routes** — `/try/shopify`, `/try/youtube`
+- **Landing rewrite** — stronger hero, FAQ, try CTAs, legal footer links
+- **Legal stubs** — `/legal/privacy`, `/legal/terms`, `/legal/refund-policy`, `/legal/security`
+
+### Explicitly out of scope
+- iPhone location spoofing, Apple Wallet overlays, real-hostname address spoofing (desktop app features)
+
+---
+
 ## v0.4.0 — Home, Instagram, Shopify & Studio polish
 
 **Production:** https://larpcity-delexo.vercel.app  

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useLocalPlan } from "@/hooks/useLocalPlan";
 import { cn } from "@/lib/utils";
 import { AppSidebar } from "./AppSidebar";
+import { CommandPalette } from "./CommandPalette";
 import { TopBar } from "./TopBar";
 
 export function DashboardShell({
@@ -36,6 +37,7 @@ export function DashboardShell({
 
   return (
     <div className="flex min-h-screen bg-[var(--bg)] text-[var(--ink)]">
+      <CommandPalette />
       {mobileOpen ? (
         <button
           type="button"

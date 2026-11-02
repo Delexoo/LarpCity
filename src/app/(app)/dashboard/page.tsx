@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { OnboardingChecklist } from "@/components/dashboard/OnboardingChecklist";
 import { InstallLarpPrompt } from "@/components/larps/InstallLarpPrompt";
 import { PlatformLogo } from "@/components/platforms/PlatformLogo";
 import { Button } from "@/components/ui/Button";
@@ -44,6 +45,8 @@ export default async function DashboardPage({
           </Button>
         </Link>
       </div>
+
+      <OnboardingChecklist />
 
       <section>
         <div className="mb-4 flex items-baseline justify-between gap-3">
