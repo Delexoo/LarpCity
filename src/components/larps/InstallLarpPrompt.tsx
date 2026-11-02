@@ -192,7 +192,7 @@ export function InstallLarpPrompt({
   return (
     <div
       className={cn(
-        "pointer-events-none fixed bottom-3 right-3 z-[80] flex max-w-[min(220px,calc(100vw-1.25rem))] flex-col items-end gap-1",
+        "pointer-events-none fixed bottom-3 left-3 z-[80] flex max-w-[min(220px,calc(100vw-1.25rem))] flex-col items-start gap-1",
         className,
       )}
     >

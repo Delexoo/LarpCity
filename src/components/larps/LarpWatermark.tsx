@@ -2,44 +2,24 @@
 
 import Link from "next/link";
 
-/** Persistent Free-plan mark over LARP viewers. Pro removes it. */
+/** Small Free-plan mark (Pro removes it). Matches Install pill size. */
 export function LarpWatermark() {
   return (
-    <div
-      className="pointer-events-none fixed inset-0 z-[80] overflow-hidden"
-      aria-hidden
-    >
-      <div
-        className="absolute inset-[-20%] flex flex-wrap content-center justify-center gap-x-16 gap-y-24 opacity-[0.14]"
-        style={{ transform: "rotate(-28deg)" }}
+    <div className="pointer-events-none fixed bottom-3 right-3 z-[80]">
+      <Link
+        href="/pricing"
+        title="Upgrade to remove watermark"
+        className="pointer-events-auto inline-flex h-7 items-center gap-1.5 rounded-full bg-[#111]/92 pl-1.5 pr-2.5 text-[11px] font-semibold leading-none tracking-tight text-white shadow-[0_6px_16px_rgba(0,0,0,.2)] backdrop-blur-sm"
       >
-        {Array.from({ length: 24 }).map((_, i) => (
-          <span
-            key={i}
-            className="select-none whitespace-nowrap text-2xl font-bold tracking-tight text-black sm:text-3xl"
-          >
-            LarpCity
-          </span>
-        ))}
-      </div>
-      <div className="pointer-events-auto absolute bottom-4 left-1/2 z-[81] w-[min(92vw,22rem)] -translate-x-1/2">
-        <Link
-          href="/pricing"
-          className="flex items-center justify-between gap-3 rounded-full border border-[var(--hairline)] bg-[var(--surface)]/95 px-4 py-2.5 text-left shadow-[var(--shadow-card)] backdrop-blur-sm"
-        >
-          <span className="min-w-0">
-            <span className="block text-xs font-semibold text-[var(--ink)]">
-              Free plan watermark
-            </span>
-            <span className="block truncate text-[11px] text-[var(--text-secondary)]">
-              Upgrade to Pro to remove it forever
-            </span>
-          </span>
-          <span className="shrink-0 rounded-full bg-[var(--ink)] px-3 py-1 text-[11px] font-semibold text-[var(--on-ink)]">
-            Remove
-          </span>
-        </Link>
-      </div>
+        <img
+          src="/larplabslogo.png"
+          alt=""
+          width={16}
+          height={16}
+          className="size-4 shrink-0 rounded-[4px] object-cover"
+        />
+        Made with LarpCity
+      </Link>
     </div>
   );
 }
