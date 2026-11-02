@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { NAV_CATALOG } from "@/lib/platforms/catalog";
 import { StripeNewLarpForm } from "@/components/platforms/forms/StripeNewLarpForm";
 import { VenmoNewLarpForm } from "@/components/platforms/forms/VenmoNewLarpForm";
+import { CoinbaseNewLarpForm } from "@/components/platforms/forms/CoinbaseNewLarpForm";
+import { CashAppNewLarpForm } from "@/components/platforms/forms/CashAppNewLarpForm";
 import { GenericNewLarpForm } from "@/components/platforms/forms/GenericNewLarpForm";
 
 export async function generateMetadata({
@@ -46,6 +48,14 @@ export default async function NewPlatformLarpPage({
 
   if (slug === "venmo") {
     return <VenmoNewLarpForm cancelHref={cancelHref} editId={edit} />;
+  }
+
+  if (slug === "coinbase") {
+    return <CoinbaseNewLarpForm cancelHref={cancelHref} editId={edit} />;
+  }
+
+  if (slug === "cash-app") {
+    return <CashAppNewLarpForm cancelHref={cancelHref} editId={edit} />;
   }
 
   return (

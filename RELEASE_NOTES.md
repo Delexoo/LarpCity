@@ -1,5 +1,16 @@
 # LarpCity Release Notes
 
+## v0.3.2 — Coinbase desktop + mobile LARPs
+
+**Production:** https://larpcity-delexo.vercel.app
+
+### Highlights
+- **Coinbase viewers** — full desktop Home and mobile app shells from official dumps
+- **Coinbase create form** — profile, bag vibes, device preference, theme, more settings
+- Bag size scales cash / USDC / crypto holdings and transaction history
+
+---
+
 ## v0.3.1 — Free all platforms + watermark; Pro removes it
 
 **Production:** https://larpcity-delexo.vercel.app

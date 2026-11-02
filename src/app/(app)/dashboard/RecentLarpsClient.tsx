@@ -23,13 +23,13 @@ export function RecentLarpsClient() {
 
   if (larps.length === 0) {
     return (
-      <div className="rounded-[1.5rem] border border-dashed border-[var(--dashed)] bg-[var(--surface)] px-6 py-12 text-center shadow-[var(--shadow-card)]">
-        <p className="page-title text-2xl">No LARPs yet</p>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
-          Create one from a platform and it will show up here.
+      <div className="rounded-[1.5rem] border border-dashed border-[var(--dashed)] bg-[var(--surface)] px-6 py-14 text-center">
+        <p className="text-base font-semibold text-[var(--ink)]">No LARPs yet</p>
+        <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
+          Pick a platform to create your first one.
         </p>
-        <Link href="/larps/new" className="mt-6 inline-block">
-          <Button size="sm">Browse platforms</Button>
+        <Link href="/larps/new" className="mt-7 inline-block">
+          <Button size="lg">Browse platforms</Button>
         </Link>
       </div>
     );

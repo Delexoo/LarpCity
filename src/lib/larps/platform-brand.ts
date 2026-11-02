@@ -1,10 +1,41 @@
-/** Brand assets for install / PWA / notifications by platform slug. */
+/** Brand assets for install / PWA / notifications / dashboard tiles by platform slug. */
 
 export type PlatformBrand = {
   name: string;
   iconPath: string;
   themeColor: string;
   backgroundColor: string;
+};
+
+/** Prefer crisp SVG marks on the dashboard; PNG/JPG still fine for PWA icons. */
+const LOGO_SRC: Record<string, string> = {
+  coinbase: "/brand-logos/coinbase.svg",
+  amex: "/brand-logos/amex.svg",
+  venmo: "/brand-logos/venmo.svg",
+  "cash-app": "/brand-logos/cashapp.svg",
+  cashapp: "/brand-logos/cashapp.svg",
+  stripe: "/brand-logos/stripe.svg",
+  shopify: "/brand-logos/shopify.svg",
+  "meta-ads": "/brand-logos/meta.svg",
+  metaads: "/brand-logos/meta.svg",
+  phantom: "/brand-logos/phantom.svg",
+  exodus: "/brand-logos/exodus.svg",
+  "exodus-app": "/brand-logos/exodus.svg",
+  "ledger-live": "/brand-logos/ledger.svg",
+  "ledger-portfolios": "/brand-logos/ledger.svg",
+  revolut: "/brand-logos/revolut.svg",
+  metamask: "/brand-logos/metamask.svg",
+  "trezor-suite": "/brand-logos/trezor-suite.png",
+  "cake-wallet": "/brand-logos/cakewallet.png",
+  "feather-wallet": "/brand-logos/feather-wallet.png",
+  onekey: "/brand-logos/onekey.png",
+  bmw: "/brand-logos/bmw.png",
+  tesla: "/brand-logos/tesla.png",
+  porsche: "/brand-logos/porsche.png",
+  lamborghini: "/brand-logos/lamborghini.png",
+  bybit: "/brand-logos/bybit.png",
+  metatrader: "/brand-logos/metatrader-logo.png",
+  infloww: "/brand-logos/infloww.png",
 };
 
 const BRANDS: Record<string, PlatformBrand> = {
@@ -22,7 +53,13 @@ const BRANDS: Record<string, PlatformBrand> = {
   },
   "cash-app": {
     name: "Cash App",
-    iconPath: "/brand-logos/venmo.png",
+    iconPath: "/brand-logos/cash-app.png",
+    themeColor: "#00D632",
+    backgroundColor: "#00D632",
+  },
+  cashapp: {
+    name: "Cash App",
+    iconPath: "/brand-logos/cash-app.png",
     themeColor: "#00D632",
     backgroundColor: "#00D632",
   },
@@ -34,16 +71,21 @@ const BRANDS: Record<string, PlatformBrand> = {
   },
 };
 
+export function getPlatformLogoSrc(slug: string): string {
+  return LOGO_SRC[slug] || `/brand-logos/${slug}.png`;
+}
+
 export function getPlatformBrand(slug: string): PlatformBrand {
-  return (
-    BRANDS[slug] || {
-      name: slug
-        .split("-")
-        .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-        .join(" "),
-      iconPath: `/brand-logos/${slug}.png`,
-      themeColor: "#111111",
-      backgroundColor: "#111111",
-    }
-  );
+  // Keep PNG/JPG iconPath for PWA / apple-touch; SVG logos are for in-app tiles.
+  const mapped = BRANDS[slug];
+  if (mapped) return mapped;
+  return {
+    name: slug
+      .split("-")
+      .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+      .join(" "),
+    iconPath: `/brand-logos/${slug}.png`,
+    themeColor: "#111111",
+    backgroundColor: "#111111",
+  };
 }

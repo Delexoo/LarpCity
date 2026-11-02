@@ -1,71 +1,80 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/Badge";
+import { PlatformLogo } from "@/components/platforms/PlatformLogo";
 import { Button } from "@/components/ui/Button";
 import { getActivePlatforms } from "@/lib/platforms/catalog";
 import { RecentLarpsClient } from "./RecentLarpsClient";
 
 export const metadata = { title: "Dashboard" };
 
+const FEATURED = [
+  "stripe",
+  "coinbase",
+  "venmo",
+  "cash-app",
+  "amex",
+  "shopify",
+  "phantom",
+  "revolut",
+];
+
 export default function DashboardPage() {
-  const platforms = getActivePlatforms().slice(0, 12);
+  const bySlug = new Map(getActivePlatforms().map((p) => [p.slug, p]));
+  const platforms = FEATURED.map((slug) => bySlug.get(slug)).filter(
+    (p): p is NonNullable<typeof p> => Boolean(p),
+  );
 
   return (
-    <div className="space-y-10">
-      <div className="flex flex-col gap-4 border-b border-[var(--hairline)] pb-6 sm:flex-row sm:items-end sm:justify-between">
-        <div className="min-w-0">
-          <h1 className="page-title">Dashboard</h1>
-          <p className="mt-2 text-sm text-[var(--text-secondary)]">
-            Jump into a platform or continue a recent LARP.
-          </p>
-        </div>
+    <div className="mx-auto max-w-4xl space-y-12">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="page-title">Dashboard</h1>
         <Link href="/larps/new" className="w-full sm:w-auto">
-          <Button className="w-full sm:w-auto">New LARP</Button>
+          <Button size="lg" className="w-full min-w-[10.5rem] sm:w-auto">
+            New LARP
+          </Button>
         </Link>
       </div>
 
       <section>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-[var(--ink)]">Platforms</h2>
+        <div className="mb-5 flex items-baseline justify-between gap-3">
+          <h2 className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[var(--text-secondary)]">
+            Platforms
+          </h2>
           <Link
             href="/larps/new"
-            className="text-xs text-[var(--text-secondary)] hover:text-[var(--ink)]"
+            className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--ink)]"
           >
-            Browse all
+            See all
           </Link>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {platforms.map((platform) => (
             <Link
               key={platform.id}
               href={platform.href}
-              className="ll-stat-card flex items-center justify-between px-4 py-3 transition hover:border-[var(--ink)]/30"
+              className="ll-stat-card group flex min-h-[7.25rem] flex-col items-center justify-center gap-3 px-3 py-5 transition hover:border-[var(--ink)]/35 active:scale-[0.98]"
             >
-              <div>
-                <p className="text-sm font-medium text-[var(--ink)]">
-                  {platform.name}
-                </p>
-                <p className="mt-0.5 text-[11px] text-[var(--text-secondary)]">
-                  {platform.section}
-                </p>
-              </div>
-              {platform.tier === "coming_soon" ? (
-                <Badge tone="muted">Soon</Badge>
-              ) : (
-                <Badge tone="accent">Open</Badge>
-              )}
+              <PlatformLogo
+                slug={platform.slug}
+                name={platform.name}
+                size={52}
+                className="rounded-[1.15rem]"
+              />
+              <span className="text-center text-[15px] font-semibold leading-tight text-[var(--ink)]">
+                {platform.name}
+              </span>
             </Link>
           ))}
         </div>
       </section>
 
       <section>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-[var(--ink)]">
-            Recent LARPs
+        <div className="mb-5 flex items-baseline justify-between gap-3">
+          <h2 className="text-[13px] font-semibold uppercase tracking-[0.04em] text-[var(--text-secondary)]">
+            Recent
           </h2>
           <Link
             href="/larps"
-            className="text-xs text-[var(--text-secondary)] hover:text-[var(--ink)]"
+            className="text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--ink)]"
           >
             View all
           </Link>

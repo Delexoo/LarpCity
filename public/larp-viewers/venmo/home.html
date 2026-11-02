@@ -938,7 +938,7 @@ function photoFor(name, key) {
   PHOTO[key] = url;
   return url;
 }
-PEOPLE.forEach(function (p) { PHOTO_BY_NAME[p.name] = photoFor(p.name, p.handle); });
+usedPhoto = {}; PHOTO = {}; PEOPLE.sort(function(){ return Math.random() - 0.5; }); PEOPLE.forEach(function (p) { PHOTO_BY_NAME[p.name] = photoFor(p.name, p.handle); });
 /** Only people on the account get photos; the owner, businesses and typed contacts keep initials. */
 function photoOf(name) { return name && PHOTO_BY_NAME.hasOwnProperty(name) ? PHOTO_BY_NAME[name] : null; }
 
@@ -2014,120 +2014,5 @@ function sheet(mode){
 }
 })();
 </script>
-<script id="ll-install-data" type="application/json">{"name":"Venmo","shortName":"Venmo","bg":"#111111","iconUrl":"/api/pwa/venmo/icon?size=120","sw":true}</script>
-<script>
-(function(){
-  if(!("serviceWorker" in navigator))return;
-  if(!window.addEventListener)return;
-  if(window.__llInstallBubble)return;
-  window.__llInstallBubble=true;
-  var D=document.getElementById("ll-install-data");
-  var data=D?JSON.parse(D.textContent||"{}"):{};
-  var ev=null, btn=null, dismissed=false;
-  try{ dismissed = sessionStorage.getItem("ll-install-dismissed")==="1"; }catch(e){}
 
-  // Register /sw.js so Chrome treats the larp as installable. Idempotent —
-  // a no-op when the notifications shim (or a prior visit) already registered
-  // it. Never rejects (no install prompt if the SW can't register).
-  if(data.sw!==false) navigator.serviceWorker.register("/sw.js").catch(function(){});
-
-  function hide(){ if(btn){btn.remove();} btn=null; }
-
-  function show(){
-    if(btn || dismissed)return;
-    var b=document.createElement("button");
-    b.id="ll-install-btn";
-    b.type="button";
-    b.setAttribute("aria-label","Install "+data.name);
-    // Inline styles + a sentinel class so the scraped template's CSS can't
-    // quietly reshape it. !important on the layout-critical props.
-    b.style.cssText=[
-      "position:fixed",
-      "right:16px",
-      "bottom:16px",
-      "z-index:2147483000",
-      "display:inline-flex",
-      "align-items:center",
-      "gap:8px",
-      "max-width:calc(100vw - 32px)",
-      "padding:9px 14px 9px 9px",
-      "border:0",
-      "border-radius:999px",
-      "background:"+(data.bg||"#111111"),
-      "color:#fff",
-      "font:600 13px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif",
-      "letter-spacing:.01em",
-      "box-shadow:0 6px 20px rgba(0,0,0,.28),0 1px 3px rgba(0,0,0,.2)",
-      "cursor:pointer",
-      "opacity:0",
-      "transform:translateY(6px)",
-      "transition:opacity .18s ease,transform .18s ease",
-      "-webkit-tap-highlight-color:transparent"
-    ].join(";")+"!important";
-    var img=document.createElement("img");
-    img.src=data.iconUrl; img.alt=""; img.width=22; img.height=22;
-    img.style.cssText="width:22px;height:22px;border-radius:6px;flex:0 0 auto;display:block";
-    var label=document.createElement("span");
-    label.textContent="Install "+(data.shortName||data.name);
-    label.style.cssText="white-space:nowrap;overflow:hidden;text-overflow:ellipsis";
-    var x=document.createElement("span");
-    x.textContent="×";
-    x.setAttribute("role","button");
-    x.setAttribute("aria-label","Dismiss");
-    x.style.cssText="flex:0 0 auto;margin-left:2px;opacity:.6;font-size:15px;line-height:1;padding:0 2px";
-    b.appendChild(img); b.appendChild(label); b.appendChild(x);
-    b.addEventListener("click",function(e){
-      if(e.target===x){ dismiss(); return; }
-      if(!ev)return;
-      ev.prompt();
-      var choice=ev.userChoice;
-      if(choice&&choice.then){ choice.then(function(){ hide(); ev=null; }); }
-      else { hide(); ev=null; }
-    });
-    document.body.appendChild(b);
-    btn=b;
-    // Animate in on the next frame.
-    requestAnimationFrame(function(){
-      b.style.opacity="1";
-      b.style.transform="translateY(0)";
-    });
-  }
-
-  function dismiss(){
-    hide();
-    dismissed=true;
-    try{ sessionStorage.setItem("ll-install-dismissed","1"); }catch(e){}
-  }
-
-  window.addEventListener("beforeinstallprompt",function(e){
-    e.preventDefault();
-    ev=e;
-    show();
-  });
-
-  // The notifications client's install sheet (lib/notifications/inject.ts)
-  // can ask for the native prompt on demand: it dispatches a cancelable
-  // "ll-install-request"; preventing default tells the sheet the button is
-  // live, then we fire the same captured prompt a pill tap would. The
-  // outcome goes back as "ll-install-choice" so the sheet can react to a
-  // cancelled install.
-  window.addEventListener("ll-install-request",function(e){
-    if(!ev)return;
-    e.preventDefault();
-    ev.prompt();
-    var choice=ev.userChoice;
-    if(choice&&choice.then){
-      choice.then(function(res){
-        window.dispatchEvent(new CustomEvent("ll-install-choice",{detail:{outcome:res&&res.outcome}}));
-        hide(); ev=null;
-      },function(){ hide(); ev=null; });
-    }else{ hide(); ev=null; }
-  });
-  window.addEventListener("appinstalled",function(){
-    ev=null; hide();
-    try{ sessionStorage.removeItem("ll-install-dismissed"); }catch(e){}
-  });
-})();
-</script>
-<script type="module" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;95d7af87c3314ba2b19fc39f5b4bfbb6&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
-<npz-bidxaqjjvcyg></npz-bidxaqjjvcyg><button id="ll-install-btn" type="button" aria-label="Install Venmo" style="position: fixed; right: 16px; bottom: 16px; z-index: 2147483000; display: inline-flex; align-items: center; gap: 8px; max-width: calc(-32px + 100vw); padding: 9px 14px 9px 9px; border: 0px; border-radius: 999px; background: rgb(17, 17, 17); color: rgb(255, 255, 255); font: 600 13px / 1 -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif; letter-spacing: 0.01em; box-shadow: rgba(0, 0, 0, 0.28) 0px 6px 20px, rgba(0, 0, 0, 0.2) 0px 1px 3px; cursor: pointer; opacity: 1; transform: translateY(0px); transition: opacity 0.18s, transform 0.18s; -webkit-tap-highlight-color: transparent !important;"><img src="data:image/png;base64,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" alt="" width="22" height="22" style="width: 22px; height: 22px; border-radius: 6px; flex: 0 0 auto; display: block;"><span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Install Venmo</span><span role="button" aria-label="Dismiss" style="flex: 0 0 auto; margin-left: 2px; opacity: 0.6; font-size: 15px; line-height: 1; padding: 0px 2px;">×</span></button></body>
+</body></html>

@@ -20,6 +20,18 @@ import {
   injectVenmoViewerHtml,
   type VenmoPayload,
 } from "@/lib/larps/venmo-payload";
+import {
+  buildCoinbasePayload,
+  injectCoinbaseViewerHtml,
+  type CoinbasePayload,
+} from "@/lib/larps/coinbase-payload";
+import {
+  buildCashAppDesktopPayload,
+  buildCashAppMobilePayload,
+  injectCashAppViewerHtml,
+  type CashAppDesktopPayload,
+  type CashAppMobilePayload,
+} from "@/lib/larps/cashapp-payload";
 import { getPlatformBySlug } from "@/lib/platforms/catalog";
 
 function StripeProtectMark({ className }: { className?: string }) {
@@ -165,6 +177,62 @@ async function loadVenmoHtml(
   return injectVenmoViewerHtml(template, payload, { mobile });
 }
 
+async function loadCashAppHtml(
+  larp: LocalLarp,
+  mobile: boolean,
+): Promise<string> {
+  const templatePath = mobile
+    ? "/larp-viewers/cash-app/mobile.html"
+    : "/larp-viewers/cash-app/home.html";
+  const res = await fetch(templatePath, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load Cash App viewer assets");
+  const template = await res.text();
+  const meta = { id: larp.id, title: larp.title };
+  const data = larp.data ?? {};
+
+  if (mobile) {
+    const m = template.match(/window\.__CA\s*=\s*(\{[\s\S]*?\});/);
+    if (!m) throw new Error("Cash App mobile payload missing");
+    const base = JSON.parse(m[1]) as CashAppMobilePayload;
+    const payload = buildCashAppMobilePayload(base, data, meta);
+    return injectCashAppViewerHtml(template, { mobile: true, payload });
+  }
+
+  const m = template.match(
+    /<script id="payload" type="application\/json">([\s\S]*?)<\/script>/,
+  );
+  if (!m) throw new Error("Cash App desktop payload missing");
+  const base = JSON.parse(m[1]) as CashAppDesktopPayload;
+  const payload = buildCashAppDesktopPayload(base, data, meta);
+  return injectCashAppViewerHtml(template, { mobile: false, payload });
+}
+
+async function loadCoinbaseHtml(
+  larp: LocalLarp,
+  mobile: boolean,
+): Promise<string> {
+  const preferred = String(larp.data?.device || "").toLowerCase();
+  const useMobile =
+    preferred === "mobile" ? true : preferred === "web" ? false : mobile;
+  const templatePath = useMobile
+    ? "/larp-viewers/coinbase/mobile.html"
+    : "/larp-viewers/coinbase/home.html";
+  const [templateRes, payloadRes] = await Promise.all([
+    fetch(templatePath, { cache: "no-store" }),
+    fetch("/larp-viewers/coinbase/base-payload.json", { cache: "force-cache" }),
+  ]);
+  if (!templateRes.ok || !payloadRes.ok) {
+    throw new Error("Failed to load Coinbase viewer assets");
+  }
+  const template = await templateRes.text();
+  const base = (await payloadRes.json()) as CoinbasePayload;
+  const payload = buildCoinbasePayload(base, larp.data ?? {}, {
+    id: larp.id,
+    title: larp.title,
+  });
+  return injectCoinbaseViewerHtml(template, payload, { mobile: useMobile });
+}
+
 async function loadGenericHtml(larp: LocalLarp): Promise<string> {
   const res = await fetch("/larp-viewers/generic/home.html", {
     cache: "force-cache",
@@ -264,7 +332,11 @@ export function LocalLarpClient({ id }: { id: string }) {
         ? () => loadStripeHtml(larp, mobile)
         : larp.platform_slug === "venmo"
           ? () => loadVenmoHtml(larp, mobile)
-          : () => loadGenericHtml(larp);
+          : larp.platform_slug === "coinbase"
+            ? () => loadCoinbaseHtml(larp, mobile)
+            : larp.platform_slug === "cash-app"
+              ? () => loadCashAppHtml(larp, mobile)
+              : () => loadGenericHtml(larp);
 
     loader()
       .then((doc) => {
@@ -273,7 +345,11 @@ export function LocalLarpClient({ id }: { id: string }) {
         const platform = getPlatformBySlug(larp.platform_slug);
         const name =
           String(
-            larp.data?.businessName || larp.title || platform?.name || "LARP",
+            larp.data?.displayName ||
+              larp.data?.businessName ||
+              larp.title ||
+              platform?.name ||
+              "LARP",
           ).trim() || "LARP";
         const brand = platform?.name || larp.platform_slug;
         document.title =
@@ -281,7 +357,9 @@ export function LocalLarpClient({ id }: { id: string }) {
             ? `Home – ${name} – Stripe`
             : larp.platform_slug === "venmo"
               ? `${name} – Venmo`
-              : `${name} – ${brand}`;
+              : larp.platform_slug === "coinbase"
+                ? `Home · Coinbase`
+                : `${name} – ${brand}`;
       })
       .catch((err: unknown) => {
         if (!cancelled) {
