@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { getLocalLarp, syncLarpSnapshot } from "@/lib/larps/local-store";
 import { getPlatformBrand } from "@/lib/larps/platform-brand";
@@ -27,6 +27,11 @@ function isStandalone() {
   return false;
 }
 
+function pwaIcon(brandIcon: string): string {
+  if (/\.(png|jpe?g|webp)$/i.test(brandIcon)) return brandIcon;
+  return brandIcon.replace(/\.svg$/i, ".png");
+}
+
 function ensurePwaMeta(opts: {
   appName: string;
   larpId: string;
@@ -34,12 +39,15 @@ function ensurePwaMeta(opts: {
   iconPath: string;
   themeColor: string;
 }) {
-  const existing = document.getElementById("lc-larp-manifest");
-  if (existing) existing.remove();
+  // Remove every manifest so a prior LARP (or iframe inject) can't win install.
+  document
+    .querySelectorAll('link[rel="manifest"]')
+    .forEach((node) => node.remove());
 
   const params = new URLSearchParams({
     name: opts.appName,
     slug: opts.slug,
+    v: opts.larpId.slice(0, 8),
   });
   const link = document.createElement("link");
   link.id = "lc-larp-manifest";
@@ -98,6 +106,7 @@ export function InstallLarpPrompt({
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(
     null,
   );
+  const deferredForId = useRef<string | null>(null);
   const [hint, setHint] = useState<string | null>(null);
   const [brandLabel, setBrandLabel] = useState("App");
   const [iconPath, setIconPath] = useState("/larplabslogo.png");
@@ -105,6 +114,11 @@ export function InstallLarpPrompt({
 
   useEffect(() => {
     if (!larpId) return;
+
+    // Never reuse a BIP captured for a different LARP.
+    setDeferred(null);
+    deferredForId.current = null;
+    setHint(null);
 
     const hideForever = () => {
       window.localStorage.setItem(dismissKey(larpId), "1");
@@ -123,15 +137,16 @@ export function InstallLarpPrompt({
     const larp = getLocalLarp(larpId);
     const brand = getPlatformBrand(larp?.platform_slug || "");
     const appName = brand.name;
+    const icon = pwaIcon(brand.iconPath);
     setBrandLabel(appName);
-    setIconPath(brand.iconPath);
+    setIconPath(icon);
     setThemeColor(brand.themeColor);
 
     ensurePwaMeta({
       appName,
       larpId,
       slug: larp?.platform_slug || "",
-      iconPath: brand.iconPath,
+      iconPath: icon,
       themeColor: brand.themeColor,
     });
 
@@ -147,6 +162,7 @@ export function InstallLarpPrompt({
     const onBip = (e: Event) => {
       e.preventDefault();
       setDeferred(e as BeforeInstallPromptEvent);
+      deferredForId.current = larpId;
     };
     const onInstalled = () => hideForever();
 
@@ -165,7 +181,17 @@ export function InstallLarpPrompt({
     const larp = getLocalLarp(larpId!);
     if (larp) await syncLarpSnapshot(larp);
 
-    if (deferred) {
+    // Re-assert this LARP's manifest right before prompting.
+    const brand = getPlatformBrand(larp?.platform_slug || "");
+    ensurePwaMeta({
+      appName: brand.name,
+      larpId: larpId!,
+      slug: larp?.platform_slug || "",
+      iconPath: pwaIcon(brand.iconPath),
+      themeColor: brand.themeColor,
+    });
+
+    if (deferred && deferredForId.current === larpId) {
       await deferred.prompt();
       const choice = await deferred.userChoice;
       if (choice.outcome === "accepted") {
@@ -173,14 +199,18 @@ export function InstallLarpPrompt({
         setVisible(false);
       }
       setDeferred(null);
+      deferredForId.current = null;
       return;
     }
+
     const ua = navigator.userAgent || "";
     const ios = /iPad|iPhone|iPod/.test(ua);
     setHint(
       ios
         ? "Tap Share, then Add to Home Screen."
-        : "Use your browser menu → Install app / Add to Home Screen.",
+        : deferred
+          ? "Reload this LARP, then tap Install again so the correct app is used."
+          : "Use your browser menu → Install app / Add to Home Screen.",
     );
   }
 
@@ -197,12 +227,12 @@ export function InstallLarpPrompt({
       )}
     >
       {hint ? (
-        <p className="pointer-events-auto rounded-md border border-[var(--hairline)] bg-[#111]/95 px-2 py-1 text-[10px] leading-snug text-white shadow-md">
+        <p className="pointer-events-auto rounded-2xl border border-[var(--hairline)] bg-[#111]/95 px-2.5 py-1.5 text-[10px] leading-snug text-white shadow-md">
           {hint}
         </p>
       ) : null}
       <div
-        className="pointer-events-auto flex h-7 items-center rounded-full pl-1 pr-0.5 text-white shadow-[0_6px_16px_rgba(0,0,0,.2)]"
+        className="pointer-events-auto flex h-8 items-center rounded-full pl-1.5 pr-0.5 text-white shadow-[0_6px_16px_rgba(0,0,0,.2)]"
         style={{ backgroundColor: `${themeColor}f2` }}
       >
         <button
@@ -213,9 +243,9 @@ export function InstallLarpPrompt({
           <img
             src={iconPath}
             alt=""
-            width={16}
-            height={16}
-            className="size-4 shrink-0 rounded-[4px] object-cover"
+            width={18}
+            height={18}
+            className="size-[18px] shrink-0 rounded-[5px] object-cover"
           />
           Install {brandLabel}
         </button>
@@ -223,7 +253,7 @@ export function InstallLarpPrompt({
           type="button"
           aria-label="Dismiss install prompt"
           onClick={onDismiss}
-          className="grid size-5 place-items-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
+          className="grid size-6 place-items-center rounded-full text-white/60 transition hover:bg-white/10 hover:text-white"
         >
           <X className="size-3" strokeWidth={2.4} />
         </button>

@@ -13,10 +13,13 @@ export type IMessageContact = {
   avatarLetters?: string;
   avatarHueA?: string;
   avatarHueB?: string;
+  avatarUrl?: string;
   subtitle?: string;
   service?: "iMessage" | "SMS";
   statusTime?: string;
   readLabel?: string;
+  unreadCount?: number;
+  battery?: number | string;
 };
 
 export type IMessagePayload = {
@@ -26,17 +29,21 @@ export type IMessagePayload = {
   showRead?: boolean;
   readLabel?: string;
   statusTime?: string;
+  unreadCount?: number;
+  battery?: number | string;
 };
 
 export const DEFAULT_IMESSAGE: IMessagePayload = {
   contact: {
-    name: "Mom",
-    avatarLetters: "M",
-    avatarHueA: "#A8A8AE",
-    avatarHueB: "#6E6E73",
+    name: "JJ",
+    avatarLetters: "JJ",
+    avatarHueA: "#8E8E93",
+    avatarHueB: "#48484A",
     service: "iMessage",
-    statusTime: "9:41 AM",
-    readLabel: "Read 9:41 AM",
+    statusTime: "2:30",
+    readLabel: "Delivered",
+    unreadCount: 271,
+    battery: 25,
   },
   messages: [
     {
@@ -44,7 +51,7 @@ export const DEFAULT_IMESSAGE: IMessagePayload = {
       side: "received",
       kind: "text",
       text: "Are you alive",
-      timestampLabel: "Today 9:38 AM",
+      timestampLabel: "Today 2:28 PM",
     },
     {
       id: "m2",
@@ -64,8 +71,10 @@ export const DEFAULT_IMESSAGE: IMessagePayload = {
   ],
   showTyping: true,
   showRead: true,
-  readLabel: "Read 9:41 AM",
-  statusTime: "9:41 AM",
+  readLabel: "Delivered",
+  statusTime: "2:30",
+  unreadCount: 271,
+  battery: 25,
 };
 
 export function buildIMessagePayload(
@@ -108,33 +117,50 @@ export function buildIMessagePayload(
     };
   });
 
+  const unreadRaw = contactIn.unreadCount ?? data.unreadCount ?? 271;
+  const unreadCount = Math.max(0, Math.round(Number(unreadRaw) || 0));
+  const batteryRaw = contactIn.battery ?? data.battery ?? 25;
+  const battery: number | string =
+    typeof batteryRaw === "number" || typeof batteryRaw === "string"
+      ? batteryRaw
+      : Math.max(0, Math.min(100, Number(batteryRaw) || 25));
+
   return {
     contact: {
       name,
       avatarLetters: letters,
       avatarHueA: String(
-        contactIn.avatarHueA || data.avatarHueA || "#A8A8AE",
+        contactIn.avatarHueA || data.avatarHueA || "#8E8E93",
       ),
       avatarHueB: String(
-        contactIn.avatarHueB || data.avatarHueB || "#6E6E73",
+        contactIn.avatarHueB || data.avatarHueB || "#48484A",
       ),
+      avatarUrl: contactIn.avatarUrl
+        ? String(contactIn.avatarUrl)
+        : data.avatarUrl
+          ? String(data.avatarUrl)
+          : undefined,
       subtitle: contactIn.subtitle ? String(contactIn.subtitle) : undefined,
       service:
         String(contactIn.service || data.service || "iMessage") === "SMS"
           ? "SMS"
           : "iMessage",
       statusTime: String(
-        contactIn.statusTime || data.statusTime || "9:41 AM",
+        contactIn.statusTime || data.statusTime || "2:30",
       ),
       readLabel: String(
-        contactIn.readLabel || data.readLabel || "Read 9:41 AM",
+        contactIn.readLabel || data.readLabel || "Delivered",
       ),
+      unreadCount,
+      battery,
     },
     messages: messages.length ? messages : DEFAULT_IMESSAGE.messages,
     showTyping: data.showTyping !== false,
     showRead: data.showRead !== false,
-    readLabel: String(data.readLabel || "Read 9:41 AM"),
-    statusTime: String(data.statusTime || "9:41 AM"),
+    readLabel: String(data.readLabel || "Delivered"),
+    statusTime: String(data.statusTime || "2:30"),
+    unreadCount,
+    battery,
   };
 }
 

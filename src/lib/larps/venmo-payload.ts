@@ -361,13 +361,8 @@ export function injectVenmoViewerHtml(
   html = html.replace(/<\/?(?:twh|tps)-[^>]*>/gi, "");
   if (!/<\/body>/i.test(html)) html += "</body></html>";
 
-  // Drop remote larplabs PWA tags so home-screen install uses our Venmo logo.
-  html = html.replace(
-    /<link rel="manifest"[^>]*>/gi,
-    '<link rel="manifest" href="/api/pwa/manifest/' +
-      encodeURIComponent(payload.S.id) +
-      '?name=Venmo&slug=venmo">',
-  );
+  // Parent InstallLarpPrompt owns the real PWA manifest (correct LARP id).
+  html = html.replace(/<link rel="manifest"[^>]*>/gi, "");
   html = html.replace(
     /<link rel="apple-touch-icon"[^>]*>/gi,
     '<link rel="apple-touch-icon" href="/brand-logos/venmo.png">',

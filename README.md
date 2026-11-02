@@ -1,17 +1,47 @@
-# LarpCity
+<p align="center">
+  <img src="public/larplabslogo.png" width="88" height="88" alt="LarpCity">
+</p>
 
-Create polished mock financial and social dashboards (LARPs) for screenshots — Stripe, Venmo, Coinbase, wallets, and more.
+<h1 align="center">LarpCity</h1>
 
-**Live demo:** [larpcity-delexo.vercel.app](https://larpcity-delexo.vercel.app)
+<p align="center">
+  <strong>Polished mock dashboards for screenshots</strong><br>
+  Stripe, Venmo, Cash App, Coinbase, Shopify, YouTube Studio, Instagram, Chase, and more.
+</p>
 
-## Features
+<p align="center">
+  <a href="https://larpcity-delexo.vercel.app"><img src="https://img.shields.io/badge/Live_demo-larpcity--delexo-111111?style=for-the-badge" alt="Live demo"></a>
+  <a href="https://github.com/Delexoo/LarpCity/releases/latest"><img src="https://img.shields.io/github/v/release/Delexoo/LarpCity?style=for-the-badge&label=Latest%20release&color=111111" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-0f172a?style=for-the-badge" alt="License"></a>
+  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js"></a>
+</p>
 
-- Platform hubs with create / edit / open / share / delete for local LARPs
-- Stripe desktop + mobile viewers with Settings that save on-device
-- Venmo desktop + mobile viewers with brand assets
-- Ink + Paper UI: black/white shell, single Figtree typeface
-- PWA install prompts and snapshot APIs for immersive viewing
-- Supabase + Stripe hooks ready for auth and Pro billing
+<p align="center">
+  <a href="https://larpcity-delexo.vercel.app">Live demo</a> ·
+  <a href="https://larpcity-delexo.vercel.app/pricing">Pricing</a> ·
+  <a href="./RELEASE_NOTES.md">Release notes</a> ·
+  <a href="https://github.com/Delexoo/LarpCity/releases">GitHub Releases</a>
+</p>
+
+---
+
+## What it is
+
+LarpCity lets you spin up realistic **LARPs** — local-first mock product UIs — so you can capture clean screenshots without touching live accounts.
+
+| Ready now | Coming soon |
+| --- | --- |
+| Stripe · Venmo · Cash App · Coinbase · Shopify · YouTube Studio · Chase · iMessage · Instagram · Receipts | Greyed **Soon** hubs in the sidebar (clickable roadmap) |
+
+**Free** unlocks every ready platform with a small watermark. **Pro** removes the watermark.
+
+## Highlights
+
+- **Home** — platforms + your LARPs in one place
+- **Real brand logos** and Ink + Paper chrome
+- **Immersive viewers** — desktop/mobile shells, PWA install scoped per LARP
+- **Randomized onboarding** where it matters (e.g. Instagram dark profile)
+- **Supabase + Stripe** hooks ready for auth and Pro billing
 
 ## Stack
 
@@ -21,7 +51,7 @@ Create polished mock financial and social dashboards (LARPs) for screenshots —
 | Styling | Tailwind CSS v4, Figtree |
 | Data | Local LARP store (`localStorage`); Supabase-ready |
 | Billing | Stripe Checkout, Customer Portal, webhooks |
-| Hosting | Vercel |
+| Hosting | [Vercel](https://larpcity-delexo.vercel.app) |
 
 ## Quick start
 
@@ -36,14 +66,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Environment
 
-Copy `.env.local.example` → `.env.local`. Never commit real secrets.
+Copy `.env.local.example` → `.env.local`. **Never commit real secrets.**
 
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon (public) key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-only service role |
-| `NEXT_PUBLIC_SITE_URL` | Canonical site URL (`http://localhost:3000` locally) |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL |
 | `STRIPE_SECRET_KEY` | Stripe secret key |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
 | `STRIPE_WEBHOOK_SECRET` | Webhook signing secret |
@@ -66,22 +96,22 @@ npm run lint     # ESLint
 | Path | Notes |
 | --- | --- |
 | `/` | Marketing landing |
-| `/login` | Sign-in entry (auth optional while local-first) |
+| `/dashboard` | Home — platforms + My LARPs |
+| `/platforms/[slug]` | Platform hub |
+| `/platforms/[slug]/new` | Create / edit LARP |
+| `/larps/[id]` | Immersive viewer |
 | `/pricing` | Free vs Pro |
-| `/dashboard` | Overview + recent LARPs |
-| `/larps`, `/larps/new`, `/larps/[id]` | Library, create, immersive viewer |
-| `/platforms/[slug]` | Platform hub + create form |
 | `/settings` | Profile + billing portal |
-| `/library`, `/community`, `/ai-images`, `/support`, `/refer` | Placeholders |
 
 ## Plans
 
-- **Free:** All active platforms · LarpCity watermark on viewers
-- **Pro:** Everything in Free · watermark removed forever (lifetime $99, or $29/mo later)
+- **Free** — all ready platforms · LarpCity watermark on viewers  
+- **Pro** — watermark removed (lifetime-first pricing)
 
 ## Release notes
 
-See [RELEASE_NOTES.md](./RELEASE_NOTES.md).
+Full changelog: [RELEASE_NOTES.md](./RELEASE_NOTES.md)  
+Tagged releases: [GitHub Releases](https://github.com/Delexoo/LarpCity/releases)
 
 ## License
 

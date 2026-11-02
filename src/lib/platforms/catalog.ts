@@ -9,7 +9,6 @@ export type NavSection =
   | "Trading"
   | "Mobile apps"
   | "Receipts"
-  | "Distribution"
   | "More"
   | "Coming soon";
 
@@ -24,14 +23,30 @@ export type NavItem = {
   description?: string;
 };
 
-/** All active platforms are Free (with watermark). Pro removes the watermark. */
+/** Platforms with a real viewer dashboard shipped in the app. */
+export const READY_PLATFORM_SLUGS = new Set([
+  "stripe",
+  "venmo",
+  "cash-app",
+  "coinbase",
+  "shopify",
+  "youtube-studio",
+  "chase",
+  "imessage",
+  "instagram",
+  "receipts",
+]);
+
+/** Active platforms are Free (with watermark). Pro removes the watermark. */
 function platform(
   name: string,
   slug: string,
   section: NavSection,
   extras?: Partial<NavItem>,
 ): NavItem {
-  const tier: PlatformTier = extras?.tier ?? "free";
+  const ready = READY_PLATFORM_SLUGS.has(slug);
+  const tier: PlatformTier =
+    extras?.tier ?? (ready ? "free" : "coming_soon");
   return {
     id: extras?.id ?? slug,
     name,
@@ -56,7 +71,7 @@ function comingSoon(
 }
 
 export const NAV_CATALOG: NavItem[] = [
-  // General
+  // General — Home combines former dashboard + My LARPs
   {
     id: "home",
     name: "Home",
@@ -67,33 +82,6 @@ export const NAV_CATALOG: NavItem[] = [
     icon: "Home",
   },
   {
-    id: "my-larps",
-    name: "My LARPs",
-    slug: "larps",
-    href: "/larps",
-    section: "General",
-    tier: "free",
-    icon: "LayoutGrid",
-  },
-  {
-    id: "community",
-    name: "Community",
-    slug: "community",
-    href: "/community",
-    section: "General",
-    tier: "free",
-    icon: "Users",
-  },
-  {
-    id: "ai-images",
-    name: "AI Images",
-    slug: "ai-images",
-    href: "/ai-images",
-    section: "General",
-    tier: "free",
-    icon: "Sparkles",
-  },
-  {
     id: "library",
     name: "Media Library",
     slug: "library",
@@ -101,15 +89,6 @@ export const NAV_CATALOG: NavItem[] = [
     section: "General",
     tier: "free",
     icon: "Images",
-  },
-  {
-    id: "new-larp",
-    name: "New Larp",
-    slug: "new-larp",
-    href: "/larps/new",
-    section: "General",
-    tier: "free",
-    icon: "Plus",
   },
 
   // Platforms
@@ -142,6 +121,7 @@ export const NAV_CATALOG: NavItem[] = [
   }),
 
   // Creator
+  platform("Instagram", "instagram", "Creator", { icon: "Instagram" }),
   platform("YouTube Studio", "youtube-studio", "Creator", { icon: "Youtube" }),
   platform("TikTok Studio", "tiktok-studio", "Creator", { icon: "Music2" }),
   platform("Spotify Artists", "spotify-artists", "Creator", {
@@ -180,21 +160,10 @@ export const NAV_CATALOG: NavItem[] = [
   platform("Larp Emails", "larp-emails", "Receipts", { icon: "Mail" }),
   platform("iMessage", "imessage", "Receipts", { icon: "MessageCircle" }),
 
-  // Distribution
-  {
-    id: "distribution-new-larp",
-    name: "New Larp",
-    slug: "distribution-new-larp",
-    href: "/larps/new",
-    section: "Distribution",
-    tier: "free",
-    icon: "PlusCircle",
-  },
-  platform("Companion App", "companion-app", "Distribution", {
+  // More
+  platform("Companion App", "companion-app", "More", {
     icon: "Smartphone",
   }),
-
-  // More
   platform("Wallet links", "wallet-links", "More", { icon: "Link" }),
   platform("Casino LARP", "casino-larp", "More", { icon: "Dice5" }),
   platform("FanDuel", "fanduel", "More", { icon: "Trophy" }),
@@ -227,9 +196,8 @@ export const NAV_CATALOG: NavItem[] = [
     icon: "Gift",
   },
 
-  // Coming soon
+  // Extra roadmap
   comingSoon("Robinhood", "robinhood", { icon: "Bird" }),
-  comingSoon("Chase", "chase-banking", { icon: "Landmark" }),
   comingSoon("Mercury", "mercury", { icon: "Building2" }),
   comingSoon("Wise", "wise", { icon: "Globe" }),
   comingSoon("Wire Transfers", "wire-transfers", { icon: "ArrowLeftRight" }),
@@ -258,7 +226,6 @@ export const NAV_SECTIONS: NavSection[] = [
   "Trading",
   "Mobile apps",
   "Receipts",
-  "Distribution",
   "More",
   "Coming soon",
 ];
@@ -277,23 +244,23 @@ export function getPlatformBySlug(slug: string): NavItem | undefined {
   );
 }
 
+/** Ready platforms only (create / featured grids). */
 export function getActivePlatforms(): NavItem[] {
   return NAV_CATALOG.filter(
     (item) =>
       item.href.startsWith("/platforms/") &&
       item.tier !== "coming_soon" &&
-      ![
-        "home",
-        "my-larps",
-        "community",
-        "ai-images",
-        "library",
-        "new-larp",
-        "settings",
-        "support",
-        "refer",
-        "distribution-new-larp",
-      ].includes(item.id),
+      READY_PLATFORM_SLUGS.has(item.slug),
+  );
+}
+
+/** All platform hubs including Soon — for pickers that show greyed items. */
+export function getAllPlatforms(): NavItem[] {
+  return NAV_CATALOG.filter(
+    (item) =>
+      item.href.startsWith("/platforms/") &&
+      item.section !== "General" &&
+      !["settings", "support", "refer"].includes(item.id),
   );
 }
 
@@ -301,7 +268,6 @@ export function isPlatformLocked(
   item: NavItem,
   _userIsPro: boolean,
 ): boolean {
-  // Free unlocks every active platform; only roadmap items stay locked.
   void _userIsPro;
   return item.tier === "coming_soon";
 }

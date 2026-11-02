@@ -11,7 +11,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-[var(--ink)] text-[var(--on-ink)] hover:bg-black font-bold",
+    "bg-[var(--ink)] text-[var(--on-ink)] hover:opacity-90 font-semibold",
   secondary:
     "bg-[var(--surface)] text-[var(--ink)] border border-[var(--hairline)] hover:bg-[var(--surface-alt)] font-medium",
   ghost:
@@ -19,13 +19,13 @@ const variants: Record<Variant, string> = {
   danger:
     "bg-[var(--alert-dot)]/10 text-[var(--alert-dot)] border border-[var(--alert-dot)]/25 hover:bg-[var(--alert-dot)]/15 font-medium",
   outline:
-    "bg-transparent border-[1.5px] border-[var(--ink)] text-[var(--ink)] hover:bg-[var(--surface-alt)] font-bold",
+    "bg-transparent border border-[var(--ink)]/90 text-[var(--ink)] hover:bg-[var(--surface-alt)] font-semibold",
 };
 
 const sizes: Record<Size, string> = {
-  sm: "h-10 px-4 text-sm gap-1.5",
-  md: "h-12 px-5 text-[15px] gap-2",
-  lg: "h-14 px-7 text-base gap-2.5",
+  sm: "h-9 px-4 text-sm gap-1.5",
+  md: "h-11 px-5 text-[15px] gap-2",
+  lg: "h-12 px-7 text-[15px] gap-2.5",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(

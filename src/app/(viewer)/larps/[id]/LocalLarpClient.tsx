@@ -38,12 +38,21 @@ import {
   injectIMessageHtml,
 } from "@/lib/larps/imessage-payload";
 import {
+  buildInstagramPayload,
+  injectInstagramHtml,
+} from "@/lib/larps/instagram-payload";
+import {
   buildYoutubeDesktopPayload,
   buildYoutubeMobilePayload,
   injectYoutubeViewerHtml,
   type YoutubeDesktopPayload,
   type YoutubeMobilePayload,
 } from "@/lib/larps/youtube-payload";
+import {
+  buildShopifyPayload,
+  injectShopifyViewerHtml,
+  type ShopifyPayload,
+} from "@/lib/larps/shopify-payload";
 import { buildCoinbaseReceiptHtml } from "@/lib/larps/receipt-payload";
 import {
   buildChasePayload,
@@ -245,9 +254,10 @@ async function loadCoinbaseHtml(
   larp: LocalLarp,
   mobile: boolean,
 ): Promise<string> {
+  // Phones always get the iOS shell. On desktop, preferred=mobile forces the
+  // phone-frame preview; preferred=web (default) keeps the desktop dashboard.
   const preferred = String(larp.data?.device || "").toLowerCase();
-  const useMobile =
-    preferred === "mobile" ? true : preferred === "web" ? false : mobile;
+  const useMobile = mobile || preferred === "mobile";
   const templatePath = useMobile
     ? "/larp-viewers/coinbase/mobile.html"
     : "/larp-viewers/coinbase/home.html";
@@ -275,6 +285,16 @@ async function loadIMessageHtml(larp: LocalLarp): Promise<string> {
   const template = await res.text();
   const payload = buildIMessagePayload(larp.data ?? {});
   return injectIMessageHtml(template, payload);
+}
+
+async function loadInstagramHtml(larp: LocalLarp): Promise<string> {
+  const res = await fetch("/larp-viewers/instagram/phone.html", {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Failed to load Instagram viewer");
+  const template = await res.text();
+  const payload = buildInstagramPayload(larp.data ?? {});
+  return injectInstagramHtml(template, payload);
 }
 
 async function loadReceiptHtml(larp: LocalLarp): Promise<string> {
@@ -323,6 +343,28 @@ async function loadYoutubeHtml(
     channelName,
     theme,
   });
+}
+
+async function loadShopifyHtml(
+  larp: LocalLarp,
+  mobile: boolean,
+): Promise<string> {
+  const templatePath = mobile
+    ? "/larp-viewers/shopify/mobile.html"
+    : "/larp-viewers/shopify/home.html";
+  const res = await fetch(templatePath, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load Shopify viewer assets");
+  const template = await res.text();
+  const m = template.match(
+    /<script id="payload" type="application\/json">([\s\S]*?)<\/script>/,
+  );
+  if (!m) throw new Error("Shopify payload missing");
+  const base = JSON.parse(m[1]) as ShopifyPayload;
+  const payload = buildShopifyPayload(base, larp.data ?? {}, {
+    id: larp.id,
+    title: larp.title,
+  });
+  return injectShopifyViewerHtml(template, payload, { mobile });
 }
 
 async function loadGenericHtml(larp: LocalLarp): Promise<string> {
@@ -432,11 +474,15 @@ export function LocalLarpClient({ id }: { id: string }) {
                 ? () => loadChaseHtml(larp)
                 : larp.platform_slug === "imessage"
                   ? () => loadIMessageHtml(larp)
-                  : larp.platform_slug === "youtube-studio"
-                    ? () => loadYoutubeHtml(larp, mobile)
-                    : larp.platform_slug === "receipts"
-                      ? () => loadReceiptHtml(larp)
-                      : () => loadGenericHtml(larp);
+                  : larp.platform_slug === "instagram"
+                    ? () => loadInstagramHtml(larp)
+                    : larp.platform_slug === "youtube-studio"
+                      ? () => loadYoutubeHtml(larp, mobile)
+                      : larp.platform_slug === "shopify"
+                        ? () => loadShopifyHtml(larp, mobile)
+                        : larp.platform_slug === "receipts"
+                          ? () => loadReceiptHtml(larp)
+                          : () => loadGenericHtml(larp);
 
     loader()
       .then((doc) => {
@@ -467,13 +513,19 @@ export function LocalLarpClient({ id }: { id: string }) {
                     ? `${name} · Chase`
                     : larp.platform_slug === "imessage"
                       ? `${name} – Messages`
-                      : larp.platform_slug === "youtube-studio"
-                        ? mobile
-                          ? "YouTube Studio"
-                          : `Channel dashboard - YouTube Studio`
-                        : larp.platform_slug === "receipts"
-                          ? `${name} – Receipt`
-                          : `${name} – ${brand}`;
+                      : larp.platform_slug === "instagram"
+                        ? `${String(larp.data?.username || name).replace(/^@/, "")} • Instagram`
+                        : larp.platform_slug === "youtube-studio"
+                          ? mobile
+                            ? "YouTube Studio"
+                            : `Channel dashboard - YouTube Studio`
+                          : larp.platform_slug === "shopify"
+                            ? mobile
+                              ? "Shopify"
+                              : `Home · ${name} · Shopify`
+                            : larp.platform_slug === "receipts"
+                              ? `${name} – Receipt`
+                              : `${name} – ${brand}`;
       })
       .catch((err: unknown) => {
         if (!cancelled) {
@@ -498,8 +550,8 @@ export function LocalLarpClient({ id }: { id: string }) {
         <p className="text-sm text-[var(--text-secondary)]">
           That local LARP isn&apos;t on this device anymore.
         </p>
-        <Link href="/larps">
-          <Button>Back to my larps</Button>
+        <Link href="/dashboard">
+          <Button>Back to Home</Button>
         </Link>
       </div>
     );
@@ -510,8 +562,8 @@ export function LocalLarpClient({ id }: { id: string }) {
       <div className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-6 bg-[var(--bg)] px-6 text-center text-[var(--ink)]">
         <h1 className="page-title">Couldn&apos;t open dashboard</h1>
         <p className="text-sm text-[var(--text-secondary)]">{error}</p>
-        <Link href="/larps">
-          <Button>Back to my larps</Button>
+        <Link href="/dashboard">
+          <Button>Back to Home</Button>
         </Link>
       </div>
     );

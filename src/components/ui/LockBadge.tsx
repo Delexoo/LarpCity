@@ -9,10 +9,9 @@ export function LockBadge({ tier }: { tier: PlatformTier }) {
     return (
       <Badge
         tone="muted"
-        className="gap-1 border-[1.5px] border-[var(--ink)] bg-transparent normal-case tracking-normal text-[var(--ink)]"
+        className="normal-case tracking-normal text-[var(--text-muted)]"
       >
-        <Lock className="size-2.5" strokeWidth={2} />
-        soon
+        Soon
       </Badge>
     );
   }

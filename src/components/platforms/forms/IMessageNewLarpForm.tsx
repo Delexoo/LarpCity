@@ -79,12 +79,26 @@ export function IMessageNewLarpForm({
   const [creating, setCreating] = useState(false);
 
   const [label, setLabel] = useState("");
-  const [contactName, setContactName] = useState("Mom");
-  const [avatarLetters, setAvatarLetters] = useState("M");
-  const [hueA, setHueA] = useState("#A8A8AE");
-  const [hueB, setHueB] = useState("#6E6E73");
+  const [contactName, setContactName] = useState(
+    DEFAULT_IMESSAGE.contact.name,
+  );
+  const [avatarLetters, setAvatarLetters] = useState(
+    DEFAULT_IMESSAGE.contact.avatarLetters || "JJ",
+  );
+  const [hueA, setHueA] = useState(
+    DEFAULT_IMESSAGE.contact.avatarHueA || "#8E8E93",
+  );
+  const [hueB, setHueB] = useState(
+    DEFAULT_IMESSAGE.contact.avatarHueB || "#48484A",
+  );
   const [subtitle, setSubtitle] = useState("");
   const [service, setService] = useState<"iMessage" | "SMS">("iMessage");
+  const [statusTime, setStatusTime] = useState(
+    DEFAULT_IMESSAGE.statusTime || "2:30",
+  );
+  const [unreadCount, setUnreadCount] = useState(
+    String(DEFAULT_IMESSAGE.unreadCount ?? 271),
+  );
   const [showTyping, setShowTyping] = useState(true);
   const [messages, setMessages] = useState<IMessageItem[]>(
     DEFAULT_IMESSAGE.messages,
@@ -103,12 +117,18 @@ export function IMessageNewLarpForm({
     const d = existing.data ?? {};
     const c = (d.contact as Record<string, unknown>) || {};
     setLabel(existing.title || "");
-    setContactName(String(c.name || "Mom"));
-    setAvatarLetters(String(c.avatarLetters || "M"));
-    setHueA(String(c.avatarHueA || "#A8A8AE"));
-    setHueB(String(c.avatarHueB || "#6E6E73"));
+    setContactName(String(c.name || DEFAULT_IMESSAGE.contact.name));
+    setAvatarLetters(
+      String(c.avatarLetters || DEFAULT_IMESSAGE.contact.avatarLetters || "JJ"),
+    );
+    setHueA(String(c.avatarHueA || DEFAULT_IMESSAGE.contact.avatarHueA));
+    setHueB(String(c.avatarHueB || DEFAULT_IMESSAGE.contact.avatarHueB));
     setSubtitle(String(c.subtitle || ""));
     setService(String(c.service || "iMessage") === "SMS" ? "SMS" : "iMessage");
+    setStatusTime(String(d.statusTime || c.statusTime || "2:30"));
+    setUnreadCount(
+      String(d.unreadCount ?? c.unreadCount ?? DEFAULT_IMESSAGE.unreadCount),
+    );
     setShowTyping(d.showTyping !== false);
     if (Array.isArray(d.messages) && d.messages.length) {
       setMessages(d.messages as IMessageItem[]);
@@ -119,7 +139,9 @@ export function IMessageNewLarpForm({
   const themLabel = contactName.trim() || "Them";
 
   const previewTitle = useMemo(
-    () => label.trim() || `${contactName.trim() || "Mom"} chat`,
+    () =>
+      label.trim() ||
+      `${contactName.trim() || DEFAULT_IMESSAGE.contact.name} chat`,
     [label, contactName],
   );
 
@@ -174,22 +196,28 @@ export function IMessageNewLarpForm({
   }
 
   function collectData() {
+    const unread = Math.max(0, Math.round(Number(unreadCount) || 0));
+    const clock = statusTime.trim() || "2:30";
     return {
       contact: {
-        name: contactName.trim() || "Mom",
-        avatarLetters: (avatarLetters.trim() || "M").slice(0, 2).toUpperCase(),
+        name: contactName.trim() || DEFAULT_IMESSAGE.contact.name,
+        avatarLetters: (avatarLetters.trim() || "JJ").slice(0, 2).toUpperCase(),
         avatarHueA: hueA,
         avatarHueB: hueB,
         subtitle: subtitle.trim() || undefined,
         service,
-        statusTime: "9:41 AM",
-        readLabel: "Read 9:41 AM",
+        statusTime: clock,
+        readLabel: "Delivered",
+        unreadCount: unread,
+        battery: 25,
       },
       messages: messages.filter((m) => m.text || m.timestampLabel),
       showTyping,
       showRead: true,
-      readLabel: "Read 9:41 AM",
-      statusTime: "9:41 AM",
+      readLabel: "Delivered",
+      statusTime: clock,
+      unreadCount: unread,
+      battery: 25,
     };
   }
 
@@ -201,7 +229,7 @@ export function IMessageNewLarpForm({
             {editing ? "Edit iMessage LARP" : "New iMessage LARP"}
           </h1>
           <p className="mt-2 max-w-xl text-sm text-[var(--text-secondary)]">
-            Build a chat. Opening it shows the full Messages screen.
+            Dark liquid-glass Messages UI — frosted chrome, floating composer.
           </p>
         </div>
         <Link href={cancelHref} className="shrink-0">
@@ -294,6 +322,17 @@ export function IMessageNewLarpForm({
               onChange={setSubtitle}
               placeholder="e.g. 4 people"
             />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <FieldLabel hint="Status bar clock">Status time</FieldLabel>
+              <TextInput value={statusTime} onChange={setStatusTime} />
+            </div>
+            <div>
+              <FieldLabel hint="Red badge on back">Unread count</FieldLabel>
+              <TextInput value={unreadCount} onChange={setUnreadCount} />
+            </div>
           </div>
 
           <div>
@@ -461,7 +500,7 @@ export function IMessageNewLarpForm({
                 router.push(
                   updated
                     ? `/larps/${encodeURIComponent(updated.id)}`
-                    : "/larps",
+                    : "/dashboard",
                 );
                 return;
               }

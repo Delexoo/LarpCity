@@ -2,18 +2,22 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronRight, CreditCard, LogOut, Menu } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { ChevronRight, CreditCard, LogOut } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
+import { BurgerIcon } from "./BurgerIcon";
+import { cn } from "@/lib/utils";
 
 export function TopBar({
   email,
   plan = "free",
   onMenuClick,
+  menuOpen = false,
 }: {
   email?: string | null;
   plan?: string;
   onMenuClick?: () => void;
+  menuOpen?: boolean;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -27,18 +31,22 @@ export function TopBar({
   const lastCrumb = crumbs[crumbs.length - 1];
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-[var(--hairline)] bg-[var(--surface)]/90 px-3 backdrop-blur-sm sm:px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-[3.75rem] items-center justify-between gap-2 border-b border-[var(--hairline)] bg-[var(--surface)]/90 px-3 backdrop-blur-xl sm:px-4 md:px-6">
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <button
           type="button"
           onClick={onMenuClick}
-          className="inline-flex size-9 shrink-0 items-center justify-center rounded-full text-[var(--ink)] transition-colors hover:bg-[var(--surface-alt)] md:hidden"
-          aria-label="Open menu"
+          className={cn(
+            "inline-flex size-10 shrink-0 items-center justify-center rounded-full text-[var(--ink)] transition-colors hover:bg-[var(--surface-alt)] md:hidden",
+            menuOpen && "bg-[var(--surface-alt)]",
+          )}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
         >
-          <Menu className="size-5" strokeWidth={2} />
+          <BurgerIcon open={menuOpen} />
         </button>
 
-        <p className="truncate text-sm font-medium capitalize text-[var(--ink)] md:hidden">
+        <p className="truncate text-sm font-semibold capitalize tracking-tight text-[var(--ink)] md:hidden">
           {lastCrumb?.label || "Home"}
         </p>
 
@@ -61,14 +69,6 @@ export function TopBar({
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-        <a
-          href="https://discord.gg/"
-          target="_blank"
-          rel="noreferrer"
-          className="hidden rounded-full px-3 py-1.5 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-alt)] hover:text-[var(--ink)] lg:inline-flex"
-        >
-          Discord
-        </a>
         {plan !== "pro" ? (
           <Link href="/pricing" className="hidden sm:block">
             <Button size="sm" variant="outline">
@@ -80,12 +80,12 @@ export function TopBar({
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="flex size-8 items-center justify-center rounded-full border-[1.5px] border-[var(--accent-ring)] bg-[var(--surface-alt)] text-xs font-semibold text-[var(--ink)]"
+            className="flex size-8 items-center justify-center rounded-full border border-[var(--hairline)] bg-[var(--surface-alt)] text-xs font-semibold text-[var(--ink)]"
           >
             {(email || "U").slice(0, 1).toUpperCase()}
           </button>
           {open ? (
-            <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-[1rem] border border-[var(--hairline)] bg-[var(--surface)] p-1 shadow-[var(--shadow-card)]">
+            <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-[1.15rem] border border-[var(--hairline)] bg-[var(--surface)] p-1 shadow-[var(--shadow-card)]">
               <div className="border-b border-[var(--hairline)] px-3 py-2.5">
                 <p className="truncate text-xs text-[var(--text-secondary)]">
                   Signed in

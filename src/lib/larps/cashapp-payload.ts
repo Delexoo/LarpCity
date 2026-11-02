@@ -250,13 +250,8 @@ export function injectCashAppViewerHtml(
     );
   }
 
-  // Ensure brand icons for home-screen installs
-  html = html.replace(
-    /<link rel="manifest"[^>]*>/gi,
-    `<link rel="manifest" href="/api/pwa/manifest/${encodeURIComponent(
-      opts.mobile ? opts.payload.id : opts.payload.S.id,
-    )}?name=Cash%20App&slug=cash-app">`,
-  );
+  // Parent InstallLarpPrompt owns the real PWA manifest (correct LARP id).
+  html = html.replace(/<link rel="manifest"[^>]*>/gi, "");
   html = html.replace(
     /<link rel="apple-touch-icon"[^>]*>/gi,
     '<link rel="apple-touch-icon" href="/brand-logos/cash-app.png">',

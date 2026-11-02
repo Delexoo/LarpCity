@@ -591,7 +591,7 @@ export function StripeNewLarpForm({
                   router.push(
                     updated
                       ? `/larps/${encodeURIComponent(updated.id)}`
-                      : "/larps",
+                      : "/dashboard",
                   );
                   return;
                 }

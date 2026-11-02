@@ -36,11 +36,20 @@ export function DashboardShell({
 
   return (
     <div className="flex min-h-screen bg-[var(--bg)] text-[var(--ink)]">
+      {mobileOpen ? (
+        <button
+          type="button"
+          aria-label="Close menu"
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px] md:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      ) : null}
+
       <div
         className={cn(
-          "z-50 bg-[var(--surface)]",
+          "z-50 bg-[var(--surface)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:translate-x-0 md:transition-none",
           mobileOpen
-            ? "fixed inset-0 flex flex-col md:static md:inset-auto md:block"
+            ? "fixed inset-y-0 left-0 flex w-[min(20rem,88vw)] translate-x-0 flex-col shadow-[8px_0_40px_rgba(0,0,0,0.1)] md:static md:inset-auto md:block md:w-auto md:shadow-none"
             : "hidden md:block",
         )}
         {...(mobileOpen
@@ -63,9 +72,10 @@ export function DashboardShell({
         <TopBar
           email={email}
           plan={plan}
-          onMenuClick={() => setMobileOpen(true)}
+          menuOpen={mobileOpen}
+          onMenuClick={() => setMobileOpen((v) => !v)}
         />
-        <main className="relative mx-auto w-full max-w-[1600px] flex-1 px-4 py-6 sm:px-6 md:px-8 md:py-8">
+        <main className="relative mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:px-6 md:px-8 md:py-8">
           {children}
         </main>
       </div>

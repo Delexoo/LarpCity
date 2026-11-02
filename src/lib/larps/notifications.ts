@@ -55,9 +55,9 @@ export function platformNotificationIcon(slug: string): string {
     "google-pay": "/brand-logos/google-pay.png",
     discord: "/brand-logos/discord.jpg",
     gmail: "/brand-logos/gmail.jpg",
-    instagram: "/brand-logos/instagram.svg",
     imessage: "/brand-logos/imessage.jpg",
     "i-message": "/brand-logos/imessage.jpg",
+    instagram: "/brand-logos/instagram.svg",
   };
   const path = map[slug] || `/brand-logos/${slug}.png`;
   return `${origin}${path}`;

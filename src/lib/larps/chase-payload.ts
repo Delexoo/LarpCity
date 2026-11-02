@@ -280,7 +280,7 @@ export function injectChaseViewerHtml(
 
   html = html.replace(
     /<link rel="manifest"[^>]*>/gi,
-    `<link rel="manifest" href="/api/pwa/manifest/${encodeURIComponent(payload.id)}?name=Chase&slug=chase">`,
+    "",
   );
   html = html.replace(
     /<link rel="apple-touch-icon"[^>]*>/gi,

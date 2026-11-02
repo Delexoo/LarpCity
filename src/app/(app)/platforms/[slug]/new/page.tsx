@@ -6,7 +6,9 @@ import { CoinbaseNewLarpForm } from "@/components/platforms/forms/CoinbaseNewLar
 import { CashAppNewLarpForm } from "@/components/platforms/forms/CashAppNewLarpForm";
 import { ChaseNewLarpForm } from "@/components/platforms/forms/ChaseNewLarpForm";
 import { IMessageNewLarpForm } from "@/components/platforms/forms/IMessageNewLarpForm";
+import { InstagramNewLarpForm } from "@/components/platforms/forms/InstagramNewLarpForm";
 import { YouTubeNewLarpForm } from "@/components/platforms/forms/YouTubeNewLarpForm";
+import { ShopifyNewLarpForm } from "@/components/platforms/forms/ShopifyNewLarpForm";
 import { ReceiptsNewLarpForm } from "@/components/platforms/forms/ReceiptsNewLarpForm";
 import { GenericNewLarpForm } from "@/components/platforms/forms/GenericNewLarpForm";
 
@@ -70,8 +72,23 @@ export default async function NewPlatformLarpPage({
     return <IMessageNewLarpForm cancelHref={cancelHref} editId={edit} />;
   }
 
+  if (slug === "instagram") {
+    // Remount on every visit so create onboarding re-rolls a random profile.
+    return (
+      <InstagramNewLarpForm
+        key={edit ? `edit-${edit}` : `new-${Date.now()}`}
+        cancelHref={cancelHref}
+        editId={edit}
+      />
+    );
+  }
+
   if (slug === "youtube-studio") {
     return <YouTubeNewLarpForm cancelHref={cancelHref} editId={edit} />;
+  }
+
+  if (slug === "shopify") {
+    return <ShopifyNewLarpForm cancelHref={cancelHref} editId={edit} />;
   }
 
   if (slug === "receipts") {

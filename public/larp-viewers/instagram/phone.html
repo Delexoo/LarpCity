@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#000000"/>
+<title>Instagram</title>
+<style>
+:root{
+  --bg:#000;
+  --ink:#f5f5f5;
+  --muted:#a8a8a8;
+  --line:#262626;
+  --chip:#262626;
+  --blue:#e0f1ff;
+  --link:#e0f1ff;
+  --banner:#0095f6;
+  --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{
+  height:100%;margin:0;
+  background:#050505;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased;
+}
+#phone{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;flex-direction:column;max-width:100%;
+}
+@media(min-width:480px){
+  #phone{
+    width:390px;height:min(844px,calc(100% - 32px));
+    left:50%;top:50%;right:auto;bottom:auto;
+    transform:translate(-50%,-50%);border-radius:36px;overflow:hidden;
+    box-shadow:0 24px 80px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.06);
+  }
+}
+
+/* Top bar */
+.top{
+  flex:none;
+  padding:calc(8px + var(--safe-t)) 14px 10px;
+  display:grid;
+  grid-template-columns:40px 1fr 40px;
+  align-items:center;
+}
+.top .side{display:flex;align-items:center}
+.top .side.r{justify-content:flex-end}
+.top button{
+  border:0;background:transparent;padding:0;color:var(--ink);
+  width:28px;height:28px;display:grid;place-items:center;
+}
+.top .user{
+  display:inline-flex;align-items:center;justify-content:center;gap:4px;
+  min-width:0;font-size:20px;font-weight:700;letter-spacing:-.02em;
+}
+.top .user b{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;
+}
+.top .user svg{flex:none;opacity:.95}
+
+.scroll{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding-bottom:calc(96px + var(--safe-b));
+}
+
+/* Hero: avatar + stats */
+.hero{
+  padding:6px 16px 0;
+  display:grid;
+  grid-template-columns:96px 1fr;
+  gap:12px;
+  align-items:center;
+}
+.avatar-col{position:relative;width:86px;height:86px;margin:8px auto 0}
+.note{
+  position:absolute;left:50%;top:-10px;transform:translateX(-50%);
+  z-index:2;background:#262626;color:#f5f5f5;
+  font-size:11px;font-weight:500;line-height:1;
+  padding:6px 10px;border-radius:12px;
+  white-space:nowrap;box-shadow:0 0 0 1px rgba(255,255,255,.04);
+}
+.note::after{
+  content:"";position:absolute;left:18px;bottom:-5px;
+  width:10px;height:10px;background:#262626;
+  border-radius:0 0 0 2px;transform:rotate(45deg);
+}
+.ring{
+  position:absolute;inset:0;border-radius:50%;
+  background:#000;
+  border:1.5px solid #333;
+  padding:3px;
+}
+.ring>i{
+  display:block;width:100%;height:100%;border-radius:50%;
+  background:#000;padding:0;
+}
+.avatar{
+  width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:#1a1a1a;
+}
+.avatar.fallback{
+  display:grid;place-items:center;
+  font-size:34px;font-weight:500;line-height:1;
+}
+.stats{display:flex;justify-content:space-around;text-align:center;padding-top:10px}
+.stats div{display:flex;flex-direction:column;gap:0;min-width:58px}
+.stats b{font-size:16px;font-weight:700;letter-spacing:-.01em;color:#f5f5f5}
+.stats span{font-size:13px;color:#f5f5f5;font-weight:400}
+
+.meta{padding:10px 16px 0}
+.meta .name{font-size:14px;font-weight:600;color:#f5f5f5}
+.meta .bio{margin-top:1px;font-size:14px;line-height:18px;white-space:pre-wrap;color:#f5f5f5}
+.meta .bio .mention{color:#e0f1ff;font-weight:400}
+.meta .link{
+  margin-top:2px;font-size:14px;font-weight:600;
+  color:#e0f1ff;text-decoration:none;display:none;
+}
+
+.actions{
+  padding:12px 16px 0;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.actions button{
+  height:32px;border-radius:8px;border:0;
+  background:#262626;font-size:14px;font-weight:600;color:#f5f5f5;
+}
+
+.highlights{
+  display:flex;gap:16px;padding:18px 16px 10px;
+  overflow-x:auto;scrollbar-width:none;
+}
+.highlights::-webkit-scrollbar{display:none}
+.hl{flex:none;width:72px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.hl .bub{
+  width:64px;height:64px;border-radius:50%;
+  border:1.5px solid #363636;padding:3px;background:#000;
+}
+.hl .bub span{
+  display:block;width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(145deg,#2a2a2a,#1a1a1a);
+}
+.hl em{
+  font-style:normal;font-size:12px;color:#f5f5f5;
+  max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;
+}
+
+.tabs{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  border-top:0.5px solid #262626;margin-top:2px;
+}
+.tabs button{
+  height:44px;border:0;background:transparent;
+  display:grid;place-items:center;color:#a8a8a8;position:relative;
+}
+.tabs button.on{color:#f5f5f5}
+.tabs button.on::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:#f5f5f5;
+}
+
+.grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5px;background:#000;min-height:120px;
+}
+.grid.empty{
+  display:flex;align-items:flex-start;justify-content:center;
+  min-height:160px;padding:48px 24px;color:#a8a8a8;font-size:14px;
+}
+.grid .cell{aspect-ratio:1;background:#121212;position:relative;overflow:hidden}
+.grid .cell img{width:100%;height:100%;object-fit:cover;display:block}
+.grid .cell .badge{
+  position:absolute;top:8px;right:8px;color:#fff;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.45));
+}
+
+.app-banner{
+  position:absolute;left:0;right:0;
+  bottom:calc(49px + var(--safe-b));
+  height:36px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(0,0,0,.92);
+  border-top:0.5px solid #1a1a1a;
+  z-index:4;
+}
+.app-banner button.close{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  border:0;background:transparent;color:#a8a8a8;padding:4px;line-height:0;
+}
+.app-banner a{
+  color:#0095f6;font-size:13px;font-weight:600;text-decoration:none;
+}
+
+.tabbar{
+  position:absolute;left:0;right:0;bottom:0;
+  height:calc(49px + var(--safe-b));
+  padding-bottom:var(--safe-b);
+  border-top:0.5px solid #262626;
+  background:#000;
+  display:grid;grid-template-columns:repeat(5,1fr);align-items:center;
+  z-index:5;
+}
+.tabbar button{
+  border:0;background:transparent;display:grid;place-items:center;
+  color:#f5f5f5;height:100%;position:relative;
+}
+.tabbar .create{
+  width:26px;height:26px;border:1.6px solid #f5f5f5;border-radius:7px;
+  display:grid;place-items:center;
+}
+.tabbar .badge{
+  position:absolute;top:6px;right:calc(50% - 16px);
+  min-width:16px;height:16px;padding:0 4px;border-radius:999px;
+  background:#ff3040;color:#fff;font-size:10px;font-weight:700;
+  display:grid;place-items:center;line-height:1;
+  box-shadow:0 0 0 2px #000;
+}
+.tabbar .me{
+  width:25px;height:25px;border-radius:50%;object-fit:cover;
+  border:1.5px solid #f5f5f5;display:grid;place-items:center;
+  font-size:12px;font-weight:600;overflow:hidden;
+}
+</style>
+</head>
+<body>
+<div id="phone">
+  <header class="top">
+    <div class="side">
+      <button type="button" aria-label="Create">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="user">
+      <b id="username">username</b>
+      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+        <path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="side r">
+      <button type="button" aria-label="Threads">
+        <svg width="24" height="24" viewBox="0 0 192 192" fill="currentColor" aria-hidden="true">
+          <path d="M141.5 84.3c-.5-14.7-9.4-24.3-25.2-24.7-13.3-.4-23.2 6.9-25.8 18.7-.5 2.4 1.2 4 3.4 4h.2c1.9 0 3.3-1.4 3.7-3.1 1.2-6.2 6.8-10.4 15.6-10.1 9.4.3 14.3 5.5 14.8 15.5-6.8-1-14.3-.3-20.3 2.4-7.4 3.4-12.1 10.1-11.5 18.8.7 8.6 7 15.5 16.4 15.5 6.4 0 11.5-2.3 15.6-6.9 2.4 3.5 5.4 6.1 9.4 7.1 1.8.4 3.6-.8 4-2.6.4-1.8-.8-3.6-2.6-4-2.1-.5-3.8-1.8-5.1-3.8 4.4-6.4 6.8-14.5 6.4-23.8zm-20.6 26.4c-5.8 5.2-13.3 3-14.2-5.8-.6-5.8 3.3-10.3 10.3-12.4 4.5-1.3 10.6-1.6 16.1-.6-.6 8.5-4 15.4-12.2 18.8z"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M96.2 20C57.4 20 27 50.2 27 88.8c0 31.6 20.2 58.4 48.4 69.4 2.7 1 4.7-.2 5.3-2.3.4-1.4 1.2-4.9 1.6-6.4.5-1.7.3-2.3-1-3.8-5.7-6.9-9.2-15.6-9.2-26.6 0-29.7 24.3-53.7 54.5-53.7 29.3 0 52.9 23.6 52.9 52.9 0 34.2-19.4 58.2-48.3 58.2-9.5 0-18.3-2.5-23.6-5.5-1.1-.6-2.3-.8-3.1.4l-8.7 10.2c-.9 1.1-.8 2.7.4 3.7 8 6.1 20.1 9.7 34.2 9.7 41.1 0 72.2-29.3 72.2-75 0-42.7-34.7-75.8-76.6-75.8z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="scroll" id="scroll">
+    <div class="hero">
+      <div class="avatar-col">
+        <div class="note" id="note" hidden>Note...</div>
+        <div class="ring"><i><span class="avatar fallback" id="avatar">;</span></i></div>
+      </div>
+      <div class="stats">
+        <div><b id="posts">0</b><span>posts</span></div>
+        <div><b id="followers">0</b><span>followers</span></div>
+        <div><b id="following">0</b><span>following</span></div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div class="name" id="fullName"></div>
+      <div class="bio" id="bio"></div>
+      <a class="link" id="link" href="#"></a>
+    </div>
+
+    <div class="actions">
+      <button type="button">Edit profile</button>
+      <button type="button">View archive</button>
+    </div>
+
+    <div class="highlights" id="highlights"></div>
+
+    <div class="tabs">
+      <button type="button" class="on" aria-label="Posts">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="1.7"/>
+          <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="1.7"/>
+          <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="1.7"/>
+          <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="1.7"/>
+        </svg>
+      </button>
+      <button type="button" aria-label="Reels">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M3 9h18M9 3l2.5 6M15 3l2.5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          <path d="M10 13.5v4l4-2-4-2z" fill="currentColor"/>
+        </svg>
+      </button>
+      <button type="button" aria-label="Saved">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M6.5 4.5h11a1 1 0 0 1 1 1V20l-6.5-3.4L5.5 20V5.5a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button type="button" aria-label="Tagged">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.7"/>
+          <circle cx="12" cy="12" r="2.2" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M12 3.8V7M12 17v3.2M3.8 12H7M17 12h3.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="app-banner" id="appBanner">
+    <button type="button" class="close" id="closeBanner" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <a href="#">Use the app</a>
+  </div>
+
+  <nav class="tabbar" aria-label="Tabs">
+    <button type="button" aria-label="Home">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 3.2 3.5 10.4V20a1 1 0 0 0 1 1h5.2v-6.2h4.6V21h5.2a1 1 0 0 0 1-1v-9.6L12 3.2z"/>
+      </svg>
+    </button>
+    <button type="button" aria-label="Search">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M16.5 16.5 20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button type="button" aria-label="Create">
+      <span class="create">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </span>
+    </button>
+    <button type="button" aria-label="Reels">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M3 9h18M9 3l2.5 6M15 3l2.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M10 13.5v4l4-2-4-2z" fill="currentColor"/>
+      </svg>
+      <span class="badge" id="reelsBadge" hidden>4</span>
+    </button>
+    <button type="button" aria-label="Profile">
+      <span class="me" id="tabMe">;</span>
+    </button>
+  </nav>
+</div>
+
+<script id="payload" type="application/json">{}</script>
+<script>
+(function () {
+  "use strict";
+  var P = {};
+  try { P = JSON.parse(document.getElementById("payload").textContent || "{}") || {}; } catch (e) { P = {}; }
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    });
+  }
+
+  function fmt(n) {
+    n = Number(n) || 0;
+    if (n >= 1e6) return (n / 1e6).toFixed(n % 1e6 < 1e5 ? 0 : 1).replace(/\.0$/, "") + "M";
+    if (n >= 1e4) return (n / 1e3).toFixed(n % 1e3 < 100 ? 0 : 1).replace(/\.0$/, "") + "K";
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function linkifyBio(text) {
+    return esc(text).replace(/@([A-Za-z0-9._]+)/g, '<span class="mention">@$1</span>');
+  }
+
+  var username = P.username || "username";
+  var fullName = P.fullName || "";
+  var bio = P.bio || "";
+  var link = P.link || "";
+  var posts = Number(P.posts != null ? P.posts : 0);
+  var followers = Number(P.followers != null ? P.followers : 0);
+  var following = Number(P.following != null ? P.following : 0);
+  var initials = P.initials || (fullName.split(/\s+/).map(function (p) { return p[0]; }).join("").slice(0, 2).toUpperCase()) || "IG";
+  var avatarUrl = P.avatarUrl || "";
+  var avatarSymbol = P.avatarSymbol || initials.slice(0, 1) || ";";
+  var avatarBg = P.avatarBg || "#ffffff";
+  var avatarFg = P.avatarFg || "#000000";
+  var note = P.note || "";
+  var reelsBadge = Number(P.reelsBadge != null ? P.reelsBadge : 0);
+  var highlights = Array.isArray(P.highlights) ? P.highlights : [];
+  var grid = Array.isArray(P.grid) ? P.grid : [];
+
+  document.title = username + " • Instagram";
+  document.getElementById("username").textContent = username;
+  document.getElementById("fullName").textContent = fullName;
+  document.getElementById("bio").innerHTML = linkifyBio(bio);
+  document.getElementById("posts").textContent = fmt(posts);
+  document.getElementById("followers").textContent = fmt(followers);
+  document.getElementById("following").textContent = fmt(following);
+
+  var noteEl = document.getElementById("note");
+  if (note) {
+    noteEl.hidden = false;
+    noteEl.textContent = note;
+  }
+
+  function paintAvatar(el) {
+    if (avatarUrl) {
+      var img = document.createElement("img");
+      img.className = "avatar";
+      img.alt = "";
+      img.src = avatarUrl;
+      img.onerror = function () {
+        el.className = "avatar fallback";
+        el.textContent = avatarSymbol;
+        el.style.background = avatarBg;
+        el.style.color = avatarFg;
+      };
+      el.replaceWith(img);
+      img.id = "avatar";
+      return;
+    }
+    el.className = "avatar fallback";
+    el.textContent = avatarSymbol;
+    el.style.background = avatarBg;
+    el.style.color = avatarFg;
+  }
+  paintAvatar(document.getElementById("avatar"));
+
+  var tabMe = document.getElementById("tabMe");
+  if (avatarUrl) {
+    var t = document.createElement("img");
+    t.className = "me";
+    t.alt = "";
+    t.src = avatarUrl;
+    t.onerror = function () {
+      t.removeAttribute("src");
+      t.textContent = avatarSymbol;
+      t.style.background = avatarBg;
+      t.style.color = avatarFg;
+    };
+    tabMe.replaceWith(t);
+  } else {
+    tabMe.textContent = avatarSymbol;
+    tabMe.style.background = avatarBg;
+    tabMe.style.color = avatarFg;
+  }
+
+  if (link) {
+    var a = document.getElementById("link");
+    a.style.display = "inline-block";
+    a.textContent = String(link).replace(/^https?:\/\//, "");
+    a.href = String(link).indexOf("http") === 0 ? link : "https://" + link;
+  }
+
+  var badge = document.getElementById("reelsBadge");
+  if (reelsBadge > 0) {
+    badge.hidden = false;
+    badge.textContent = String(reelsBadge);
+  }
+
+  var hl = document.getElementById("highlights");
+  if (!highlights.length) {
+    hl.style.display = "none";
+  } else {
+    hl.innerHTML = highlights.map(function (h) {
+      var label = typeof h === "string" ? h : (h.title || "Highlight");
+      var c1 = (typeof h === "object" && h.color) || "#2a2a2a";
+      var c2 = (typeof h === "object" && h.color2) || "#1a1a1a";
+      return '<div class="hl"><div class="bub"><span style="background:linear-gradient(145deg,' + esc(c1) + ',' + esc(c2) + ')"></span></div><em>' + esc(label) + "</em></div>";
+    }).join("");
+  }
+
+  var gridEl = document.getElementById("grid");
+  var cells = grid.slice(0, Math.max(0, posts));
+  if (!cells.length || posts <= 0) {
+    gridEl.className = "grid empty";
+    gridEl.innerHTML = "";
+  } else {
+    gridEl.className = "grid";
+    gridEl.innerHTML = cells.map(function (c) {
+      var bg = c.src
+        ? '<img src="' + esc(c.src) + '" alt="" loading="lazy"/>'
+        : '<div style="width:100%;height:100%;background:linear-gradient(145deg,' + esc(c.color || "#1a1a1a") + ',' + esc(c.color2 || "#0d0d0d") + ')"></div>';
+      var badgeHtml = "";
+      if (c.multi) {
+        badgeHtml = '<svg class="badge" width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="7" y="7" width="13" height="13" rx="1.5" stroke="#fff" stroke-width="2"/><path d="M4 16V5.5A1.5 1.5 0 0 1 5.5 4H16" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
+      } else if (c.video) {
+        badgeHtml = '<svg class="badge" width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8 6.5v11l9-5.5-9-5.5z"/></svg>';
+      }
+      return '<div class="cell">' + bg + badgeHtml + "</div>";
+    }).join("");
+  }
+
+  document.getElementById("closeBanner").addEventListener("click", function () {
+    document.getElementById("appBanner").style.display = "none";
+  });
+})();
+</script>
+</body>
+</html>

@@ -7,26 +7,26 @@ export type PlatformBrand = {
   backgroundColor: string;
 };
 
-/** Prefer crisp SVG marks on the dashboard; PNG/JPG still fine for PWA icons. */
+/** In-app tiles — prefer real PNG marks when available. */
 const LOGO_SRC: Record<string, string> = {
-  coinbase: "/brand-logos/coinbase.svg",
+  coinbase: "/brand-logos/coinbase.png",
   chase: "/brand-logos/chase.png",
-  amex: "/brand-logos/amex.svg",
-  venmo: "/brand-logos/venmo.svg",
-  "cash-app": "/brand-logos/cashapp.svg",
-  cashapp: "/brand-logos/cashapp.svg",
-  stripe: "/brand-logos/stripe.svg",
-  "youtube-studio": "/brand-logos/youtube.svg",
-  youtube: "/brand-logos/youtube.svg",
-  shopify: "/brand-logos/shopify.svg",
-  "meta-ads": "/brand-logos/meta.svg",
-  metaads: "/brand-logos/meta.svg",
-  phantom: "/brand-logos/phantom.svg",
-  exodus: "/brand-logos/exodus.svg",
-  "exodus-app": "/brand-logos/exodus.svg",
-  "ledger-live": "/brand-logos/ledger.svg",
-  "ledger-portfolios": "/brand-logos/ledger.svg",
-  revolut: "/brand-logos/revolut.svg",
+  amex: "/brand-logos/amex.png",
+  venmo: "/brand-logos/venmo.png",
+  "cash-app": "/brand-logos/cash-app.png",
+  cashapp: "/brand-logos/cash-app.png",
+  stripe: "/brand-logos/stripe.png",
+  "youtube-studio": "/brand-logos/youtube.png",
+  youtube: "/brand-logos/youtube.png",
+  shopify: "/brand-logos/shopify.png",
+  "meta-ads": "/brand-logos/metaads.png",
+  metaads: "/brand-logos/metaads.png",
+  phantom: "/brand-logos/phantom.png",
+  exodus: "/brand-logos/exodus.png",
+  "exodus-app": "/brand-logos/exodus.png",
+  "ledger-live": "/brand-logos/ledger.png",
+  "ledger-portfolios": "/brand-logos/ledger.png",
+  revolut: "/brand-logos/revolut.png",
   metamask: "/brand-logos/metamask.svg",
   "trezor-suite": "/brand-logos/trezor-suite.png",
   "cake-wallet": "/brand-logos/cakewallet.png",
@@ -39,8 +39,11 @@ const LOGO_SRC: Record<string, string> = {
   bybit: "/brand-logos/bybit.png",
   metatrader: "/brand-logos/metatrader-logo.png",
   infloww: "/brand-logos/infloww.png",
+  imessage: "/brand-logos/imessage.jpg",
+  instagram: "/brand-logos/instagram.svg",
 };
 
+/** PWA / apple-touch icons must be raster when possible. */
 const BRANDS: Record<string, PlatformBrand> = {
   venmo: {
     name: "Venmo",
@@ -80,7 +83,7 @@ const BRANDS: Record<string, PlatformBrand> = {
   },
   "youtube-studio": {
     name: "YouTube Studio",
-    iconPath: "/brand-logos/youtube.svg",
+    iconPath: "/brand-logos/youtube.png",
     themeColor: "#FF0000",
     backgroundColor: "#0F0F0F",
   },
@@ -90,6 +93,36 @@ const BRANDS: Record<string, PlatformBrand> = {
     themeColor: "#0052FF",
     backgroundColor: "#0052FF",
   },
+  shopify: {
+    name: "Shopify",
+    iconPath: "/brand-logos/shopify.png",
+    themeColor: "#95BF47",
+    backgroundColor: "#002E25",
+  },
+  phantom: {
+    name: "Phantom",
+    iconPath: "/brand-logos/phantom.png",
+    themeColor: "#AB9FF2",
+    backgroundColor: "#1C1C1C",
+  },
+  revolut: {
+    name: "Revolut",
+    iconPath: "/brand-logos/revolut.png",
+    themeColor: "#0666EB",
+    backgroundColor: "#000000",
+  },
+  imessage: {
+    name: "iMessage",
+    iconPath: "/brand-logos/imessage.jpg",
+    themeColor: "#34C759",
+    backgroundColor: "#F2F2F7",
+  },
+  instagram: {
+    name: "Instagram",
+    iconPath: "/brand-logos/instagram.svg",
+    themeColor: "#E1306C",
+    backgroundColor: "#ffffff",
+  },
 };
 
 export function getPlatformLogoSrc(slug: string): string {
@@ -97,15 +130,15 @@ export function getPlatformLogoSrc(slug: string): string {
 }
 
 export function getPlatformBrand(slug: string): PlatformBrand {
-  // Keep PNG/JPG iconPath for PWA / apple-touch; SVG logos are for in-app tiles.
   const mapped = BRANDS[slug];
   if (mapped) return mapped;
+  const logo = getPlatformLogoSrc(slug);
   return {
     name: slug
       .split("-")
       .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
       .join(" "),
-    iconPath: `/brand-logos/${slug}.png`,
+    iconPath: logo,
     themeColor: "#111111",
     backgroundColor: "#111111",
   };

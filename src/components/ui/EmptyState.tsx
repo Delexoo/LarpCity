@@ -17,20 +17,20 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "relative isolate flex flex-col items-center justify-center overflow-hidden rounded-[1.5rem] border border-dashed border-[var(--dashed)] bg-[var(--surface)] px-6 py-14 text-center shadow-[var(--shadow-card)]",
+        "relative isolate flex flex-col items-center justify-center overflow-hidden rounded-[1.5rem] border border-[var(--hairline)] bg-[var(--surface)] px-6 py-16 text-center",
         className,
       )}
     >
       {icon ? (
         <div className="mb-4 text-[var(--text-secondary)]">{icon}</div>
       ) : null}
-      <h3 className="page-title text-xl">{title}</h3>
+      <h3 className="page-title text-[1.35rem]">{title}</h3>
       {description ? (
-        <p className="mt-2 max-w-sm text-sm text-[var(--text-secondary)]">
+        <p className="mt-2 max-w-sm text-sm leading-relaxed text-[var(--text-secondary)]">
           {description}
         </p>
       ) : null}
-      {action ? <div className="mt-6">{action}</div> : null}
+      {action ? <div className="mt-7">{action}</div> : null}
     </div>
   );
 }

@@ -1,39 +1,42 @@
 import Link from "next/link";
 import { PlatformLogo } from "@/components/platforms/PlatformLogo";
-import { getActivePlatforms } from "@/lib/platforms/catalog";
+import { getAllPlatforms } from "@/lib/platforms/catalog";
+import { cn } from "@/lib/utils";
 
 export const metadata = { title: "New LARP" };
 
 export default function NewLarpPage() {
-  const platforms = getActivePlatforms();
+  // Ready + Soon hubs (skip the separate "Coming soon" roadmap bucket).
+  const platforms = getAllPlatforms().filter(
+    (p) => p.section !== "Coming soon",
+  );
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8">
+    <div className="mx-auto max-w-4xl space-y-10">
       <div>
-        <h1 className="page-title">New LARP</h1>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
-          Choose a platform.
+        <h1 className="page-title text-[clamp(1.75rem,3vw,2.25rem)]">
+          New LARP
+        </h1>
+        <p className="mt-2 max-w-md text-sm leading-relaxed text-[var(--text-secondary)]">
+          Ready platforms open the editor. Grey ones are coming soon.
         </p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {platforms.map((platform) => {
-          const comingSoon = platform.tier === "coming_soon";
-          const href = comingSoon
-            ? undefined
-            : `/platforms/${encodeURIComponent(platform.slug)}/new`;
-
+          const soon = platform.tier === "coming_soon";
           const body = (
             <>
               <PlatformLogo
                 slug={platform.slug}
                 name={platform.name}
                 size={48}
+                className="rounded-[1.2rem]"
               />
               <span className="mt-3 text-center text-[15px] font-semibold leading-tight text-[var(--ink)]">
                 {platform.name}
               </span>
-              {comingSoon ? (
+              {soon ? (
                 <span className="mt-1 text-xs text-[var(--text-muted)]">
                   Soon
                 </span>
@@ -41,11 +44,12 @@ export default function NewLarpPage() {
             </>
           );
 
-          if (!href) {
+          if (soon) {
             return (
               <div
                 key={platform.id}
-                className="ll-stat-card flex min-h-[7.5rem] flex-col items-center justify-center px-3 py-5 opacity-55"
+                aria-disabled="true"
+                className="flex min-h-[7.5rem] cursor-default flex-col items-center justify-center rounded-[1.5rem] border border-[var(--hairline)] bg-[var(--surface)] px-3 py-5 opacity-45"
               >
                 {body}
               </div>
@@ -55,8 +59,10 @@ export default function NewLarpPage() {
           return (
             <Link
               key={platform.id}
-              href={href}
-              className="ll-stat-card flex min-h-[7.5rem] flex-col items-center justify-center px-3 py-5 transition hover:border-[var(--ink)]/35 active:scale-[0.98]"
+              href={`/platforms/${encodeURIComponent(platform.slug)}/new`}
+              className={cn(
+                "group flex min-h-[7.5rem] flex-col items-center justify-center rounded-[1.5rem] border border-[var(--hairline)] bg-[var(--surface)] px-3 py-5 transition hover:border-[var(--ink)]/30 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card)] active:scale-[0.98]",
+              )}
             >
               {body}
             </Link>

@@ -23,9 +23,9 @@ export function RecentLarpsClient() {
 
   if (larps.length === 0) {
     return (
-      <div className="rounded-[1.5rem] border border-dashed border-[var(--dashed)] bg-[var(--surface)] px-6 py-14 text-center">
-        <p className="text-base font-semibold text-[var(--ink)]">No LARPs yet</p>
-        <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
+      <div className="rounded-[1.5rem] border border-[var(--hairline)] bg-[var(--surface)] px-6 py-14 text-center">
+        <p className="page-title text-[1.25rem]">No LARPs yet</p>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
           Pick a platform to create your first one.
         </p>
         <Link href="/larps/new" className="mt-7 inline-block">
@@ -36,7 +36,7 @@ export function RecentLarpsClient() {
   }
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-2.5 sm:grid-cols-2">
       {larps.map((larp) => (
         <LarpCard key={larp.id} larp={larp} />
       ))}

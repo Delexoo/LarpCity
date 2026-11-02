@@ -15,7 +15,7 @@ export function PlatformLogo({ slug, name, size = 40, className }: Props) {
   return (
     <span
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[1.15rem] bg-[var(--surface-alt)] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]",
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[1.25rem] bg-[var(--surface-alt)] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]",
         className,
       )}
       style={{ width: size, height: size }}
@@ -26,7 +26,7 @@ export function PlatformLogo({ slug, name, size = 40, className }: Props) {
         alt=""
         width={size}
         height={size}
-        className="h-full w-full object-cover"
+        className="h-[72%] w-[72%] object-contain"
         unoptimized
       />
       <span className="sr-only">{name}</span>

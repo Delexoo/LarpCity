@@ -1,5 +1,31 @@
 # LarpCity Release Notes
 
+## v0.4.0 — Home, Instagram, Shopify & Studio polish
+
+**Production:** https://larpcity-delexo.vercel.app  
+**GitHub:** https://github.com/Delexoo/LarpCity
+
+### Highlights
+- **Home** — dashboard and My LARPs combined; `/larps` redirects to Home
+- **Sidebar cleanup** — AI Images, Community, and New Larp removed from nav
+- **Soon platforms** — unfinished hubs stay in place, greyed, labeled Soon, still clickable
+- **Instagram** — dark own-profile viewer matching real IG chrome; randomized name/bio/counts each create visit; empty posts grid by default
+- **Shopify** — store dashboard LARP + create form
+- **YouTube Studio** — viewer + create form polish from Studio dumps
+- **Brand logos** — real platform marks across Home, hubs, and cards
+- **PWA install** — manifest scoped per `/larps/{id}` so install targets the right LARP
+- **UI chrome** — rounder surfaces, simpler Home grid, clearer empty states
+
+### Fixes
+- Install-to-Home targeting the wrong LARP
+- Form cancel/save paths that still pointed at the old `/larps` library
+
+### Not in this release
+- Cloud sync / multi-device LARP accounts (still local `localStorage`)
+- Full auth gate on every route (local-first entry remains open)
+
+---
+
 ## v0.3.3 — Chase mobile banking LARP
 
 **Production:** https://larpcity-delexo.vercel.app

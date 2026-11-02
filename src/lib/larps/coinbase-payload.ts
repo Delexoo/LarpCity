@@ -195,6 +195,82 @@ export function buildCoinbasePayload(
   };
 }
 
+/** Mobile shell boots from a compact #payload (separate from desktop #payload / #acct). */
+export function buildCoinbaseMobileDomPayload(
+  payload: CoinbasePayload,
+): Record<string, unknown> {
+  const st = payload.st;
+  const coins: Record<string, number> = {};
+  const pcts: Record<string, number> = {};
+  const holdings: Array<{
+    sym: string;
+    name: string;
+    amt: number;
+    val: number;
+    px: number;
+    pct: number;
+    img: string;
+  }> = [];
+
+  for (const row of payload.q || []) {
+    if (!Array.isArray(row) || row.length < 6) continue;
+    const sym = String(row[1] || "");
+    if (!sym) continue;
+    const name = String(row[2] || sym);
+    const img = String(row[3] || "");
+    const px = Number(row[4]) || 0;
+    const pct = Number(row[5]) || 0;
+    const amt = Number(row[row.length - 1]) || 0;
+    coins[sym] = px;
+    pcts[sym] = pct;
+    if (amt > 0) {
+      holdings.push({
+        sym,
+        name,
+        amt,
+        val: round2(amt * px),
+        px,
+        pct,
+        img,
+      });
+    }
+  }
+
+  holdings.sort((a, b) => b.val - a.val);
+
+  const ethAddr = payload.addr?.ethereum;
+  const addr = Array.isArray(ethAddr)
+    ? String(ethAddr[0] || "")
+    : typeof ethAddr === "string"
+      ? ethAddr
+      : "";
+
+  const c24 = Number(st.c24) || 0;
+  return {
+    id: st.id,
+    sym: st.sym || "$",
+    cur: st.cur || "USD",
+    start: "home",
+    fresh: false,
+    flat: false,
+    total: st.total,
+    cash: st.cash,
+    usd: st.cash,
+    usdc: st.usdc,
+    crypto: st.crypto,
+    isUp: c24 >= 0,
+    pct: Math.abs(c24 * 100),
+    vibe: "SIDEWAYS",
+    holdings,
+    coins,
+    pcts,
+    addr,
+    btc: coins.BTC || 0,
+    beat: round2((coins.BTC || 0) * 0.998),
+    v: "2026.10.22.2",
+  };
+}
+
 export function injectCoinbaseViewerHtml(
   template: string,
   payload: CoinbasePayload,
@@ -202,6 +278,7 @@ export function injectCoinbaseViewerHtml(
 ): string {
   let html = template;
   const titleName = payload.st.name || "Coinbase";
+  const theme = payload.st.theme === "light" ? "light" : "dark";
 
   html = html.replace(
     /<title>[\s\S]*?<\/title>/,
@@ -210,10 +287,37 @@ export function injectCoinbaseViewerHtml(
       : `<title>Home · Coinbase</title>`,
   );
 
+  // Desktop CSS resolves body { color:var(--fg) } against :root (light tokens)
+  // unless <html data-theme> matches. Without this, inherited text stays near-black
+  // on the forced dark background → washed-out / unreadable secondary fonts.
+  html = html.replace(/<html\b([^>]*)>/i, (_m, attrs: string) => {
+    const cleaned = String(attrs || "")
+      .replace(/\sdata-theme\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/i, "")
+      .trim();
+    return `<html${cleaned ? ` ${cleaned}` : ""} data-theme="${theme}">`;
+  });
+
+  if (!opts.mobile) {
+    html = html.replace(
+      /<div\s+id="app"([^>]*)>/i,
+      (_m, attrs: string) => {
+        const cleaned = String(attrs || "")
+          .replace(/\sdata-theme\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/i, "")
+          .trim();
+        return `<div id="app"${cleaned ? ` ${cleaned}` : ""} data-theme="${theme}">`;
+      },
+    );
+  }
+
   if (opts.mobile) {
+    // Mobile needs both: #acct (CBA kit) and compact #payload (screen renderer).
     html = html.replace(
       /<script id="acct" type="application\/json">[\s\S]*?<\/script>/,
       `<script id="acct" type="application/json">${JSON.stringify(payload)}</script>`,
+    );
+    html = html.replace(
+      /<script id="payload" type="application\/json">[\s\S]*?<\/script>/,
+      `<script id="payload" type="application/json">${JSON.stringify(buildCoinbaseMobileDomPayload(payload))}</script>`,
     );
   } else {
     html = html.replace(
@@ -228,7 +332,7 @@ export function injectCoinbaseViewerHtml(
         displayName: titleName,
         totalUsd: payload.st.total,
         currency: payload.st.cur,
-        theme: payload.st.theme === "light" ? "LIGHT" : "DARK",
+        theme: theme === "light" ? "LIGHT" : "DARK",
         vibe: "SIDEWAYS",
         strategy: "BLUE_CHIP",
         buyPanel: "NORMAL",
@@ -239,8 +343,13 @@ export function injectCoinbaseViewerHtml(
     );
   }
 
-  html = html.replace(/<script id="ll-install-data"[\s\S]*$/i, "");
+  // Strip larplabs install chrome only (do not truncate the document to EOF).
+  html = html.replace(/<script id="ll-install-data"[\s\S]*?<\/script>/gi, "");
   html = html.replace(/<button id="ll-install-btn"[\s\S]*?<\/button>/gi, "");
+  html = html.replace(
+    /<script>\s*\(function\(\)\{\s*if\(!\("serviceWorker" in navigator\)\)return;[\s\S]*?<\/script>/gi,
+    "",
+  );
   html = html.replace(/https:\/\/larplabs\.io/gi, "");
 
   html = html.replace(
@@ -252,28 +361,39 @@ export function injectCoinbaseViewerHtml(
     `<link rel="apple-touch-icon" href="/brand-logos/coinbase.png">`,
   );
 
+  const themeBoot = opts.mobile
+    ? ""
+    : `<script id="lc-coinbase-theme-boot">(function(){var t=${JSON.stringify(theme)};document.documentElement.dataset.theme=t;var a=document.getElementById("app");if(a)a.dataset.theme=t;document.addEventListener("DOMContentLoaded",function(){document.documentElement.dataset.theme=t;var el=document.getElementById("app");if(el)el.dataset.theme=t;});})();</script>`;
+
   const fit = opts.mobile
     ? `<style id="lc-coinbase-fit">
-html,body{height:100%;width:100%;overflow:hidden;background:#0A0B0D}
-body.t-home,body{min-height:100%}
+html,body{height:100%;width:100%;overflow:hidden;background:#0A0B0D;color:#fff}
 #ll-install-btn{display:none!important}
+/* Phone frame on desktop — keep #app inside body (shell uses position:fixed). */
 @media (min-width:560px){
   html{background:#050505}
-  body{max-width:390px;margin:16px auto;height:calc(100% - 32px);
-    border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+  body{
+    position:relative;max-width:390px;width:100%;
+    height:min(844px,calc(100% - 32px));margin:16px auto;
+    border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45)
+  }
+  #app{position:absolute!important;inset:0!important;height:100%!important;max-width:none!important;margin:0!important;right:0!important}
 }
 </style>
 <link rel="icon" href="/brand-logos/coinbase.png"/>`
     : `<style id="lc-coinbase-fit">
-html,body{min-height:100%;margin:0;background:#0A0B0D}
+/* Re-resolve color against themed tokens (body alone uses :root light --fg). */
+html,body,#app{min-height:100%;margin:0;background:var(--bg,#0A0B0D);color:var(--fg,#fff)}
 #ll-install-btn{display:none!important}
 </style>
+${themeBoot}
 <link rel="icon" href="/brand-logos/coinbase.png"/>`;
 
   if (html.includes("</head>")) html = html.replace("</head>", `${fit}</head>`);
   else html = fit + html;
 
-  if (!/<\/body>/i.test(html)) html += "</body></html>";
+  if (!/<\/body>/i.test(html)) html += "</body>";
+  if (!/<\/html>/i.test(html)) html += "</html>";
   return html;
 }
 

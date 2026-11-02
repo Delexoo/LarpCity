@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Figtree } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
-const figtree = Figtree({
+const manrope = Manrope({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${figtree.variable} h-full antialiased`}>
+    <html lang="en" className={`${manrope.variable} h-full antialiased`}>
       <body className="min-h-full bg-[var(--bg)] font-[family-name:var(--font-body)] text-[var(--ink)]">
         {children}
       </body>

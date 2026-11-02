@@ -32,7 +32,7 @@ export function PlatformLarpsClient({
     return (
       <EmptyState
         title={`No ${platformName} LARPs yet`}
-        description="Create a new LARP to configure balances and dashboard details."
+        description={`Create one, set the numbers, then open your ${platformName} mock.`}
         action={
           <CreateLarpActions
             platformSlug={slug}
@@ -44,7 +44,7 @@ export function PlatformLarpsClient({
   }
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-2.5 sm:grid-cols-2">
       {larps.map((larp) => (
         <LarpCard key={larp.id} larp={larp} />
       ))}

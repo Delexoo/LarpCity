@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="download_date" content="2026-11-02T14:19:55.631Z"/><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
+<!DOCTYPE html><html data-theme="dark"><head><meta charset="utf-8"><meta name="download_date" content="2026-11-02T14:19:55.631Z"/><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -643,6 +643,9 @@ input,textarea{font:inherit;color:inherit;background:none;border:0;outline:0}
   "use strict";
   const P = JSON.parse(document.getElementById("payload").textContent || "{}");
   const S = P.st, K = window.cbKit;
+  document.documentElement.dataset.theme = S.theme === "light" ? "light" : "dark";
+  const __appEl = document.getElementById("app");
+  if (__appEl) __appEl.dataset.theme = document.documentElement.dataset.theme;
   const DAY = 864e5, HOUR = 36e5, MIN = 6e4;
   const NOW0 = S.now, T0 = Date.now();
   const now = () => NOW0 + (Date.now() - T0);
