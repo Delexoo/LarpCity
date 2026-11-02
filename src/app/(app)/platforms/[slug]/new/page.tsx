@@ -4,6 +4,10 @@ import { StripeNewLarpForm } from "@/components/platforms/forms/StripeNewLarpFor
 import { VenmoNewLarpForm } from "@/components/platforms/forms/VenmoNewLarpForm";
 import { CoinbaseNewLarpForm } from "@/components/platforms/forms/CoinbaseNewLarpForm";
 import { CashAppNewLarpForm } from "@/components/platforms/forms/CashAppNewLarpForm";
+import { ChaseNewLarpForm } from "@/components/platforms/forms/ChaseNewLarpForm";
+import { IMessageNewLarpForm } from "@/components/platforms/forms/IMessageNewLarpForm";
+import { YouTubeNewLarpForm } from "@/components/platforms/forms/YouTubeNewLarpForm";
+import { ReceiptsNewLarpForm } from "@/components/platforms/forms/ReceiptsNewLarpForm";
 import { GenericNewLarpForm } from "@/components/platforms/forms/GenericNewLarpForm";
 
 export async function generateMetadata({
@@ -56,6 +60,22 @@ export default async function NewPlatformLarpPage({
 
   if (slug === "cash-app") {
     return <CashAppNewLarpForm cancelHref={cancelHref} editId={edit} />;
+  }
+
+  if (slug === "chase") {
+    return <ChaseNewLarpForm cancelHref={cancelHref} editId={edit} />;
+  }
+
+  if (slug === "imessage") {
+    return <IMessageNewLarpForm cancelHref={cancelHref} editId={edit} />;
+  }
+
+  if (slug === "youtube-studio") {
+    return <YouTubeNewLarpForm cancelHref={cancelHref} editId={edit} />;
+  }
+
+  if (slug === "receipts") {
+    return <ReceiptsNewLarpForm cancelHref={cancelHref} editId={edit} />;
   }
 
   return (

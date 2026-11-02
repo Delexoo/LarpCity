@@ -28,10 +28,28 @@ import {
 import {
   buildCashAppDesktopPayload,
   buildCashAppMobilePayload,
+  extractCashAppMobileJson,
   injectCashAppViewerHtml,
   type CashAppDesktopPayload,
   type CashAppMobilePayload,
 } from "@/lib/larps/cashapp-payload";
+import {
+  buildIMessagePayload,
+  injectIMessageHtml,
+} from "@/lib/larps/imessage-payload";
+import {
+  buildYoutubeDesktopPayload,
+  buildYoutubeMobilePayload,
+  injectYoutubeViewerHtml,
+  type YoutubeDesktopPayload,
+  type YoutubeMobilePayload,
+} from "@/lib/larps/youtube-payload";
+import { buildCoinbaseReceiptHtml } from "@/lib/larps/receipt-payload";
+import {
+  buildChasePayload,
+  injectChaseViewerHtml,
+  type ChasePayload,
+} from "@/lib/larps/chase-payload";
 import { getPlatformBySlug } from "@/lib/platforms/catalog";
 
 function StripeProtectMark({ className }: { className?: string }) {
@@ -191,9 +209,8 @@ async function loadCashAppHtml(
   const data = larp.data ?? {};
 
   if (mobile) {
-    const m = template.match(/window\.__CA\s*=\s*(\{[\s\S]*?\});/);
-    if (!m) throw new Error("Cash App mobile payload missing");
-    const base = JSON.parse(m[1]) as CashAppMobilePayload;
+    const raw = extractCashAppMobileJson(template);
+    const base = JSON.parse(raw) as CashAppMobilePayload;
     const payload = buildCashAppMobilePayload(base, data, meta);
     return injectCashAppViewerHtml(template, { mobile: true, payload });
   }
@@ -205,6 +222,23 @@ async function loadCashAppHtml(
   const base = JSON.parse(m[1]) as CashAppDesktopPayload;
   const payload = buildCashAppDesktopPayload(base, data, meta);
   return injectCashAppViewerHtml(template, { mobile: false, payload });
+}
+
+async function loadChaseHtml(larp: LocalLarp): Promise<string> {
+  const [templateRes, payloadRes] = await Promise.all([
+    fetch("/larp-viewers/chase/mobile.html", { cache: "no-store" }),
+    fetch("/larp-viewers/chase/base-payload.json", { cache: "force-cache" }),
+  ]);
+  if (!templateRes.ok || !payloadRes.ok) {
+    throw new Error("Failed to load Chase viewer assets");
+  }
+  const template = await templateRes.text();
+  const base = (await payloadRes.json()) as ChasePayload;
+  const payload = buildChasePayload(base, larp.data ?? {}, {
+    id: larp.id,
+    title: larp.title,
+  });
+  return injectChaseViewerHtml(template, payload);
 }
 
 async function loadCoinbaseHtml(
@@ -231,6 +265,64 @@ async function loadCoinbaseHtml(
     title: larp.title,
   });
   return injectCoinbaseViewerHtml(template, payload, { mobile: useMobile });
+}
+
+async function loadIMessageHtml(larp: LocalLarp): Promise<string> {
+  const res = await fetch("/larp-viewers/imessage/phone.html", {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Failed to load iMessage viewer");
+  const template = await res.text();
+  const payload = buildIMessagePayload(larp.data ?? {});
+  return injectIMessageHtml(template, payload);
+}
+
+async function loadReceiptHtml(larp: LocalLarp): Promise<string> {
+  return buildCoinbaseReceiptHtml(larp.data ?? {}, {
+    id: larp.id,
+    title: larp.title,
+  });
+}
+
+async function loadYoutubeHtml(
+  larp: LocalLarp,
+  mobile: boolean,
+): Promise<string> {
+  const templatePath = mobile
+    ? "/larp-viewers/youtube-studio/mobile.html"
+    : "/larp-viewers/youtube-studio/home.html";
+  const res = await fetch(templatePath, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load YouTube Studio viewer assets");
+  const template = await res.text();
+  const m = template.match(
+    /<script id="payload" type="application\/json">([\s\S]*?)<\/script>/,
+  );
+  if (!m) throw new Error("YouTube Studio payload missing");
+  const data = larp.data ?? {};
+  const meta = { id: larp.id, title: larp.title };
+  const theme =
+    String(data.theme || "Dark").toLowerCase() === "light" ? "light" : "dark";
+  const channelName = String(
+    data.channelName || data.businessName || larp.title || "Channel",
+  );
+
+  if (mobile) {
+    const base = JSON.parse(m[1]) as YoutubeMobilePayload;
+    const payload = buildYoutubeMobilePayload(base, data, meta);
+    return injectYoutubeViewerHtml(template, payload, {
+      mobile: true,
+      channelName,
+      theme,
+    });
+  }
+
+  const base = JSON.parse(m[1]) as YoutubeDesktopPayload;
+  const payload = buildYoutubeDesktopPayload(base, data, meta);
+  return injectYoutubeViewerHtml(template, payload, {
+    mobile: false,
+    channelName,
+    theme,
+  });
 }
 
 async function loadGenericHtml(larp: LocalLarp): Promise<string> {
@@ -336,16 +428,26 @@ export function LocalLarpClient({ id }: { id: string }) {
             ? () => loadCoinbaseHtml(larp, mobile)
             : larp.platform_slug === "cash-app"
               ? () => loadCashAppHtml(larp, mobile)
-              : () => loadGenericHtml(larp);
+              : larp.platform_slug === "chase"
+                ? () => loadChaseHtml(larp)
+                : larp.platform_slug === "imessage"
+                  ? () => loadIMessageHtml(larp)
+                  : larp.platform_slug === "youtube-studio"
+                    ? () => loadYoutubeHtml(larp, mobile)
+                    : larp.platform_slug === "receipts"
+                      ? () => loadReceiptHtml(larp)
+                      : () => loadGenericHtml(larp);
 
     loader()
       .then((doc) => {
         if (cancelled) return;
         setHtml(doc);
         const platform = getPlatformBySlug(larp.platform_slug);
+        const contact = (larp.data?.contact || {}) as Record<string, unknown>;
         const name =
           String(
-            larp.data?.displayName ||
+            contact.name ||
+              larp.data?.displayName ||
               larp.data?.businessName ||
               larp.title ||
               platform?.name ||
@@ -359,7 +461,19 @@ export function LocalLarpClient({ id }: { id: string }) {
               ? `${name} – Venmo`
               : larp.platform_slug === "coinbase"
                 ? `Home · Coinbase`
-                : `${name} – ${brand}`;
+                : larp.platform_slug === "cash-app"
+                  ? `${name} – Cash App`
+                  : larp.platform_slug === "chase"
+                    ? `${name} · Chase`
+                    : larp.platform_slug === "imessage"
+                      ? `${name} – Messages`
+                      : larp.platform_slug === "youtube-studio"
+                        ? mobile
+                          ? "YouTube Studio"
+                          : `Channel dashboard - YouTube Studio`
+                        : larp.platform_slug === "receipts"
+                          ? `${name} – Receipt`
+                          : `${name} – ${brand}`;
       })
       .catch((err: unknown) => {
         if (!cancelled) {

@@ -10,11 +10,14 @@ export type PlatformBrand = {
 /** Prefer crisp SVG marks on the dashboard; PNG/JPG still fine for PWA icons. */
 const LOGO_SRC: Record<string, string> = {
   coinbase: "/brand-logos/coinbase.svg",
+  chase: "/brand-logos/chase.png",
   amex: "/brand-logos/amex.svg",
   venmo: "/brand-logos/venmo.svg",
   "cash-app": "/brand-logos/cashapp.svg",
   cashapp: "/brand-logos/cashapp.svg",
   stripe: "/brand-logos/stripe.svg",
+  "youtube-studio": "/brand-logos/youtube.svg",
+  youtube: "/brand-logos/youtube.svg",
   shopify: "/brand-logos/shopify.svg",
   "meta-ads": "/brand-logos/meta.svg",
   metaads: "/brand-logos/meta.svg",
@@ -64,6 +67,24 @@ const BRANDS: Record<string, PlatformBrand> = {
     backgroundColor: "#00D632",
   },
   coinbase: {
+    name: "Coinbase",
+    iconPath: "/brand-logos/coinbase.png",
+    themeColor: "#0052FF",
+    backgroundColor: "#0052FF",
+  },
+  chase: {
+    name: "Chase",
+    iconPath: "/brand-logos/chase.png",
+    themeColor: "#117ACA",
+    backgroundColor: "#0f1324",
+  },
+  "youtube-studio": {
+    name: "YouTube Studio",
+    iconPath: "/brand-logos/youtube.svg",
+    themeColor: "#FF0000",
+    backgroundColor: "#0F0F0F",
+  },
+  receipts: {
     name: "Coinbase",
     iconPath: "/brand-logos/coinbase.png",
     themeColor: "#0052FF",

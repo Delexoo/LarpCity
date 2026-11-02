@@ -56,6 +56,8 @@ export function platformNotificationIcon(slug: string): string {
     discord: "/brand-logos/discord.jpg",
     gmail: "/brand-logos/gmail.jpg",
     instagram: "/brand-logos/instagram.svg",
+    imessage: "/brand-logos/imessage.jpg",
+    "i-message": "/brand-logos/imessage.jpg",
   };
   const path = map[slug] || `/brand-logos/${slug}.png`;
   return `${origin}${path}`;

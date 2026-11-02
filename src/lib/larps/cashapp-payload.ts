@@ -186,6 +186,35 @@ export function buildCashAppMobilePayload(
   };
 }
 
+/** Extract a top-level `{...}` object after `window.__CA=` (handles nesting). */
+export function extractCashAppMobileJson(html: string): string {
+  const marker = "window.__CA=";
+  const i = html.indexOf(marker);
+  if (i < 0) throw new Error("Cash App mobile payload missing");
+  let j = i + marker.length;
+  while (j < html.length && /\s/.test(html[j])) j++;
+  if (html[j] !== "{") throw new Error("Cash App mobile payload missing");
+  let depth = 0;
+  let inStr = false;
+  let esc = false;
+  for (let k = j; k < html.length; k++) {
+    const c = html[k];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === "\\") esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') inStr = true;
+    else if (c === "{") depth++;
+    else if (c === "}") {
+      depth--;
+      if (depth === 0) return html.slice(j, k + 1);
+    }
+  }
+  throw new Error("Cash App mobile payload incomplete");
+}
+
 export function injectCashAppViewerHtml(
   template: string,
   opts:
@@ -203,10 +232,17 @@ export function injectCashAppViewerHtml(
   );
 
   if (opts.mobile) {
-    html = html.replace(
-      /window\.__CA\s*=\s*\{[\s\S]*?\};/,
-      `window.__CA=${JSON.stringify(opts.payload)};`,
-    );
+    const marker = "window.__CA=";
+    const i = html.indexOf(marker);
+    if (i < 0) throw new Error("Cash App mobile payload missing");
+    let j = i + marker.length;
+    while (j < html.length && /\s/.test(html[j])) j++;
+    const raw = extractCashAppMobileJson(html);
+    const end = j + raw.length;
+    html =
+      html.slice(0, i) +
+      `window.__CA=${JSON.stringify(opts.payload)}` +
+      html.slice(end);
   } else {
     html = html.replace(
       /<script id="payload" type="application\/json">[\s\S]*?<\/script>/,

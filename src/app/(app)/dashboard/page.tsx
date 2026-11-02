@@ -8,10 +8,10 @@ export const metadata = { title: "Dashboard" };
 
 const FEATURED = [
   "stripe",
+  "youtube-studio",
   "coinbase",
   "venmo",
   "cash-app",
-  "amex",
   "shopify",
   "phantom",
   "revolut",

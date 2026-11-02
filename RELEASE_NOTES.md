@@ -1,5 +1,16 @@
 # LarpCity Release Notes
 
+## v0.3.3 — Chase mobile banking LARP
+
+**Production:** https://larpcity-delexo.vercel.app
+
+### Highlights
+- **Chase mobile app** — accounts, Sapphire, activity, goals from the Chase dump
+- Create form for holder, net worth presets, income, credit score
+- Local Chase art assets mirrored under `/display-apps/chase`
+
+---
+
 ## v0.3.2 — Coinbase desktop + mobile LARPs
 
 **Production:** https://larpcity-delexo.vercel.app

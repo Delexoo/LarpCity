@@ -2430,7 +2430,7 @@ var ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="Mac
 var hasSW="serviceWorker" in navigator;
 // Android/desktop: register the worker at this larp's own scope so the
 // installed PWA's pushes are attributed to the app itself (name + icon, no
-// "larplabs.io · Chrome" origin line). Hold the registration from register()
+// "this site · Chrome" origin line). Hold the registration from register()
 // rather than navigator.serviceWorker.ready: .ready can resolve with the old
 // origin-wide registration (from the install shim or a pre-scope visit)
 // while the scoped one is still activating, which would put the push
@@ -2517,7 +2517,7 @@ if(!installed){
   if(!pushApi||!C.vapidPublicKey||Notification.permission==="denied")return;
   if(Notification.permission==="granted"){subscribe().then(function(){sheet("done")}).catch(function(){});return}
   // Android/desktop first run: pushes from a tab always carry the
-  // "larplabs.io · Chrome" origin line, so walk through installing the app
+  // "this site · Chrome" origin line, so walk through installing the app
   // first. The sheet's secondary action keeps the direct tab flow for
   // browsers that can't install.
   setTimeout(function(){sheet("install")},600);
@@ -2613,7 +2613,7 @@ function sheet(mode){
     p.textContent="Got it";n.style.display="none";
   }else if(mode==="install"){
     t.textContent="Install "+appName;
-    s.textContent="Notifications from a browser tab are labelled “larplabs.io · Chrome”. Install "+appName+" and they come from the app instead, like the real thing.";
+    s.textContent="Notifications from a browser tab are labelled “this site · Chrome”. Install "+appName+" and they come from the app instead, like the real thing.";
     step("<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\"><rect x=\"2\" y=\"2\" width=\"16\" height=\"16\" rx=\"4\"/><path d=\"M10 6.5v7M6.5 10h7\"/></svg>","Install "+appName,"Tap the Install "+appName+" button, or ⋮, then Install app");
     step(a.icon||"","Open "+appName+" from your home screen","");
     step("<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9\"/><path d=\"M13.73 21a2 2 0 0 1-3.46 0\"/></svg>","Tap Turn on","");
